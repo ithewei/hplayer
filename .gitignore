@@ -1,0 +1,6 @@
+test/*
+build/*
+package/*
+.vscode
+*.bk
+

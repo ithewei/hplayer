@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/skin"/>
+    <qresource prefix="/">
+        <file>skin/dark.qss</file>
+        <file>skin/dark/add_bottom.png</file>
+        <file>skin/dark/add_left.png</file>
+        <file>skin/dark/add_right.png</file>
+        <file>skin/dark/add_top.png</file>
+        <file>skin/dark/branch_close.png</file>
+        <file>skin/dark/branch_open.png</file>
+        <file>skin/dark/calendar_nextmonth.png</file>
+        <file>skin/dark/calendar_prevmonth.png</file>
+        <file>skin/dark/checkbox_checked.png</file>
+        <file>skin/dark/checkbox_checked_disable.png</file>
+        <file>skin/dark/checkbox_parcial.png</file>
+        <file>skin/dark/checkbox_parcial_disable.png</file>
+        <file>skin/dark/checkbox_unchecked.png</file>
+        <file>skin/dark/checkbox_unchecked_disable.png</file>
+        <file>skin/dark/radiobutton_checked.png</file>
+        <file>skin/dark/radiobutton_checked_disable.png</file>
+        <file>skin/dark/radiobutton_unchecked.png</file>
+        <file>skin/dark/radiobutton_unchecked_disable.png</file>
+        <file>lang/app_zh_CN.qm</file>
+    </qresource>
+</RCC>
