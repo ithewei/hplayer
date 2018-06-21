@@ -2,10 +2,9 @@
 #define HGLWIDGET_H
 
 #include "hgl.h"
-#include <qopenglwidget.h>
 #include "hframe.h"
 #include "hgui.h"
-#include "qtstyles.h"
+#include <qopenglwidget.h>
 
 void bindTexture(GLTexture* tex, QImage* img);
 

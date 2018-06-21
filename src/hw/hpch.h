@@ -26,13 +26,15 @@
 #include <atomic>
 
 // hw
-#include "hversion.h"
 #include "hdef.h"
 #include "hcc.h"
+#include "hversion.h"
 #include "singleton.h"
 #include "herr.h"
 #include "hlog.h"
 #include "hcos.h"
+#include "hstring.h"
+#include "hbytearray.h"
 #include "hthread.h"
 
 #include "hobj.h"

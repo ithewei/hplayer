@@ -50,7 +50,8 @@ HEADERS +=  \
     src/ui/qtstyles.h   \
     src/ui/hglwidget.h \
     src/ui/hvideowidget.h \
-    src/ui/hopenmediadlg.h
+    src/ui/hopenmediadlg.h \
+    src/hw/htaskmgr.h
 
 HEADERS +=  \
     src/video/hvideoplayer.h \
@@ -71,7 +72,6 @@ HEADERS += \
     src/hw/hobj.h \
     src/hw/hpch.h \
     src/hw/htask.h \
-    src/hw/htaskmanager.h \
     src/hw/hthread.h \
     src/hw/hutil.h \
     src/hw/hvar.h \
@@ -93,7 +93,8 @@ SOURCES +=  \
     src/ui/qtrcloader.cpp \
     src/ui/hglwidget.cpp \
     src/ui/hvideowidget.cpp \
-    src/ui/hopenmediadlg.cpp
+    src/ui/hopenmediadlg.cpp \
+    src/hw/htaskmgr.cpp
 
 SOURCES +=  src/video/hvideocapture.cpp
 
@@ -102,7 +103,6 @@ SOURCES += \
     src/hw/hlayout.cpp \
     src/hw/hlog.cpp \
     src/hw/htask.cpp \
-    src/hw/htaskmanager.cpp \
     src/hw/hutil.cpp \
     src/jsoncpp/json_reader.cpp \
     src/jsoncpp/json_value.cpp \

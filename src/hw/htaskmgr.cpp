@@ -1,4 +1,4 @@
-#include "htaskmanager.h"
+#include "htaskmgr.h"
 #include "herr.h"
 
 IMPL_SINGLETON(HTaskManager)
