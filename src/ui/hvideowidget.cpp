@@ -74,18 +74,24 @@ void HVideoWidget::leaveEvent(QEvent *e){
 
 void HVideoWidget::mousePressEvent(QMouseEvent *e){
     ptMousePress = e->pos();
+#if WITH_MV_STYLE
     e->ignore();
+#endif
 }
 
 void HVideoWidget::mouseReleaseEvent(QMouseEvent *e){
+#if WITH_MV_STYLE
     e->ignore();
+#endif
 }
 
 void HVideoWidget::mouseMoveEvent(QMouseEvent *e){
     if (e->buttons() == Qt::LeftButton){
 
     }
+#if WITH_MV_STYLE
     e->ignore();
+#endif
 }
 
 void HVideoWidget::open(HMedia& media){

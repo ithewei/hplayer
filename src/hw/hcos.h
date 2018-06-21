@@ -68,7 +68,8 @@ inline datetime_t get_datetime(){
     datetime_t  dt;
 #ifdef _WIN32
     SYSTEMTIME tm;
-	GetSystemTime(&tm);
+	//GetSystemTime(&tm);
+	GetLocalTime(&tm);
 	dt.year     = tm.wYear;
 	dt.month    = tm.wMonth;
 	dt.day      = tm.wDay;
