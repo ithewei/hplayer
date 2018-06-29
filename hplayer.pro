@@ -50,8 +50,7 @@ HEADERS +=  \
     src/ui/qtstyles.h   \
     src/ui/hglwidget.h \
     src/ui/hvideowidget.h \
-    src/ui/hopenmediadlg.h \
-    src/hw/htaskmgr.h
+    src/ui/hopenmediadlg.h
 
 HEADERS +=  \
     src/video/hvideoplayer.h \
@@ -63,23 +62,26 @@ HEADERS +=  \
 HEADERS += \
     src/appdef.h \
     src/hw/hbuf.h \
+    src/hw/hbytearray.h \
     src/hw/hcc.h \
     src/hw/hcos.h \
     src/hw/hdef.h \
     src/hw/herr.h \
+    src/hw/hframe.h \
+    src/hw/hgl.h \
+    src/hw/hgui.h \
     src/hw/hlayout.h \
     src/hw/hlog.h \
     src/hw/hobj.h \
     src/hw/hpch.h \
+    src/hw/hstring.h \
     src/hw/htask.h \
+    src/hw/htaskmgr.h \
     src/hw/hthread.h \
     src/hw/hutil.h \
     src/hw/hvar.h \
     src/hw/hversion.h \
-    src/hw/singleton.h \
-    src/hw/hgui.h \
-    src/hw/hframe.h \
-    src/hw/hgl.h
+    src/hw/singleton.h
 
 SOURCES +=  \
     src/ui/centralwidget.cpp \
@@ -93,17 +95,17 @@ SOURCES +=  \
     src/ui/qtrcloader.cpp \
     src/ui/hglwidget.cpp \
     src/ui/hvideowidget.cpp \
-    src/ui/hopenmediadlg.cpp \
-    src/hw/htaskmgr.cpp
+    src/ui/hopenmediadlg.cpp
 
 SOURCES +=  src/video/hvideocapture.cpp
 
 SOURCES += \
     src/hw/herr.cpp \
-    src/hw/hlayout.cpp \
     src/hw/hlog.cpp \
-    src/hw/htask.cpp \
     src/hw/hutil.cpp \
+    src/hw/htask.cpp \
+    src/hw/htaskmgr.cpp \
+    src/hw/hlayout.cpp  \
     src/jsoncpp/json_reader.cpp \
     src/jsoncpp/json_value.cpp \
     src/jsoncpp/json_writer.cpp

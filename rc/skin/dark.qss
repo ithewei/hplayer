@@ -654,14 +654,6 @@ background:#C0404040;
 color:#FF0000;
 }
 
-.HFRListItem QLabel[reg="yes"]{
-border:2px solid #00FF00;
-}
-
-.HFRListItem QLabel[reg="no"]{
-border:2px solid #FF0000;
-}
-
 /*TextColor:#DCDCDC*/
 /*PanelColor:#444444*/
 /*BorderColor:#242424*/

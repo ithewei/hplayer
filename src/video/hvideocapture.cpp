@@ -37,7 +37,7 @@ int HVideoCapture::doTask(){
     //...ALG
 
     HFrame frame;
-    mat2frame(mat, frame);
+    Mat2HFrame(mat, frame);
     push_frame(&frame);
 
     return 0;

@@ -16,7 +16,7 @@ void CentralWidget::initUI(){
     split->addWidget(mv);
 
     ml->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ml->setMinimumWidth(150);
+    ml->setMinimumWidth(300);
     mv->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mv->setMinimumWidth(700);
     split->setStretchFactor(0, MEDIA_LIST_FACTOR);

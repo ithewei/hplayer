@@ -5,7 +5,7 @@
 #include "hthread.h"
 #include "opencv2/opencv.hpp"
 
-void mat2frame(cv::Mat& mat, HFrame& frame);
+void Mat2HFrame(cv::Mat& mat, HFrame& frame);
 
 class HVideoCapture : public HVideoPlayer, public HThread
 {

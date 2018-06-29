@@ -1,5 +1,6 @@
 #include "hvideowidget.h"
 #include "hvideoplayerfactory.h"
+#include "qtstyles.h"
 
 HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
 {
