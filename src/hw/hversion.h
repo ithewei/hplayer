@@ -20,6 +20,7 @@ inline const char* get_static_version(){
     return VERSION_STRING;
 }
 
+#include <stdio.h>
 inline const char* get_compile_version(){
     static char version[16];
     static datetime_t dt = get_compile_datetime();

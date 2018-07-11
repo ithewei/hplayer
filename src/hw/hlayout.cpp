@@ -47,4 +47,6 @@ HLayoutCell HLayout::merge(int lt, int rb){
 
         return cell;
     }
+
+    return HLayoutCell(0,0,0,0);
 }

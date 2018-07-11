@@ -24,6 +24,8 @@
     F(ERR_TASK_TIMEOUT,     1100,   "task timeout")     \
     F(ERR_TASK_DEQUE_FULL,  1101,   "task deque full")  \
     F(ERR_TASK_NOT_CREATE,  1102,   "task not create")  \
+    \
+    F(ERR_OPEN_FILE,        1200,   "open file failed")
 
 #define FOREACH_ERR_NETWORK(F) \
     F(ERR_ADAPTER_NOT_FOUND,    2001, "adapter not found")  \
