@@ -1,6 +1,10 @@
 #ifndef HCOS_H
 #define HCOS_H
 
+#include <string.h>
+#include <time.h>
+#include "hdef.h"
+
 #ifdef _WIN32
     #ifndef WIN32_LEAN_AND_MEAN
     #define WIN32_LEAN_AND_MEAN
@@ -17,10 +21,6 @@
     #include <pthread.h>
     #include <sys/time.h>
 #endif
-
-#include <time.h>
-
-#include "hdef.h"
 
 #ifdef _WIN32
 inline uint32 getpid(){

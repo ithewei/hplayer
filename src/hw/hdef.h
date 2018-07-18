@@ -57,4 +57,7 @@ typedef int BOOL;
 ( ((uint32)d) | ( ((uint32)c) << 8 ) | ( ((uint32)b) << 16 ) | ( ((uint32)a) << 24 ) )
 #endif
 
+#define FLOAT_PRECISION 1e-6
+#define FLOAT_EQUAL_ZERO(f) (-FLOAT_PRECISION < (f) && (f) < FLOAT_PRECISION)
+
 #endif // HDEF_H

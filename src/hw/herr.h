@@ -13,6 +13,7 @@
     F(ERR_INVALID_HANDLE,   1011,   "invalid handle")   \
     F(ERR_INVALID_JSON,     1012,   "invalid json")     \
     F(ERR_INVALID_XML,      1013,   "invalid xml")      \
+    F(ERR_INVALID_FMT,      1014,   "invalid format")   \
     \
     F(ERR_MISMATCH,         1020,   "mismatch")         \
     F(ERR_REQUEST,          1021,   "error request")    \
@@ -25,7 +26,8 @@
     F(ERR_TASK_DEQUE_FULL,  1101,   "task deque full")  \
     F(ERR_TASK_NOT_CREATE,  1102,   "task not create")  \
     \
-    F(ERR_OPEN_FILE,        1200,   "open file failed")
+    F(ERR_OPEN_FILE,        1200,   "open file failed") \
+    F(ERR_SAVE_FILE,        1201,   "save file failed")
 
 #define FOREACH_ERR_NETWORK(F) \
     F(ERR_ADAPTER_NOT_FOUND,    2001, "adapter not found")  \
@@ -37,9 +39,13 @@
     F(ERR_SERVER_NOT_STARTUP,   2007, "server not startup")     \
     F(ERR_CLIENT_DISCONNECT,    2008, "client disconnect")
 
+#define FOREACH_ERR_SERVICE(F)  \
+    F(ERR_GROUP_NOT_FOUND,      3000, "group not found")        
+
 #define FOREACH_ERR(F) \
     FOREACH_ERR_COMMON(F) \
-    FOREACH_ERR_NETWORK(F)
+    FOREACH_ERR_NETWORK(F)  \
+    FOREACH_ERR_SERVICE(F)
 
 #define ENUM_ERR(macro, errcode, _) macro = errcode,
 enum E_ERR{

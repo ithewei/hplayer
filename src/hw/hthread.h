@@ -71,7 +71,7 @@ public:
         hlogi("%d", cnt);
         return 0;
     }
-    virtual void doFinish() {}
+    virtual void doFinish() {status = STOP;}
 
     std::thread thread;
     enum STATUS {
