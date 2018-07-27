@@ -21,5 +21,6 @@
         <file>skin/dark/radiobutton_unchecked.png</file>
         <file>skin/dark/radiobutton_unchecked_disable.png</file>
         <file>lang/app_zh_CN.qm</file>
+        <file>lang/qt_zh_CN.qm</file>
     </qresource>
 </RCC>

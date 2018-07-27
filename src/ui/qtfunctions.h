@@ -28,6 +28,11 @@ inline void loadLang(const char* qm){
     QTranslator *translator = new QTranslator(qApp);
     translator->load(qm);
     qApp->installTranslator(translator);
+
+    QTranslator *qt_translator = new QTranslator(qApp);
+    qt_translator->load(QLocale(), "qt", "_", ":/lang");
+    //qt_translator->load(":/lang/qt_zh_CN.qm");
+    qApp->installTranslator(qt_translator);
 }
 
 inline QPushButton* genPushButton(QPixmap pixmap, QString tooltip = QString(), QSize sz = QSize(0,0), QWidget* parent = NULL){
