@@ -3,7 +3,7 @@
 
 #include "qtheaders.h"
 #include "hvideowidget.h"
-#include "hlayout.h"
+#include "htable.h"
 
 #define MV_STYLE_MAXNUM     64
 
@@ -32,7 +32,7 @@ struct HWndInfo{
 };
 
 struct HSaveLayout{
-    HLayout layout;
+    HTable layout;
     QVector<HWndInfo> views;
 };
 
@@ -46,6 +46,7 @@ public:
         MERGE,
     };
     explicit HMultiView(QWidget *parent = nullptr);
+    ~HMultiView();
 
     HVideoWidget* getPlayerByID(int playerid);
     HVideoWidget* getPlayerByPos(QPoint pt);
@@ -75,7 +76,7 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
 
 public:
-    HLayout layout;
+    HTable layout;
     QVector<QWidget*> views;
     QLabel *labRect;
     QLabel *labDrag;

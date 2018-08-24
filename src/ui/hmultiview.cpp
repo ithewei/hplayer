@@ -8,6 +8,10 @@ HMultiView::HMultiView(QWidget *parent) : QWidget(parent)
     initConnect();
 }
 
+HMultiView::~HMultiView(){
+    hlogd("~HMultiView");
+}
+
 void HMultiView::initUI(){
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -109,10 +113,10 @@ void HMultiView::relayout(){
     for (int r = 0; r < row; ++r){
         for (int c = 0; c < col; ++c){
             int id = r*col + c + 1;
-            HLayoutCell cell;
+            HTableCell cell;
             QWidget *wdg = getPlayerByID(id);
-            if (layout.getLayoutCell(id, cell)){
-                wdg->setGeometry(x, y, cell_w*cell.getColspan() - CELL_BORDER, cell_h*cell.getRowspan()- CELL_BORDER);
+            if (layout.getTableCell(id, cell)){
+                wdg->setGeometry(x, y, cell_w*cell.colspan() - CELL_BORDER, cell_h*cell.rowspan()- CELL_BORDER);
                 wdg->show();
             }
             x += cell_w;

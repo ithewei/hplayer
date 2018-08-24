@@ -1,5 +1,5 @@
 #include "herr.h"
-#include "hcos.h"
+#include "hthread.h" // for gettid
 
 #include <map>
 

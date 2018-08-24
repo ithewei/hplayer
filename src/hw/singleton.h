@@ -1,8 +1,6 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
-#include "hdef.h"
-
 #define DISABLE_COPY(Class) \
     Class(const Class &) = delete; \
     Class &operator=(const Class &) = delete;
@@ -18,13 +16,16 @@
 #define IMPL_SINGLETON(Class) \
     Class* Class::s_pInstance = NULL; \
     Class* Class::instance(){ \
-        if (!s_pInstance){ \
+        if (s_pInstance == NULL){ \
             s_pInstance = new Class; \
         } \
         return s_pInstance; \
     } \
     void Class::exitInstance(){ \
-        SAFE_DELETE(s_pInstance); \
+        if (s_pInstance){  \
+            delete s_pInstance; \
+            s_pInstance = NULL; \
+        }   \
     }
 
 #endif // SINGLETON_H

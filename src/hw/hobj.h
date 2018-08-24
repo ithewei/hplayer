@@ -21,11 +21,11 @@ public:
         }
     }
 
-    std::string objName() {
+    std::string name() {
         return _objName;
     }
 
-    void  setObjName(char* name) {
+    void  setName(char* name) {
         _objName = name;
     }
 
@@ -44,7 +44,7 @@ public:
     HObj* findChild(std::string objName) {
         auto iter = children.begin();
         while (iter != children.end()) {
-            if ((*iter)->objName() == objName)
+            if ((*iter)->name() == objName)
                 return *iter;
             iter++;
         }

@@ -3,13 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <QDebug>
-#define loge qWarning
-#define logi qInfo
-
 int db_open(const char* dbname, HDB* phdb){
     if (sqlite3_open(dbname, phdb) != SQLITE_OK){
-        loge("sqlite3_open %s failed!", dbname);
+        //loge("sqlite3_open %s failed!", dbname);
+        return SQL_ERR;
     }
 
     return SQL_OK;
@@ -23,7 +20,7 @@ int db_exec_no_result(HDB hdb, const char* sql){
     char *errmsg;
     //logi("sql: %s", sql);
     if (sqlite3_exec(hdb, sql, NULL, NULL, &errmsg) != SQLITE_OK){
-        loge("sqlite3_exec sql: %s err: %s", sql, errmsg);
+        //loge("sqlite3_exec sql: %s err: %s", sql, errmsg);
         return SQL_ERR;
     }
     return SQL_OK;
@@ -35,7 +32,7 @@ int db_exec_with_result(HDB hdb, const char* sql, dbRecords* records){
     char *errmsg;
     //logi("sql: %s", sql);
     if (sqlite3_get_table(hdb, sql, &results, &row, &col, &errmsg) != SQLITE_OK){
-        loge("sqlite3_get_table sql: %s err: %s", sql, errmsg);
+        //loge("sqlite3_get_table sql: %s err: %s", sql, errmsg);
         return SQL_ERR;
     }
 
@@ -55,7 +52,7 @@ int db_exec_cb(HDB hdb, const char* sql, db_callback cb, void* userdata){
     char *errmsg;
     //logi("sql: %s", sql);
     if (sqlite3_exec(hdb, sql, cb, userdata, &errmsg) != SQLITE_OK){
-        loge("sqlite3_exec sql: %s err: %s", sql, errmsg);
+        //loge("sqlite3_exec sql: %s err: %s", sql, errmsg);
         return SQL_ERR;
     }
     return SQL_OK;

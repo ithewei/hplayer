@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-
+    hlogd("~MainWindow");
 }
 
 void MainWindow::initMenu(){

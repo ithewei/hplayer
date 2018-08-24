@@ -7,6 +7,10 @@ CentralWidget::CentralWidget(QWidget *parent) : QWidget(parent)
     initConnect();
 }
 
+CentralWidget::~CentralWidget(){
+    hlogd("~CentralWidget");
+}
+
 void CentralWidget::initUI(){
     ml = new HMediaList;
     mv = new HMultiView;

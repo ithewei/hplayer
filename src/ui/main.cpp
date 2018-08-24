@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
 {
     qInstallMessageHandler(myLogHandler);
 
+    hlogi("%s", get_compile_version());
     qInfo("-------------------app start----------------------------------");
     QApplication a(argc, argv);
     a.setApplicationName(APP_NAME);

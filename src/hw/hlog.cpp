@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <mutex>
-#include "hcos.h"
+#include "htime.h" // for get_datetime
 
 #define LOGBUF_SIZE         (1<<13)  // 8k
 #define LOGFILE_MAXSIZE     (1<<23)  // 8M
@@ -37,8 +37,8 @@ int hlog_printf(int level, const char* fmt, ...) {
     if (level < s_loglevel)
         return -10;
 
-    const char* pcolor = CL_WHITE;
-    const char* plevel = "LOG";
+    const char* pcolor = "";
+    const char* plevel = "";
 #define CASE_LOG(id, str, clr) \
     case id: plevel = str; pcolor = clr; break;
 
@@ -47,7 +47,7 @@ int hlog_printf(int level, const char* fmt, ...) {
     }
 #undef CASE_LOG
 
-#if !LOG_WITH_COLOR
+#ifdef _WIN32
     pcolor = "";
 #endif
 
@@ -74,7 +74,11 @@ int hlog_printf(int level, const char* fmt, ...) {
     len += vsnprintf(s_logbuf + len, LOGBUF_SIZE-len, fmt, ap);
     va_end(ap);
 
-    fprintf(s_logfp, "%s\n" CL_CLR, s_logbuf);
+    fprintf(s_logfp, "%s\n", s_logbuf);
+#ifndef _WIN32
+    fprintf(s_logfp, CL_CLR);
+#endif
+
     fflush(NULL);
 
     return len;

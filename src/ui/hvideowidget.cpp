@@ -13,6 +13,7 @@ HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
 }
 
 HVideoWidget::~HVideoWidget(){
+    hlogi("~HVideoWidget");
     close();
 }
 

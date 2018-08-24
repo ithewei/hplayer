@@ -16,10 +16,10 @@ public:
 
     virtual int stop();
 
-    virtual void pause() {HThread::pause();}
-    virtual void resume() {HThread::resume();}
+    virtual int pause() {return HThread::pause();}
+    virtual int resume() {return HThread::resume();}
 
-    virtual int doTask();
+    virtual void doTask();
 
 protected:
     cv::VideoCapture vc;

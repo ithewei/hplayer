@@ -9,6 +9,7 @@ using namespace std;
 
 #define SQL_OK SQLITE_OK
 #define SQL_ERR SQLITE_ERROR
+
 typedef sqlite3* HDB;
 typedef int (*db_callback)(void* userdata, int argc, char *col_values[], char *col_names[]);
 typedef std::map<std::string, std::string> key_value;

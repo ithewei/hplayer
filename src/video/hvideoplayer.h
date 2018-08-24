@@ -12,8 +12,8 @@ public:
 
     virtual int start() = 0;
     virtual int stop() = 0;
-    virtual void pause() = 0;
-    virtual void resume() = 0;
+    virtual int pause() = 0;
+    virtual int resume() = 0;
 
     void set_media(HMedia& media){
         this->media = media;

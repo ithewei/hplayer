@@ -50,7 +50,28 @@ HEADERS +=  \
     src/ui/qtstyles.h   \
     src/ui/hglwidget.h \
     src/ui/hvideowidget.h \
-    src/ui/hopenmediadlg.h
+    src/ui/hopenmediadlg.h \
+    src/hw/base64.h \
+    src/hw/h.h \
+    src/hw/hbuf.h \
+    src/hw/hbytearray.h \
+    src/hw/hdef.h \
+    src/hw/herr.h \
+    src/hw/hframe.h \
+    src/hw/hgl.h \
+    src/hw/hgui.h \
+    src/hw/hlog.h \
+    src/hw/hmutex.h \
+    src/hw/hobj.h \
+    src/hw/hplatform.h \
+    src/hw/hscope.h \
+    src/hw/hstring.h \
+    src/hw/htable.h \
+    src/hw/hthread.h \
+    src/hw/htime.h \
+    src/hw/hvar.h \
+    src/hw/hversion.h \
+    src/hw/singleton.h
 
 HEADERS +=  \
     src/video/hvideoplayer.h \
@@ -60,28 +81,7 @@ HEADERS +=  \
     src/video/opencv_util.h
 
 HEADERS += \
-    src/appdef.h \
-    src/hw/hbuf.h \
-    src/hw/hbytearray.h \
-    src/hw/hcc.h \
-    src/hw/hcos.h \
-    src/hw/hdef.h \
-    src/hw/herr.h \
-    src/hw/hframe.h \
-    src/hw/hgl.h \
-    src/hw/hgui.h \
-    src/hw/hlayout.h \
-    src/hw/hlog.h \
-    src/hw/hobj.h \
-    src/hw/hpch.h \
-    src/hw/hstring.h \
-    src/hw/htask.h \
-    src/hw/htaskmgr.h \
-    src/hw/hthread.h \
-    src/hw/hutil.h \
-    src/hw/hvar.h \
-    src/hw/hversion.h \
-    src/hw/singleton.h
+    src/appdef.h
 
 SOURCES +=  \
     src/ui/centralwidget.cpp \
@@ -95,17 +95,18 @@ SOURCES +=  \
     src/ui/qtrcloader.cpp \
     src/ui/hglwidget.cpp \
     src/ui/hvideowidget.cpp \
-    src/ui/hopenmediadlg.cpp
+    src/ui/hopenmediadlg.cpp \
+    src/hw/base64.cpp \
+    src/hw/herr.cpp \
+    src/hw/hframe.cpp \
+    src/hw/hlog.cpp \
+    src/hw/hstring.cpp \
+    src/hw/htable.cpp \
+    src/hw/htime.cpp
 
 SOURCES +=  src/video/hvideocapture.cpp
 
 SOURCES += \
-    src/hw/herr.cpp \
-    src/hw/hlog.cpp \
-    src/hw/hutil.cpp \
-    src/hw/htask.cpp \
-    src/hw/htaskmgr.cpp \
-    src/hw/hlayout.cpp  \
     src/jsoncpp/json_reader.cpp \
     src/jsoncpp/json_value.cpp \
     src/jsoncpp/json_writer.cpp

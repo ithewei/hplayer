@@ -2,7 +2,7 @@
 #define H_BYTE_ARRAY_H
 
 #include "hbuf.h"
-#include "base64/base64.h"
+#include "base64.h"
 
 class HByteArray : public HVLBuf{
 public:

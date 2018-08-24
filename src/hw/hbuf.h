@@ -1,5 +1,5 @@
-#ifndef HBUF_H
-#define HBUF_H
+#ifndef H_BUF_H
+#define H_BUF_H
 
 #include "hdef.h"
 #include <stdlib.h>
@@ -191,4 +191,4 @@ private:
     size_t _size;
 };
 
-#endif // HBUF_H
+#endif // H_BUF_H

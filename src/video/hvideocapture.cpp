@@ -29,16 +29,14 @@ int HVideoCapture::stop(){
     return 0;
 }
 
-int HVideoCapture::doTask(){
+void HVideoCapture::doTask(){
     cv::Mat mat;
     if (!vc.read(mat))
-        return 0;
+        return;
 
     //...ALG
 
     HFrame frame;
     Mat2HFrame(mat, frame);
     push_frame(&frame);
-
-    return 0;
 }

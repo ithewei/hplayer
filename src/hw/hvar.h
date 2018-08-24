@@ -22,7 +22,7 @@ public:
         float64 f;
         char* str;
         void* ptr;
-    }data;
+    } data;
 
     HVar()          {memset(&data, 0, sizeof(data)); type = UNKNOWN;}
     HVar(bool b)    {data.b = b; type = BOOLEAN;}

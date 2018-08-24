@@ -1,5 +1,5 @@
-#ifndef HERR_H
-#define HERR_H
+#ifndef H_ERR_H
+#define H_ERR_H
 
 // F(macro, errcode, errmsg)
 #define FOREACH_ERR_COMMON(F) \
@@ -65,4 +65,4 @@ int  get_last_errcode();
 // errcode => errmsg
 const char* get_errmsg(int errcode);
 
-#endif // HERR_H
+#endif // H_ERR_H

@@ -1,14 +1,5 @@
-#ifndef HDEF_H
-#define HDEF_H
-
-#define STRINGIFY(x)    STRINGIFY_HELPER(x)
-#define STRINGIFY_HELPER(x)    #x
-
-#define STRINGCAT(x,y)  STRINGCAT_HELPER(x,y)
-#define STRINGCAT_HELPER(x,y)   x##y
-
-#define container_of(ptr, type, member) \
-  ((type *) ((char *) (ptr) - offsetof(type, member)))
+#ifndef H_DEF_H
+#define H_DEF_H
 
 typedef unsigned char       uint8;
 typedef unsigned short      uint16;
@@ -23,7 +14,14 @@ typedef long long           int64;
 typedef float               float32;
 typedef double              float64;
 
+typedef int                 BOOL;
+
 typedef int (*method_t)(void* userdata);
+typedef void (*procedure_t)(void* userdata);
+
+#ifndef NULL
+#define NULL    0
+#endif
 
 #ifndef TRUE
 #define TRUE    1L
@@ -31,10 +29,6 @@ typedef int (*method_t)(void* userdata);
 
 #ifndef FALSE
 #define FALSE   0L
-#endif
-
-#ifndef BOOL
-typedef int BOOL;
 #endif
 
 #ifndef MAX
@@ -60,4 +54,13 @@ typedef int BOOL;
 #define FLOAT_PRECISION 1e-6
 #define FLOAT_EQUAL_ZERO(f) (-FLOAT_PRECISION < (f) && (f) < FLOAT_PRECISION)
 
-#endif // HDEF_H
+#define STRINGIFY(x)    STRINGIFY_HELPER(x)
+#define STRINGIFY_HELPER(x)    #x
+
+#define STRINGCAT(x,y)  STRINGCAT_HELPER(x,y)
+#define STRINGCAT_HELPER(x,y)   x##y
+
+#define container_of(ptr, type, member) \
+  ((type *) ((char *) (ptr) - offsetof(type, member)))
+
+#endif // H_DEF_H

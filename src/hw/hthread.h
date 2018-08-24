@@ -1,12 +1,33 @@
 #ifndef H_THREAD_H
 #define H_THREAD_H
 
+#include "hdef.h"
+#include "hplatform.h"
+#include "htime.h" // for msleep
 #include <thread>
-#include <mutex>
 #include <atomic>
-#include "hcos.h"
-#include "hlog.h"
 
+#ifdef _MSC_VER
+inline uint32 getpid(){
+    return GetCurrentProcessId();
+}
+#endif
+
+inline uint32 gettid(){
+#ifdef _MSC_VER
+    return GetCurrentThreadId();
+#else
+    return pthread_self();
+#endif
+}
+
+/************************************************
+ * HThread
+ * Status: STOP,RUNNING,PAUSE
+ * Control: start,stop,pause,resume
+ * first-level virtual: doTask
+ * second-level virtual: run
+************************************************/
 class HThread{
 public:
     HThread() {
@@ -33,16 +54,18 @@ public:
         return 0;
     }
 
-    virtual void pause() {
+    virtual int pause() {
         if (status == RUNNING) {
             status = PAUSE;
         }
+        return 0;
     }
 
-    virtual void resume() {
+    virtual int resume() {
         if (status == PAUSE) {
             status = RUNNING;
         }
+        return 0;
     }
 
     void thread_proc() {
@@ -65,21 +88,16 @@ public:
     }
 
     virtual void doPrepare() {}
-    virtual int doTask() {
-        static uint64 cnt = 0;
-        cnt++;
-        hlogi("%d", cnt);
-        return 0;
-    }
-    virtual void doFinish() {status = STOP;}
+    virtual void doTask() {}
+    virtual void doFinish() {}
 
     std::thread thread;
-    enum STATUS {
+    enum Status {
+        STOP,
         RUNNING,
         PAUSE,
-        STOP
     };
-    std::atomic<STATUS> status;
+    std::atomic<Status> status;
 };
 
 #endif // H_THREAD_H

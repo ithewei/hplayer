@@ -3,7 +3,7 @@
 
 #include "hdef.h"
 
-typedef uint32_t HColor; // 0xAARRGGBB
+typedef uint32 HColor; // 0xAARRGGBB
 
 #define CLR_B(c)    ( c        & 0xff)
 #define CLR_G(c)    ((c >> 8)  & 0xff)
