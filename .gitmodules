@@ -1,0 +1,3 @@
+[submodule "src/hw"]
+	path = src/hw
+	url = https://github.com/ithewei/hw.git
