@@ -15,9 +15,9 @@ enum MEDIA_TYPE{
 
 typedef struct media_s{
     MEDIA_TYPE  type;
-    std::string src;
     int         index; // for camera index
-    std::string szID;
+    std::string src;
+    std::string descr;
 
     media_s(){
         type = DEFAULT_MEDIA_TYPE;

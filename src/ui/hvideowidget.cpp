@@ -117,7 +117,8 @@ void HVideoWidget::start(){
     if (!pImpl_player){
         pImpl_player = HVideoPlayerFactory::create(media.type);
         pImpl_player->set_media(media);
-        //pImpl_player->set_frame_cache(5);
+        pImpl_player->set_fps(DEFAULT_FPS);
+        pImpl_player->set_frame_cache(5);
         if (pImpl_player->start() != 0){
             QMessageBox::critical(this, tr("ERROR"), tr("Could not open media: \n")
                                   + media.src.c_str() + QString::asprintf("[%d]", media.index));

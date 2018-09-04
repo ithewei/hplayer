@@ -5,7 +5,8 @@
 #include "hthread.h"
 #include "opencv2/opencv.hpp"
 
-void Mat2HFrame(cv::Mat& mat, HFrame& frame);
+#include <chrono>
+using namespace std::chrono;
 
 class HVideoCapture : public HVideoPlayer, public HThread
 {
@@ -23,6 +24,9 @@ public:
 
 protected:
     cv::VideoCapture vc;
+
+    bool first_flag;
+    system_clock::time_point base_tp;
 };
 
 #endif // HVIDEOCAPTURE_H

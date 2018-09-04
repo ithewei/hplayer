@@ -5,6 +5,7 @@
 #include "hframe.h"
 #include "hgui.h"
 #include <qopenglwidget.h>
+#include <atomic>
 
 void bindTexture(GLTexture* tex, QImage* img);
 
@@ -33,7 +34,7 @@ protected:
     void drawYUV(HFrame* pFrame);
 
 protected:
-    static bool s_bInitGLEW;
+    static std::atomic_flag s_init_flag;
     static GLuint prog_yuv;
     static GLuint texUniformY;
     static GLuint texUniformU;

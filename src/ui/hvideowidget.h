@@ -7,8 +7,6 @@
 #include "hvideotoolbar.h"
 #include "hvideoplayer.h"
 
-#define DEFAULT_FPS     25
-
 class  HVideoWidget : public QFrame
 {
     Q_OBJECT

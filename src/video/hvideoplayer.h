@@ -3,11 +3,14 @@
 
 #include "hmedia.h"
 #include "hframe.h"
+#define DEFAULT_FPS 25
 
 class HVideoPlayer
 {
 public:
-    HVideoPlayer(){}
+    HVideoPlayer(){
+        fps = DEFAULT_FPS;
+    }
     virtual ~HVideoPlayer() {}
 
     virtual int start() = 0;
@@ -17,6 +20,10 @@ public:
 
     void set_media(HMedia& media){
         this->media = media;
+    }
+
+    void set_fps(int fps){
+        this->fps = fps;
     }
 
     FrameStats get_frame_stats(){
@@ -40,6 +47,7 @@ public:
     }
 
 protected:
+    int         fps;
     HMedia      media;
     HFrameBuf   frame_buf;
 };

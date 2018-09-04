@@ -19,7 +19,7 @@ void bindTexture(GLTexture* tex, QImage* img){
     //glTexImage2D(GL_TEXTURE_2D, 0, tex->bpp/8, tex->width, tex->height, 0, tex->type, GL_UNSIGNED_BYTE, img->bits());
 }
 
-bool HGLWidget::s_bInitGLEW = false;
+std::atomic_flag HGLWidget::s_init_flag = ATOMIC_FLAG_INIT;
 GLuint HGLWidget::prog_yuv;
 GLuint HGLWidget::texUniformY;
 GLuint HGLWidget::texUniformU;
@@ -183,14 +183,14 @@ void HGLWidget::initYUV(){
 }
 
 void HGLWidget::initializeGL(){
-    if (!s_bInitGLEW){
+    if (!s_init_flag.test_and_set()){
         if (glewInit() != 0){
+            s_init_flag.clear();
             qFatal("glewInit failed");
             return;
         }
 
         loadYUVShader();
-        s_bInitGLEW = true;
     }
 
     initVAO();
