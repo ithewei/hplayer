@@ -26,8 +26,6 @@ public:
 signals:
 
 public slots:
-    void onBtnMedia();
-
     void open(HMedia& media);
     void close();
 

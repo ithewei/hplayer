@@ -26,7 +26,7 @@ void MainWindow::initMenu(){
     QAction* actOpenFile = new QAction(QIcon(":/image/file.png"), tr(" Open File"));
     actOpenFile->setShortcut(QKeySequence("Ctrl+F"));
     connect(actOpenFile, &QAction::triggered, this, [=](){
-        onOpenMedia(MEDIA_TYPE_FILE);
+        OpenMediaDlg(MEDIA_TYPE_FILE);
     });
     mediaMenu->addAction(actOpenFile);
     mediaToolbar->addAction(actOpenFile);
@@ -34,7 +34,7 @@ void MainWindow::initMenu(){
     QAction* actOpenNetwork = new QAction(QIcon(":/image/network.png"), tr(" Open Network"));
     actOpenNetwork->setShortcut(QKeySequence("Ctrl+N"));
     connect(actOpenNetwork, &QAction::triggered, this, [=](){
-        onOpenMedia(MEDIA_TYPE_NETWORK);
+        OpenMediaDlg(MEDIA_TYPE_NETWORK);
     });
     mediaMenu->addAction(actOpenNetwork);
     mediaToolbar->addAction(actOpenNetwork);
@@ -42,7 +42,7 @@ void MainWindow::initMenu(){
     QAction* actOpenCapture = new QAction(QIcon(":/image/capture.png"), tr(" Open Capture"));
     actOpenCapture->setShortcut(QKeySequence("Ctrl+C"));
     connect(actOpenCapture, &QAction::triggered, this, [=](){
-        onOpenMedia(MEDIA_TYPE_CAPTURE);
+        OpenMediaDlg(MEDIA_TYPE_CAPTURE);
     });
     mediaMenu->addAction(actOpenCapture);
     mediaToolbar->addAction(actOpenCapture);
@@ -129,7 +129,7 @@ void MainWindow::initUI(){
 }
 
 void MainWindow::initConnect(){
-    connect(this, SIGNAL(reqPlay(HMedia&)), center->mv, SLOT(play(HMedia&)));
+
 }
 
 void MainWindow::fullscreen(){
@@ -220,10 +220,10 @@ void MainWindow::onMVStyleSelected(int id){
 }
 
 #include "hopenmediadlg.h"
-void MainWindow::onOpenMedia(int index){
+void MainWindow::OpenMediaDlg(int index){
     HOpenMediaDlg dlg(this);
     dlg.tab->setCurrentIndex(index);
     if (dlg.exec() == QDialog::Accepted){
-        emit reqPlay(dlg.media);
+        center->mv->play(dlg.media);
     }
 }

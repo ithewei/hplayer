@@ -30,7 +30,6 @@ protected:
     virtual void keyPressEvent(QKeyEvent* e);
 
 signals:
-    void reqPlay(HMedia& media);
 
 public slots:
     void about();
@@ -39,7 +38,7 @@ public slots:
     void onMVStyleSelected(int id);
     void mv_fullscreen();
 
-    void onOpenMedia(int index);
+    void OpenMediaDlg(int index);
 
 public:
     CentralWidget* center;

@@ -1,16 +1,18 @@
-# output
-build
-
-# test
-test
+# cache
+*~
+*.bk
+*.old
+*.org
 
 # IDE
 .vs
 .vscode
 *.user
 
-# cache
-*~
-*.bk
-*.old
-*.org
+# output
+.qmake.stash
+Makefile*
+tmp
+
+# run
+*.log

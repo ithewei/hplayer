@@ -1,6 +1,7 @@
 #include "hvideowidget.h"
 #include "hvideoplayerfactory.h"
 #include "qtstyles.h"
+#include "hopenmediadlg.h"
 
 HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
 {
@@ -38,7 +39,12 @@ void HVideoWidget::initUI(){
 }
 
 void HVideoWidget::initConnect(){
-    connect( btnMedia, SIGNAL(clicked(bool)), this, SLOT(onBtnMedia()) );
+    connect( btnMedia, &QPushButton::clicked, [this]{
+        HOpenMediaDlg dlg(this);
+        if (dlg.exec() == QDialog::Accepted){
+            open(dlg.media);
+        }
+    } );
     connect( titlebar->btnClose, SIGNAL(clicked(bool)), this, SLOT(close()) );
 
     connect( toolbar, SIGNAL(sigStart()), this, SLOT(start()) );
@@ -167,13 +173,5 @@ void HVideoWidget::onTimerUpdate(){
         if (pImpl_player->pop_frame(&videoWnd->last_frame) == 0){
             videoWnd->update();
         }
-    }
-}
-
-#include "hopenmediadlg.h"
-void HVideoWidget::onBtnMedia(){
-    HOpenMediaDlg dlg(this);
-    if (dlg.exec() == QDialog::Accepted){
-        open(dlg.media);
     }
 }
