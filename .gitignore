@@ -16,3 +16,8 @@ tmp
 
 # run
 *.log
+
+# devenv
+msvc14_x64
+mingw32
+mingw64

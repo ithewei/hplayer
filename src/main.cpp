@@ -59,6 +59,8 @@ void myLogHandler(QtMsgType type, const QMessageLogContext & ctx, const QString 
 int main(int argc, char *argv[])
 {
     qInstallMessageHandler(myLogHandler);
+    hlog_set_file(APP_NAME".log");
+    hlog_set_level(LOG_LEVEL_INFO);
 
     hlogi("%s", get_compile_version());
     qInfo("-------------------app start----------------------------------");

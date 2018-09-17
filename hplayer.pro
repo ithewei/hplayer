@@ -15,7 +15,6 @@ MOC_DIR         = tmp/moc
 RCC_DIR         = tmp/rcc
 UI_DIR          = tmp/ui
 OBJECTS_DIR     = tmp/obj
-DESTDIR         = bin
 
 #PRECOMPILED_HEADER  = src/ui/qtheaders.h
 
@@ -123,24 +122,38 @@ win32 {
 
     DEFINES += WIN32_LEAN_AND_MEAN
 
-    LIBS += kernel32.lib    \
-            user32.lib      \
-            gdi32.lib       \
+    LIBS += -lkernel32    \
+            -luser32      \
+            -lgdi32       \
             \
-            opengl32.lib    \
-            glu32.lib       \
+            -lopengl32    \
+            -lglu32       \
             \
-            ole32.lib       \
-            oleaut32.lib    \
-            strmiids.lib
+            -lole32       \
+            -loleaut32    \
+            -lstrmiids
 
-    LIBS += -L$$PWD/3rd/lib/x86
+    LIBS += -lopencv_core341  \
+            -lopencv_highgui341   \
+            -lopencv_imgcodecs341 \
+            -lopencv_imgproc341   \
+            -lopencv_videoio341
 
-    LIBS += opencv_core341.lib  \
-            opencv_highgui341.lib   \
-            opencv_imgcodecs341.lib \
-            opencv_imgproc341.lib   \
-            opencv_videoio341.lib
+    # msvc14_x86
+    LIBS += -L$$PWD/3rd/lib/msvc14_x86
+    DESTDIR = bin/msvc14_x86
+
+    # msvc14_x64
+#    LIBS += -L$$PWD/3rd/lib/msvc14_x64
+#    DESTDIR = bin/msvc14_x64
+
+    # mingw32
+#    LIBS += -L$$PWD/3rd/lib/mingw32
+#    DESTDIR = bin/mingw32
+
+    # mingw64
+#    LIBS += -L$$PWD/3rd/lib/mingw64
+#    DESTDIR = bin/mingw64
 }
 
 unix{

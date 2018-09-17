@@ -12,8 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     initConnect();
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     hlogd("~MainWindow");
 }
 

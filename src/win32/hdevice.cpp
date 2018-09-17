@@ -2,6 +2,7 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#define NO_DSHOW_STRSAFE
 #include <dshow.h>
 
 vector<HDevice> getDevicesList(REFGUID category){
