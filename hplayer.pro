@@ -4,8 +4,12 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+# default CONFIG contains debug,release,debug_and_release
+CONFIG -= debug 
+#CONFIG -= release
+CONFIG -= debug_and_release
 
+QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TEMPLATE = app
@@ -98,14 +102,16 @@ SOURCES += src/GL/glew.c
 # video
 INCLUDEPATH += src/video
 HEADERS +=  \
-    src/video/hvideoplayer.h \
-    src/video/hvideocapture.h \
-    src/video/hvideoplayerfactory.h \
     src/video/hmedia.h \
+    src/video/hvideoplayer.h \
+    src/video/hvideoplayerfactory.h \
     src/video/opencv_util.h \
+    src/video/hvideocapture.h \
+    src/video/hffplayer.h \
 
 SOURCES += \
-    src/video/hvideocapture.cpp
+    src/video/hvideocapture.cpp \
+    src/video/hffplayer.cpp \
 
 # global
 HEADERS += \
@@ -114,13 +120,27 @@ HEADERS += \
 SOURCES += \
     src/main.cpp
 
+## opencv
+LIBS += -lopencv_core341  \
+        -lopencv_highgui341   \
+        -lopencv_imgcodecs341 \
+        -lopencv_imgproc341   \
+        -lopencv_videoio341   \
+
+## FFmpeg with nvcodec compiler by mingw
+LIBS += -lavformat  \
+        -lavcodec   \
+        -lswresample \
+        -lswscale   \
+        \#-lavdevice  \
+        -lavutil \
 
 win32 {
+    DEFINES += WIN32_LEAN_AND_MEAN
+
     INCLUDEPATH += src/win32
     HEADERS += src/win32/hdevice.h
     SOURCES += src/win32/hdevice.cpp
-
-    DEFINES += WIN32_LEAN_AND_MEAN
 
     LIBS += -lkernel32    \
             -luser32      \
@@ -131,30 +151,62 @@ win32 {
             \
             -lole32       \
             -loleaut32    \
-            -lstrmiids
+            -lstrmiids    \
+            \
+            -lws2_32      \
+            -lsecur32     \
 
-    LIBS += -lopencv_core341  \
-            -lopencv_highgui341   \
-            -lopencv_imgcodecs341 \
-            -lopencv_imgproc341   \
-            -lopencv_videoio341
+#    if (contains(QMAKE_HOST.arch, x86_64)) {
+#        LIBS += -L3rd/lib/x64
+#    } else {
+#        LIBS += -L3rd/lib/x86
+#    }
 
-    # msvc14_x86
-    LIBS += -L$$PWD/3rd/lib/msvc14_x86
-    DESTDIR = bin/msvc14_x86
+    win32-msvc {
+        if (contains(QMAKE_HOST.arch, x86_64)) {
+            LIBS += -L3rd/lib/msvc14_x64
+            DESTDIR = bin/msvc14_x64
+        } else {
+            LIBS += -L3rd/lib/msvc14_x86
+            DESTDIR = bin/msvc14_x86 
+        }
+    }
 
-    # msvc14_x64
-#    LIBS += -L$$PWD/3rd/lib/msvc14_x64
-#    DESTDIR = bin/msvc14_x64
+    win32-g++ {
+        if (contains(QMAKE_HOST.arch, x86_64)) {
+            LIBS += -L3rd/lib/mingw64
+            DESTDIR = bin/mingw64
+        } else {
+            LIBS += -L3rd/lib/mingw32
+            DESTDIR = bin/mingw32
+        }
 
-    # mingw32
-#    LIBS += -L$$PWD/3rd/lib/mingw32
-#    DESTDIR = bin/mingw32
-
-    # mingw64
-#    LIBS += -L$$PWD/3rd/lib/mingw64
-#    DESTDIR = bin/mingw64
+        # for ffmpeg staticlib
+        LIBS += -liconv \
+        -lz \
+        -lbz2   \
+        -llzma  \
+        -lcrypto \
+        -lbcrypt 
+    }
 }
 
 unix{
 }
+
+message(ARCH=$$QMAKE_HOST.arch)
+message(QT_VERSION=$$QT_VERSION)
+message(QMAKE=$$QMAKE_QMAKE)
+message(QMAKESPEC=$$QMAKESPEC)
+message(CC=$$QMAKE_CC)
+message(CXX=$$QMAKE_CXX)
+message(LINK=$$QMAKE_LINK)
+message(CFLAGS=$$QMAKE_CFLAGS)
+message(CXXFLAGS=$$QMAKE_CXXFLAGS)
+
+message(PWD=$$PWD)
+message(TARGET=$$DESTDIR/$$TARGET)
+message(DEFINES=$$DEFINES)
+message(CONFIG=$$CONFIG)
+message(INCLUDEPATH=$$INCLUDEPATH)
+message(LIBS=$$LIBS)

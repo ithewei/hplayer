@@ -13,11 +13,14 @@
 .qmake.stash
 Makefile*
 tmp
+*debug
+*release
 
 # run
 *.log
 
 # devenv
+# just push msvc14_x86 lib and dll
 msvc14_x64
 mingw32
 mingw64

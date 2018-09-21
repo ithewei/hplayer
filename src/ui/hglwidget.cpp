@@ -207,6 +207,8 @@ void HGLWidget::paintGL(){
 }
 
 void HGLWidget::drawYUV(HFrame* pFrame){
+    assert(pFrame->type == GL_I420 || pFrame->type == GL_YV12);
+
     glUseProgram(prog_yuv);
 
     int w = pFrame->w;
@@ -215,6 +217,11 @@ void HGLWidget::drawYUV(HFrame* pFrame){
     GLubyte* y = pFrame->buf.base;
     GLubyte* u = y + y_size;
     GLubyte* v = u + (y_size>>2);
+    if (pFrame->type == GL_YV12) {
+        GLubyte* tmp = u;
+        u = v;
+        v = tmp;
+    }
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex_yuv[0]);
@@ -237,7 +244,7 @@ void HGLWidget::drawYUV(HFrame* pFrame){
 }
 
 void HGLWidget::drawFrame(HFrame *pFrame){
-    if (pFrame->type == GL_I420){
+    if (pFrame->type == GL_I420 || pFrame->type == GL_YV12){
         drawYUV(pFrame);
     }else{
         glMatrixMode(GL_PROJECTION);

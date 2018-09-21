@@ -4,6 +4,7 @@
 #include "hmedia.h"
 #include "hvideoplayer.h"
 #include "hvideocapture.h"
+#include "hffplayer.h"
 
 class HVideoPlayerFactory
 {
@@ -12,6 +13,7 @@ public:
         switch (type) {
         case MEDIA_TYPE_FILE:
         case MEDIA_TYPE_NETWORK:
+            return new HFFPlayer;
         case MEDIA_TYPE_CAPTURE:
             return new HVideoCapture;
         default:

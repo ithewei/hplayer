@@ -19,7 +19,7 @@ int HVideoCapture::start(){
         return -20;
 
     vc.set(cv::CAP_PROP_FPS, fps);
-    first_flag = true;
+    HThread::setSleepPolicy(HThread::SLEEP_UNTIL, 1000/fps);
 
     return HThread::start();
 }
@@ -37,15 +37,7 @@ void HVideoCapture::doTask(){
 
     //...ALG
 
-    HFrame frame;
-    Mat2HFrame(mat, frame);
-    push_frame(&frame);
-
-    if (first_flag){
-        first_flag = false;
-        base_tp = std::chrono::system_clock::now();
-    }
-
-    base_tp += std::chrono::milliseconds(1000/fps); // 40ms
-    std::this_thread::sleep_until(base_tp);
+    HFrame hframe;
+    Mat2HFrame(mat, hframe);
+    push_frame(&hframe);
 }
