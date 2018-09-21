@@ -32,7 +32,7 @@ struct HWndInfo{
 };
 
 struct HSaveLayout{
-    HTable layout;
+    HTable table;
     QVector<HWndInfo> views;
 };
 
@@ -76,7 +76,7 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
 
 public:
-    HTable layout;
+    HTable table;
     QVector<QWidget*> views;
     QLabel *labRect;
     QLabel *labDrag;

@@ -38,7 +38,7 @@ void HMultiView::initConnect(){
 }
 
 void HMultiView::setLayout(int row, int col){
-    layout.init(row,col);
+    table.init(row,col);
     relayout();
 }
 
@@ -54,11 +54,14 @@ void HMultiView::mergeCells(int lt, int rb){
     }
 #endif
 
-    layout.merge(lt,rb);
+    saveLayout();
+    table.merge(lt,rb);
     relayout();
 }
 
 void HMultiView::exchangeCells(HVideoWidget* player1, HVideoWidget* player2){
+    qDebug("exchange %d<=>%d", player1->playerid, player2->playerid);
+
     QRect rcTmp = player1->geometry();
     int idTmp = player1->playerid;
 
@@ -98,8 +101,8 @@ HVideoWidget* HMultiView::getIdlePlayer(){
 
 #define CELL_BORDER     1
 void HMultiView::relayout(){
-    int row = layout.row;
-    int col = layout.col;
+    int row = table.row;
+    int col = table.col;
     int cell_w = width()/col;
     int cell_h = height()/row;
 
@@ -115,7 +118,7 @@ void HMultiView::relayout(){
             int id = r*col + c + 1;
             HTableCell cell;
             QWidget *wdg = getPlayerByID(id);
-            if (layout.getTableCell(id, cell)){
+            if (table.getTableCell(id, cell)){
                 wdg->setGeometry(x, y, cell_w*cell.colspan() - CELL_BORDER, cell_h*cell.rowspan()- CELL_BORDER);
                 wdg->show();
             }
@@ -135,13 +138,17 @@ void HMultiView::mousePressEvent(QMouseEvent *e){
 }
 
 void HMultiView::mouseReleaseEvent(QMouseEvent *e){
-    QRect rc = adjustRect(ptMousePress, e->pos());
-    HVideoWidget* player1 = getPlayerByPos(rc.topLeft());
-    HVideoWidget* player2 = getPlayerByPos(rc.bottomRight());
-    if (player1 && player2 && player1 != player2){
-        if (action == EXCHANGE){
+    if (action == EXCHANGE) {
+        HVideoWidget* player1 = getPlayerByPos(ptMousePress);
+        HVideoWidget* player2 = getPlayerByPos(e->pos());
+        if (player1 && player2 && player1 != player2) {
             exchangeCells(player1, player2);
-        }else if (action == MERGE){
+        }
+    } else if (action == MERGE) {
+        QRect rc = adjustRect(ptMousePress, e->pos());
+        HVideoWidget* player1 = getPlayerByPos(rc.topLeft());
+        HVideoWidget* player2 = getPlayerByPos(rc.bottomRight());
+        if (player1 && player2 && player1 != player2){
             mergeCells(player1->playerid, player2->playerid);
         }
     }
@@ -184,11 +191,11 @@ void HMultiView::mouseDoubleClickEvent(QMouseEvent *e){
 }
 
 void HMultiView::stretch(QWidget* wdg){
-    if (wdg->geometry() == rect()){
+    if (wdg->rect() == rect()) {
         restoreLayout();
-    }else{
+    } else {
         saveLayout();
-        for (int i = 0; i < views.size(); ++i){
+        for (int i = 0; i < views.size(); ++i) {
             views[i]->hide();
         }
         wdg->setGeometry(rect());
@@ -197,7 +204,7 @@ void HMultiView::stretch(QWidget* wdg){
 }
 
 void HMultiView::saveLayout(){
-    save_layout.layout = layout;
+    save_layout.table = table;
     for (int i = 0; i < views.size(); ++i){
         HVideoWidget* player = (HVideoWidget*)views[i];
         HWndInfo wnd;
@@ -209,7 +216,7 @@ void HMultiView::saveLayout(){
 }
 
 void HMultiView::restoreLayout(){
-    layout = save_layout.layout;
+    table = save_layout.table;
     for (int i = 0; i < save_layout.views.size(); ++i){
         HWndInfo& wnd = save_layout.views[i];
         HVideoWidget* player = NULL;
