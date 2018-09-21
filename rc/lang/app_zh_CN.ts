@@ -71,6 +71,14 @@
         <source>Capture</source>
         <translation>捕获设备</translation>
     </message>
+    <message>
+        <source>Info</source>
+        <translation>消息</translation>
+    </message>
+    <message>
+        <source>Invalid media source!</source>
+        <translation>无效的媒体源！</translation>
+    </message>
 </context>
 <context>
     <name>HVideoTitlebar</name>

@@ -48,12 +48,10 @@ CaptureTab::CaptureTab(QWidget *parent) : QWidget(parent){
     vbox->addWidget(new QLabel(tr("Device:")));
 
     cmb = new QComboBox;
-    QStringList items;
     vector<HDevice> devs = getVideoDevices();
     for (int i = 0; i < devs.size(); ++i){
-        items << devs[i].name;
+        cmb->addItem(devs[i].name);
     }
-    cmb->addItems(items);
 
     vbox->addWidget(cmb);
     vbox->addStretch();
@@ -122,6 +120,12 @@ void HOpenMediaDlg::accept(){
         break;
     default:
         break;
+    }
+
+    if ( media.type == MEDIA_TYPE_NONE ||
+        (media.src.empty() && media.index < 0)) {
+        QMessageBox::information(this, tr("Info"), tr("Invalid media source!"));
+        return;
     }
 
     QDialog::accept();

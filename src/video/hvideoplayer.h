@@ -3,13 +3,16 @@
 
 #include "hmedia.h"
 #include "hframe.h"
-#define DEFAULT_FPS 25
+
+#define DEFAULT_FPS         25
+#define DEFAULT_FRAME_CACHE 5
 
 class HVideoPlayer
 {
 public:
     HVideoPlayer(){
-        fps = DEFAULT_FPS;
+        set_fps(DEFAULT_FPS);
+        set_frame_cache(DEFAULT_FRAME_CACHE);
     }
     virtual ~HVideoPlayer() {}
 

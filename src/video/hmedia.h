@@ -20,8 +20,8 @@ typedef struct media_s{
     std::string descr;
 
     media_s(){
-        type = DEFAULT_MEDIA_TYPE;
-        index = 0;
+        type = MEDIA_TYPE_NONE;
+        index = -1;
     }
 }HMedia;
 

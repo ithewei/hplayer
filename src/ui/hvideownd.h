@@ -3,7 +3,6 @@
 
 #include "qtheaders.h"
 #include "hglwidget.h"
-#include <QElapsedTimer>
 #include "hframe.h"
 
 class HVideoWnd : public HGLWidget
@@ -23,7 +22,9 @@ public slots:
 
 public:
     HFrame last_frame;
-    QElapsedTimer timer_elapsed;
+    
+    // for calFPS
+    uint64 tick;
     int framecnt;
     int fps;
 };

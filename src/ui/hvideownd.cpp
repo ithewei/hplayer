@@ -1,19 +1,19 @@
 #include "hvideownd.h"
+#include "hw/htime.h"
 
 HVideoWnd::HVideoWnd(QWidget *parent) : HGLWidget(parent)
 {
     fps = 0;
     framecnt = 0;
+    tick = 0;
 }
 
 void HVideoWnd::calFps(){
-    if (framecnt == 0)
-        timer_elapsed.restart();
-
-    if (timer_elapsed.elapsed() > 1000){
-        fps = framecnt + 1;
+    if (gettick() - tick > 1000) {
+        fps = framecnt;
         framecnt = 0;
-    }else{
+        tick = gettick();
+    } else {
         ++framecnt;
     }
 }

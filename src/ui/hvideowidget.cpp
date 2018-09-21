@@ -52,6 +52,7 @@ void HVideoWidget::initConnect(){
     connect( toolbar, SIGNAL(sigStop()), this, SLOT(stop()) );
 
     timer = new QTimer(this);
+    timer->setTimerType(Qt::PreciseTimer);
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimerUpdate()));
 }
 
@@ -123,8 +124,6 @@ void HVideoWidget::start(){
     if (!pImpl_player){
         pImpl_player = HVideoPlayerFactory::create(media.type);
         pImpl_player->set_media(media);
-        pImpl_player->set_fps(DEFAULT_FPS);
-        pImpl_player->set_frame_cache(5);
         if (pImpl_player->start() != 0){
             QMessageBox::critical(this, tr("ERROR"), tr("Could not open media: \n")
                                   + media.src.c_str() + QString::asprintf("[%d]", media.index));
@@ -168,7 +167,7 @@ void HVideoWidget::pause(){
     updateUI();
 }
 
-void HVideoWidget::onTimerUpdate(){
+void HVideoWidget::onTimerUpdate() {
     if (pImpl_player){
         if (pImpl_player->pop_frame(&videoWnd->last_frame) == 0){
             videoWnd->update();
