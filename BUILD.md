@@ -1,3 +1,5 @@
+> git submodule update --init
+
 # msvc
 
 - qmake

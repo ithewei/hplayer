@@ -17,6 +17,8 @@ public:
 
 private:
     virtual void doTask();
+    
+    void cleanup();
 
 private:
     static std::atomic_flag s_init_flag;

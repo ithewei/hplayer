@@ -35,7 +35,7 @@ HFFPlayer::HFFPlayer()
 }
 
 HFFPlayer::~HFFPlayer() {
-
+    cleanup();
 }
 
 int HFFPlayer::start(){
@@ -181,8 +181,7 @@ int HFFPlayer::start(){
     return HThread::start();
 }
 
-int HFFPlayer::stop(){
-    HThread::stop();
+void HFFPlayer::cleanup() {
     if (codec_ctx) {
         avcodec_close(codec_ctx);
         avcodec_free_context(&codec_ctx);
@@ -211,8 +210,16 @@ int HFFPlayer::stop(){
     }
 
     hframe.buf.cleanup();
-    sws_freeContext(sws_ctx);
-    
+
+    if (sws_ctx) {
+        sws_freeContext(sws_ctx);
+        sws_ctx = NULL;
+    }
+}
+
+int HFFPlayer::stop(){
+    HThread::stop();
+    cleanup();
     return 0;
 }
 
@@ -222,7 +229,7 @@ void HFFPlayer::doTask(){
         av_init_packet(packet);
         int iRet = av_read_frame(fmt_ctx, packet);
         if (iRet != 0) {
-            hloge("No frame: %d", iRet);
+            hlogi("No frame: %d", iRet);
             return;
         }
 
