@@ -25,17 +25,6 @@ enum MV_STYLE{
     FOREACH_MV_STYLE(ENUM_MV_STYLE)
 };
 
-struct HWndInfo{
-    int id;
-    QRect rc;
-    bool visible;
-};
-
-struct HSaveLayout{
-    HTable table;
-    QVector<HWndInfo> views;
-};
-
 class HMultiView : public QWidget
 {
     Q_OBJECT
@@ -56,19 +45,20 @@ signals:
 
 public slots:
     void setLayout(int row, int col);
+    void saveLayout();
+    void restoreLayout();
+
     void mergeCells(int lt, int rb);
     void exchangeCells(HVideoWidget* player1, HVideoWidget* player2);
     void stretch(QWidget* wdg);
-    void saveLayout();
-    void restoreLayout();
 
     void play(HMedia& media);
 
 protected:
     void initUI();
     void initConnect();
+    void updateUI();
 
-    void relayout();
     virtual void resizeEvent(QResizeEvent* e);
     virtual void mousePressEvent(QMouseEvent *e);
     virtual void mouseReleaseEvent(QMouseEvent *e);
@@ -77,14 +67,14 @@ protected:
 
 public:
     HTable table;
+    HTable prev_table;
     QVector<QWidget*> views;
     QLabel *labRect;
     QLabel *labDrag;
 
-    HSaveLayout save_layout;
-
     QPoint ptMousePress;
     Action action;
+    bool bStretch;
 };
 
 #endif // HMULTIVIEW_H

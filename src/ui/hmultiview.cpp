@@ -6,6 +6,7 @@ HMultiView::HMultiView(QWidget *parent) : QWidget(parent)
 {
     initUI();
     initConnect();
+    bStretch = false;
 }
 
 HMultiView::~HMultiView(){
@@ -38,8 +39,9 @@ void HMultiView::initConnect(){
 }
 
 void HMultiView::setLayout(int row, int col){
+    saveLayout();
     table.init(row,col);
-    relayout();
+    updateUI();
 }
 
 void HMultiView::mergeCells(int lt, int rb){
@@ -56,7 +58,7 @@ void HMultiView::mergeCells(int lt, int rb){
 
     saveLayout();
     table.merge(lt,rb);
-    relayout();
+    updateUI();
 }
 
 void HMultiView::exchangeCells(HVideoWidget* player1, HVideoWidget* player2){
@@ -100,7 +102,7 @@ HVideoWidget* HMultiView::getIdlePlayer(){
 }
 
 #define CELL_BORDER     1
-void HMultiView::relayout(){
+void HMultiView::updateUI(){
     int row = table.row;
     int col = table.col;
     int cell_w = width()/col;
@@ -113,6 +115,8 @@ void HMultiView::relayout(){
     for (int i = 0; i < views.size(); ++i){
         views[i]->hide();
     }
+
+    int cnt = 0;
     for (int r = 0; r < row; ++r){
         for (int c = 0; c < col; ++c){
             int id = r*col + c + 1;
@@ -121,16 +125,19 @@ void HMultiView::relayout(){
             if (table.getTableCell(id, cell)){
                 wdg->setGeometry(x, y, cell_w*cell.colspan() - CELL_BORDER, cell_h*cell.rowspan()- CELL_BORDER);
                 wdg->show();
+                ++cnt;
             }
             x += cell_w;
         }
         x = margin_x;
         y += cell_h;
     }
+
+    bStretch = (cnt == 1);
 }
 
 void HMultiView::resizeEvent(QResizeEvent* e){
-    relayout();
+    updateUI();
 }
 
 void HMultiView::mousePressEvent(QMouseEvent *e){
@@ -191,8 +198,9 @@ void HMultiView::mouseDoubleClickEvent(QMouseEvent *e){
 }
 
 void HMultiView::stretch(QWidget* wdg){
-    if (wdg->rect() == rect()) {
+    if (bStretch) {
         restoreLayout();
+        bStretch = false;
     } else {
         saveLayout();
         for (int i = 0; i < views.size(); ++i) {
@@ -200,31 +208,19 @@ void HMultiView::stretch(QWidget* wdg){
         }
         wdg->setGeometry(rect());
         wdg->show();
+        bStretch = true;
     }
 }
 
 void HMultiView::saveLayout(){
-    save_layout.table = table;
-    for (int i = 0; i < views.size(); ++i){
-        HVideoWidget* player = (HVideoWidget*)views[i];
-        HWndInfo wnd;
-        wnd.id = player->playerid;
-        wnd.rc = player->geometry();
-        wnd.visible = player->isVisible();
-        save_layout.views.push_back(wnd);
-    }
+    prev_table = table;
 }
 
 void HMultiView::restoreLayout(){
-    table = save_layout.table;
-    for (int i = 0; i < save_layout.views.size(); ++i){
-        HWndInfo& wnd = save_layout.views[i];
-        HVideoWidget* player = NULL;
-        if ((player = getPlayerByID(wnd.id))){
-            player->setGeometry(wnd.rc);
-            player->setVisible(wnd.visible);
-        }
-    }
+    HTable tmp = table;
+    table = prev_table;
+    prev_table = tmp;
+    updateUI();
 }
 
 void HMultiView::play(HMedia& media){
