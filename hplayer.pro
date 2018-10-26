@@ -46,7 +46,6 @@ HEADERS += \
     src/hw/hplatform.h \
     src/hw/hscope.h \
     src/hw/hstring.h \
-    src/hw/htable.h \
     src/hw/hthread.h \
     src/hw/htime.h \
     src/hw/hvar.h \
@@ -59,7 +58,6 @@ SOURCES += \
     src/hw/hframe.cpp \
     src/hw/hlog.cpp \
     src/hw/hstring.cpp \
-    src/hw/htable.cpp \
     src/hw/htime.cpp \
 
 # ui
@@ -67,6 +65,7 @@ INCLUDEPATH += src/ui
 HEADERS +=  \
     src/ui/centralwidget.h \
     src/ui/hmedialist.h \
+    src/ui/htable.h \
     src/ui/hmultiview.h \
     src/ui/hvideotitlebar.h \
     src/ui/hvideotoolbar.h \
@@ -83,6 +82,7 @@ HEADERS +=  \
 SOURCES +=  \
     src/ui/centralwidget.cpp \
     src/ui/hmedialist.cpp \
+    src/ui/htable.cpp \
     src/ui/hmultiview.cpp \
     src/ui/hvideotitlebar.cpp \
     src/ui/hvideotoolbar.cpp \
