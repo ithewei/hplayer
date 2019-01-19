@@ -66,13 +66,10 @@ HEADERS += \
     src/qt/qtheaders.h \
     src/qt/qtfunctions.h \
     src/qt/qtrcloader.h \
-    src/qt/qglwidgetimpl.h \
     src/qt/hglwidget.h \
 
 SOURCES += \
     src/qt/qtrcloader.cpp \
-    src/qt/qglwidgetimpl.cpp \
-    src/qt/qglwidgetimpl.cpp \
     src/qt/hglwidget.cpp \
 
 # ui
