@@ -22,7 +22,7 @@ public slots:
 
 public:
     HFrame last_frame;
-    
+
     // for calFPS
     uint64 tick;
     int framecnt;

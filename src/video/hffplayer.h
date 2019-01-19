@@ -17,7 +17,7 @@ public:
 
 private:
     virtual void doTask();
-    
+
     void cleanup();
 
 private:

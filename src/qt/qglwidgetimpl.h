@@ -1,18 +1,18 @@
-﻿#ifndef QGLWIDGETIMPL_H
+#ifndef QGLWIDGETIMPL_H
 #define QGLWIDGETIMPL_H
 
 #include <GL/glew.h>
 #include <qopenglwidget.h>
 
 // GL PixelFormat extend
-#define GL_I420				0x1910
+#define GL_I420             0x1910
 
 #define A(color) (((color) >> 24) & 0xFF)
 #define R(color) (((color) >> 16) & 0xFF)
 #define G(color) (((color) >>  8) & 0xFF)
 #define B(color) ((color) & 0xFF)
 
-struct Texture{
+struct Texture {
     GLuint texID; // glGenTextures分配的ID
     GLuint type; // 数据类型如GL_RGB
     GLint width;
@@ -20,7 +20,7 @@ struct Texture{
     GLint bpp;
     GLubyte* data; // 像素数据
 
-    Texture(){
+    Texture() {
         texID = 0;
         type = GL_RGBA;
         width = 0;
@@ -29,23 +29,23 @@ struct Texture{
         data = NULL;
     }
 
-    ~Texture(){
+    ~Texture() {
         release();
     }
 
-    void release(){
-        if (data != NULL){
+    void release() {
+        if (data != NULL) {
             free(data);
             data = NULL;
         }
         width = 0;
         height = 0;
-        if (texID != 0){
+        if (texID != 0) {
             glDeleteTextures(1,&texID);
         }
     }
 
-    bool alloc(int w, int h, int type = GL_I420){
+    bool alloc(int w, int h, int type = GL_I420) {
         if (w == 0 || h == 0)
             return false;
 
@@ -63,7 +63,7 @@ struct Texture{
     }
 };
 
-struct DrawInfo{
+struct DrawInfo {
     int left;
     int right;
     int top;

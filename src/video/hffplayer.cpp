@@ -191,7 +191,7 @@ void HFFPlayer::cleanup() {
     if (fmt_ctx) {
         avformat_close_input(&fmt_ctx);
     }
-    
+
     if (fmt_ctx) {
         avformat_free_context(fmt_ctx);
         fmt_ctx = NULL;
@@ -202,7 +202,7 @@ void HFFPlayer::cleanup() {
         av_frame_free(&frame);
         frame = NULL;
     }
-    
+
     if (packet) {
         av_packet_unref(packet);
         av_packet_free(&packet);

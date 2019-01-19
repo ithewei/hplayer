@@ -1,12 +1,12 @@
 #include "qtheaders.h"
+
 #include "mainwindow.h"
 #include "qtstyles.h"
 #include "appdef.h"
 
-FILE* g_loggerfp = NULL;
 #define LOG_LEVEL   0
 
-void myLogHandler(QtMsgType type, const QMessageLogContext & ctx, const QString & msg){
+void qLogHandler(QtMsgType type, const QMessageLogContext & ctx, const QString & msg) {
     // QtDebugMsg = 0
     // QtInfoMsg = 4
     if (type < LOG_LEVEL)
@@ -15,50 +15,50 @@ void myLogHandler(QtMsgType type, const QMessageLogContext & ctx, const QString 
     char szType[16];
     switch (type) {
     case QtDebugMsg:
-        strcpy(szType, "Debug");
+        strcpy(szType, "DEBUG");
         break;
     case QtInfoMsg:
-        strcpy(szType, "Info");
+        strcpy(szType, "INFO ");
         break;
     case QtWarningMsg:
-        strcpy(szType, "Warning");
+        strcpy(szType, "WARN ");
         break;
     case QtCriticalMsg:
-        strcpy(szType, "Critical");
+        strcpy(szType, "ERROR");
         break;
     case QtFatalMsg:
-        strcpy(szType, "Fatal");
+        strcpy(szType, "FATAL");
     }
 
-    QString strLog = QString::asprintf("[%s] [%s]:%s [%s:%d-%s]\n",
+    QString strLog = QString::asprintf("[%s] [%s]: %s [%s:%d-%s]\n",
                                        QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz").toLocal8Bit().data(),
                                        szType,
                                        msg.toLocal8Bit().data(),
                                        ctx.file,ctx.line,ctx.function);
 
 
-    QString strLogFilePath = "qt.log";
+    QString strLogfile = "qt.log";
 
-    if (!g_loggerfp){
-        g_loggerfp = fopen(strLogFilePath.toLocal8Bit().data(), "a");
+    static FILE* s_fp = NULL;
+    if (!s_fp) {
+        s_fp = fopen(strLogfile.toLocal8Bit().data(), "a");
     }
 
-    if (g_loggerfp){
-        fseek(g_loggerfp, 0, SEEK_END);
-        if (ftell(g_loggerfp) > (2 << 20)){
-            fclose(g_loggerfp);
-            g_loggerfp = fopen(strLogFilePath.toLocal8Bit().data(), "w");
+    if (s_fp) {
+        fseek(s_fp, 0, SEEK_END);
+        if (ftell(s_fp) > (2 << 20)) {
+            fclose(s_fp);
+            s_fp = fopen(strLogfile.toLocal8Bit().data(), "w");
         }
     }
 
-    if (g_loggerfp){
-        fputs(strLog.toLocal8Bit().data(), g_loggerfp);
+    if (s_fp) {
+        fputs(strLog.toLocal8Bit().data(), s_fp);
     }
 }
 
-int main(int argc, char *argv[])
-{
-    qInstallMessageHandler(myLogHandler);
+int main(int argc, char *argv[]) {
+    qInstallMessageHandler(qLogHandler);
     hlog_set_file(APP_NAME".log");
     hlog_set_level(LOG_LEVEL_INFO);
 
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     setPalette(DEFAULT_PALETTE_COLOR);
     loadLang(DEFAULT_LANGUAGE);
 
-    // note: we use image.qrc
+    // note: replace with image.qrc
     // rcloader->loadIcon();
 
     g_mainwnd->showMaximized();
@@ -80,5 +80,6 @@ int main(int argc, char *argv[])
     int retcode = a.exec();
 
     MainWindow::exitInstance();
+    qInfo("-------------------app end----------------------------------");
     return retcode;
 }

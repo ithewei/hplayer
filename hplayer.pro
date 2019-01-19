@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 # default CONFIG contains debug,release,debug_and_release
-CONFIG -= debug 
+CONFIG -= debug
 #CONFIG -= release
 CONFIG -= debug_and_release
 
@@ -60,6 +60,21 @@ SOURCES += \
     src/hw/hstring.cpp \
     src/hw/htime.cpp \
 
+# qt
+INCLUDEPATH += src/qt
+HEADERS += \
+    src/qt/qtheaders.h \
+    src/qt/qtfunctions.h \
+    src/qt/qtrcloader.h \
+    src/qt/qglwidgetimpl.h \
+    src/qt/hglwidget.h \
+
+SOURCES += \
+    src/qt/qtrcloader.cpp \
+    src/qt/qglwidgetimpl.cpp \
+    src/qt/qglwidgetimpl.cpp \
+    src/qt/hglwidget.cpp \
+
 # ui
 INCLUDEPATH += src/ui
 HEADERS +=  \
@@ -71,11 +86,7 @@ HEADERS +=  \
     src/ui/hvideotoolbar.h \
     src/ui/hvideownd.h \
     src/ui/mainwindow.h \
-    src/ui/qtfunctions.h \
-    src/ui/qtheaders.h \
-    src/ui/qtrcloader.h \
     src/ui/qtstyles.h   \
-    src/ui/hglwidget.h \
     src/ui/hvideowidget.h \
     src/ui/hopenmediadlg.h \
 
@@ -88,8 +99,6 @@ SOURCES +=  \
     src/ui/hvideotoolbar.cpp \
     src/ui/hvideownd.cpp \
     src/ui/mainwindow.cpp \
-    src/ui/qtrcloader.cpp \
-    src/ui/hglwidget.cpp \
     src/ui/hvideowidget.cpp \
     src/ui/hopenmediadlg.cpp \
 
@@ -127,12 +136,11 @@ LIBS += -lopencv_core341  \
         -lopencv_imgproc341   \
         -lopencv_videoio341   \
 
-## FFmpeg with nvcodec compiler by mingw
+## FFmpeg
 LIBS += -lavformat  \
         -lavcodec   \
         -lswresample \
         -lswscale   \
-        \#-lavdevice  \
         -lavutil \
 
 win32 {
@@ -155,12 +163,6 @@ win32 {
             \
             -lws2_32      \
             -lsecur32     \
-
-#    if (contains(QMAKE_HOST.arch, x86_64)) {
-#        LIBS += -L3rd/lib/x64
-#    } else {
-#        LIBS += -L3rd/lib/x86
-#    }
 
     win32-msvc {
         if (contains(QMAKE_HOST.arch, x86_64)) {
@@ -187,7 +189,7 @@ win32 {
         -lbz2   \
         -llzma  \
         -lcrypto \
-        -lbcrypt 
+        -lbcrypt
     }
 }
 

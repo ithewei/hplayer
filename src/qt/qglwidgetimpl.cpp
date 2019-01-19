@@ -1,5 +1,7 @@
 #include "qglwidgetimpl.h"
 
+#include <QApplication>
+
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 bool QGLWidgetImpl::s_bInitGLEW = false;
 GLuint QGLWidgetImpl::prog_yuv;
@@ -18,8 +20,6 @@ QGLWidgetImpl::~QGLWidgetImpl()
 
 }
 
-#include <QApplication>
-#include <QMessageBox>
 void QGLWidgetImpl::initializeGL(){
     if (!s_bInitGLEW){
         if (glewInit() != 0){
