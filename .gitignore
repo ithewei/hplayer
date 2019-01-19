@@ -1,8 +1,9 @@
 # cache
 *~
 *.bk
+*.bak
 *.old
-*.org
+*.new
 
 # IDE
 .vs
@@ -19,7 +20,7 @@ tmp
 # run
 *.log
 
-# devenv
+# toolchains
 # just push msvc14_x86 lib and dll
 msvc14_x64
 mingw32
