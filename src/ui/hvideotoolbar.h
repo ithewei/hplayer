@@ -27,6 +27,9 @@ public:
     QPushButton *btnPrev;
     QPushButton *btnStop;
     QPushButton *btnNext;
+
+    QSlider     *sldProgress;
+    QLabel      *lblDuration;
 };
 
 #endif // HVIDEOTOOLBAR_H

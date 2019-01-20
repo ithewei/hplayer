@@ -15,7 +15,8 @@ public:
         case MEDIA_TYPE_NETWORK:
             return new HFFPlayer;
         case MEDIA_TYPE_CAPTURE:
-            return new HVideoCapture;
+            //return new HVideoCapture;
+            return new HFFPlayer;
         default:
             return NULL;
         }

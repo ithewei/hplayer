@@ -23,18 +23,29 @@ void HVideoToolbar::initUI(){
     btnStop->setAutoDefault(true);
     btnNext  = genPushButton(QPixmap(":/image/next.png"), tr("next"));
 
+    sldProgress = new QSlider;
+    sldProgress->setOrientation(Qt::Horizontal);
+    lblDuration = new QLabel("00:00:00");
+
     QHBoxLayout *hbox = genHBoxLayout();
     hbox->setSpacing(5);
-    hbox->addWidget(btnStart);
-    hbox->addWidget(btnPause);
+    hbox->addWidget(btnStart, 0, Qt::AlignLeft);
+    hbox->addWidget(btnPause, 0, Qt::AlignLeft);
     btnPause->hide();
 
     hbox->addSpacing(5);
-    hbox->addWidget(btnPrev);
-    hbox->addWidget(btnStop);
-    hbox->addWidget(btnNext);
+    hbox->addWidget(btnPrev, 0, Qt::AlignLeft);
+    btnPrev->hide();
+    hbox->addWidget(btnStop, 0, Qt::AlignLeft);
+    btnStop->hide();
+    hbox->addWidget(btnNext, 0, Qt::AlignLeft);
+    btnNext->hide();
 
-    hbox->addStretch();
+    hbox->addSpacing(5);
+    hbox->addWidget(sldProgress);
+    sldProgress->hide();
+    hbox->addWidget(lblDuration);
+    lblDuration->hide();
 
     setLayout(hbox);
 }

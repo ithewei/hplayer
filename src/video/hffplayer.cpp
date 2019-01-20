@@ -1,23 +1,32 @@
 #include "hffplayer.h"
+
 #include "hw/hlog.h"
 #include "hw/hstring.h"
 #include "hw/hscope.h"
 
-string strtime(int64 us) {
-    int sec = us / 1000000;
-
-    int min = sec / 60;
-    sec = sec % 60;
-
-    int hour = min / 60;
-    min = min % 60;
-
-    return asprintf("%02d:%02d:%02d", hour, min, sec);
-}
-
 #define WITH_CUVID
 
 std::atomic_flag HFFPlayer::s_init_flag;
+
+void list_devices() {
+    AVFormatContext* fmt_ctx = avformat_alloc_context();
+    AVDictionary* options = NULL;
+    av_dict_set(&options, "list_devices", "true", 0);
+#ifdef _WIN32
+    const char drive[] = "dshow";
+#elif defined(__linux__)
+    const char drive[] = "v4l2";
+#else
+    const char drive[] = "avfoundation";
+#endif
+    AVInputFormat* ifmt = av_find_input_format(drive);
+    if (ifmt) {
+        avformat_open_input(&fmt_ctx, "video=dummy", ifmt, &options);
+    }
+    avformat_close_input(&fmt_ctx);
+    avformat_free_context(fmt_ctx);
+    av_dict_free(&options);
+}
 
 HFFPlayer::HFFPlayer()
 : HVideoPlayer()
@@ -30,7 +39,8 @@ HFFPlayer::HFFPlayer()
     if (!s_init_flag.test_and_set()) {
         av_register_all();
         avcodec_register_all();
-        //avdevice_register_all();
+        avdevice_register_all();
+        list_devices();
     }
 }
 
@@ -46,7 +56,7 @@ int HFFPlayer::start(){
     case MEDIA_TYPE_CAPTURE:
         ifile = "video=";
         ifile += media.src;
-        ifmt = av_find_input_format("dshow"); 
+        ifmt = av_find_input_format("dshow");
         if (ifmt == NULL) {
             hloge("Can not find dshow");
             return -5;
@@ -73,8 +83,6 @@ int HFFPlayer::start(){
         return iRet;
     }
 
-    hlogi("duration:%s", strtime(fmt_ctx->duration).c_str());
-
     iRet = avformat_find_stream_info(fmt_ctx, NULL);
     if (iRet != 0) {
         hloge("Can not find stream: %d", iRet);
@@ -95,7 +103,15 @@ int HFFPlayer::start(){
         return -20;
     }
 
-    AVCodecParameters* codecpar = fmt_ctx->streams[video_stream_index]->codecpar;
+    AVStream* video_stream = fmt_ctx->streams[video_stream_index];
+    video_time_base_num = video_stream->time_base.num;
+    video_time_base_den = video_stream->time_base.den;
+    fps = video_stream->avg_frame_rate.num / video_stream->avg_frame_rate.den;
+    duration = video_stream->duration / (double)video_time_base_den * video_time_base_num * 1000;
+    start_time = video_stream->start_time / (double)video_time_base_den * video_time_base_num * 1000;
+    hlogi("fps=%d duration=%lldms start_time=%lldms", fps, duration, start_time);
+
+    AVCodecParameters* codecpar = video_stream->codecpar;
     hlogi("codec_id=%d:%s", codecpar->codec_id, avcodec_get_name(codecpar->codec_id));
 
     std::string cuvid(avcodec_get_name(codecpar->codec_id));
@@ -174,7 +190,7 @@ int HFFPlayer::start(){
     sws_ctx = sws_getContext(sw, sh, src_pix_fmt, dw, dh, dst_pix_fmt, SWS_FAST_BILINEAR, NULL, NULL, NULL);
 
     hlogi("sw=%d sh=%d dw=%d dh=%d", sw, sh, dw, dh);
-    hlogi("src_pix_fmt=%d:%s dst_pix_fmt=%d:%s", src_pix_fmt, av_get_pix_fmt_name(src_pix_fmt), 
+    hlogi("src_pix_fmt=%d:%s dst_pix_fmt=%d:%s", src_pix_fmt, av_get_pix_fmt_name(src_pix_fmt),
         dst_pix_fmt, av_get_pix_fmt_name(dst_pix_fmt));
 
     HThread::setSleepPolicy(HThread::SLEEP_UNTIL, 1000/fps);
@@ -223,6 +239,16 @@ int HFFPlayer::stop(){
     return 0;
 }
 
+int HFFPlayer::seek(int64 ms) {
+    if (fmt_ctx) {
+        hlogi("seek=>%lldms", ms);
+        return av_seek_frame(fmt_ctx, video_stream_index,
+                (start_time+ms)/1000/(double)video_time_base_num*video_time_base_den,
+                AVSEEK_FLAG_BACKWARD);
+    }
+    return 0;
+}
+
 void HFFPlayer::doTask(){
     // loop until get a video frame
     while (1) {
@@ -230,6 +256,7 @@ void HFFPlayer::doTask(){
         int iRet = av_read_frame(fmt_ctx, packet);
         if (iRet != 0) {
             hlogi("No frame: %d", iRet);
+            signal = SIGNAL_END_OF_FILE;
             return;
         }
 
@@ -248,6 +275,9 @@ void HFFPlayer::doTask(){
     }
 
     sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, data, linesize);
+
+    hframe.ts = frame->pts / (double)video_time_base_den * video_time_base_num * 1000;
+    //hlogi("ts=%lldms", hframe.ts);
 
     push_frame(&hframe);
 }

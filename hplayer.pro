@@ -135,6 +135,7 @@ LIBS += -lopencv_core341  \
 
 ## FFmpeg
 LIBS += -lavformat  \
+        -lavdevice \
         -lavcodec   \
         -lswresample \
         -lswscale   \

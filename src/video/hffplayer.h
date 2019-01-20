@@ -2,8 +2,9 @@
 #define H_FFPLAYER_H
 
 #include "hvideoplayer.h"
-#include "hw/hthread.h"
 #include "ffmpeg_util.h"
+
+#include "hw/hthread.h"
 
 class HFFPlayer : public HVideoPlayer, public HThread {
 public:
@@ -14,6 +15,7 @@ public:
     virtual int stop();
     virtual int pause() {return HThread::pause();}
     virtual int resume() {return HThread::resume();}
+    virtual int seek(int64 ms);
 
 private:
     virtual void doTask();
@@ -32,6 +34,9 @@ private:
     int video_stream_index;
     int audio_stream_index;
     int subtitle_stream_index;
+
+    int video_time_base_num;
+    int video_time_base_den;
 
     // for scale
     AVPixelFormat dst_pix_fmt;

@@ -50,6 +50,11 @@ void HVideoWidget::initConnect(){
     connect( toolbar, SIGNAL(sigStart()), this, SLOT(start()) );
     connect( toolbar, SIGNAL(sigPause()), this, SLOT(pause()) );
     connect( toolbar, SIGNAL(sigStop()), this, SLOT(stop()) );
+    connect( toolbar->sldProgress, &QSlider::sliderReleased, [this](){
+        if (pImpl_player) {
+            pImpl_player->seek(toolbar->sldProgress->value()*1000);
+        }
+    });
 
     timer = new QTimer(this);
     timer->setTimerType(Qt::PreciseTimer);
@@ -63,6 +68,11 @@ void HVideoWidget::updateUI(){
     toolbar->btnPause->setVisible(status == PLAY);
 
     btnMedia->setVisible(status == STOP);
+
+    if (status == STOP) {
+        toolbar->sldProgress->hide();
+        toolbar->lblDuration->hide();
+    }
 }
 
 void HVideoWidget::resizeEvent(QResizeEvent *e){
@@ -131,11 +141,20 @@ void HVideoWidget::start(){
             goto end;
         }
         title = media.src.c_str();
+        if (pImpl_player->duration > 0) {
+            toolbar->lblDuration->setText(strtime(pImpl_player->duration).c_str());
+            toolbar->sldProgress->setRange(0, pImpl_player->duration/1000);
+            toolbar->lblDuration->show();
+            toolbar->sldProgress->show();
+        } else {
+            toolbar->lblDuration->hide();
+            toolbar->sldProgress->hide();
+        }
     }else{
         pImpl_player->resume();
     }
 
-    timer->start(1000/DEFAULT_FPS);
+    timer->start(1000/pImpl_player->fps);
     status = PLAY;
 
 end:
@@ -168,9 +187,18 @@ void HVideoWidget::pause(){
 }
 
 void HVideoWidget::onTimerUpdate() {
-    if (pImpl_player){
-        if (pImpl_player->pop_frame(&videoWnd->last_frame) == 0){
+    if (pImpl_player) {
+        if (pImpl_player->pop_frame(&videoWnd->last_frame) == 0) {
+            int progress = (videoWnd->last_frame.ts - pImpl_player->start_time) / 1000;
+            if (toolbar->sldProgress->value() != progress &&
+                !toolbar->sldProgress->isSliderDown()) {
+                toolbar->sldProgress->setValue(progress);
+            }
             videoWnd->update();
+        } else {
+            if (pImpl_player->signal == SIGNAL_END_OF_FILE) {
+                stop();
+            }
         }
     }
 }
