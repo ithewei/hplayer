@@ -60,7 +60,7 @@ void qLogHandler(QtMsgType type, const QMessageLogContext & ctx, const QString &
 int main(int argc, char *argv[]) {
     qInstallMessageHandler(qLogHandler);
     hlog_set_file(APP_NAME".log");
-    hlog_set_level(LOG_LEVEL_INFO);
+    hlog_set_level(LOG_LEVEL_DEBUG);
 
     hlogi("%s", get_compile_version());
     qInfo("-------------------app start----------------------------------");
