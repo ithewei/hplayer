@@ -11,6 +11,11 @@
 
 #define SIGNAL_END_OF_FILE  0x01
 
+#define HARDWARE_DECODE     1
+#define SOFTWARE_DECODE     2
+
+#define DEFAULT_DECODE_MODE HARDWARE_DECODE
+
 inline string strtime(int64 ms) {
     int sec = ms / 1000;
 
@@ -29,6 +34,7 @@ public:
     HVideoPlayer(){
         set_frame_cache(DEFAULT_FRAME_CACHE);
         fps = DEFAULT_FPS;
+        decode_mode = DEFAULT_DECODE_MODE;
         duration = 0;
         start_time = 0;
         signal = 0;
@@ -44,8 +50,12 @@ public:
         return 0;
     }
 
-    void set_media(HMedia& media){
+    void set_media(HMedia& media) {
         this->media = media;
+    }
+
+    void set_decode_mode(int mode) {
+        decode_mode = mode;
     }
 
     FrameStats get_frame_stats(){
@@ -71,6 +81,7 @@ public:
 public:
     HMedia      media;
     int         fps;
+    int         decode_mode;
     int64       duration; // ms
     int64       start_time; // ms
     int         signal;

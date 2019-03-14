@@ -4,8 +4,6 @@
 #include "hw/hstring.h"
 #include "hw/hscope.h"
 
-#define WITH_CUVID
-
 std::atomic_flag HFFPlayer::s_init_flag;
 
 void list_devices() {
@@ -54,12 +52,21 @@ int HFFPlayer::start(){
     AVInputFormat* ifmt = NULL;
     switch (media.type) {
     case MEDIA_TYPE_CAPTURE:
-        ifile = "video=";
-        ifile += media.src;
-        ifmt = av_find_input_format("dshow");
-        if (ifmt == NULL) {
-            hloge("Can not find dshow");
-            return -5;
+        {
+            ifile = "video=";
+            ifile += media.src;
+#ifdef _WIN32
+            const char drive[] = "dshow";
+#elif defined(__linux__)
+            const char drive[] = "v4l2";
+#else
+            const char drive[] = "avfoundation";
+#endif
+            ifmt = av_find_input_format(drive);
+            if (ifmt == NULL) {
+                hloge("Can not find dshow");
+                return -5;
+            }
         }
         break;
     case MEDIA_TYPE_FILE:
@@ -119,15 +126,13 @@ int HFFPlayer::start(){
     hlogi("cuvid=%s", cuvid.c_str());
 
     AVCodec* codec = NULL;
-#ifdef WITH_CUVID
-    if (codec == NULL) {
+    if (decode_mode == HARDWARE_DECODE && codec == NULL) {
         codec = avcodec_find_decoder_by_name(cuvid.c_str());
         if (codec == NULL) {
             hlogi("Can not find decoder %s!", cuvid.c_str());
             // no return, try soft-decoder
         }
     }
-#endif
 
     if (codec == NULL) {
         codec = avcodec_find_decoder(codecpar->codec_id);
