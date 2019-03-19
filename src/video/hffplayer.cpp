@@ -113,9 +113,13 @@ int HFFPlayer::start(){
     AVStream* video_stream = fmt_ctx->streams[video_stream_index];
     video_time_base_num = video_stream->time_base.num;
     video_time_base_den = video_stream->time_base.den;
-    fps = video_stream->avg_frame_rate.num / video_stream->avg_frame_rate.den;
-    duration = video_stream->duration / (double)video_time_base_den * video_time_base_num * 1000;
-    start_time = video_stream->start_time / (double)video_time_base_den * video_time_base_num * 1000;
+    if (video_stream->avg_frame_rate.num && video_stream->avg_frame_rate.den) {
+        fps = video_stream->avg_frame_rate.num / video_stream->avg_frame_rate.den;
+    }
+    if (video_time_base_num && video_time_base_den) {
+        duration = video_stream->duration / (double)video_time_base_den * video_time_base_num * 1000;
+        start_time = video_stream->start_time / (double)video_time_base_den * video_time_base_num * 1000;
+    }
     hlogi("fps=%d duration=%lldms start_time=%lldms", fps, duration, start_time);
 
     AVCodecParameters* codecpar = video_stream->codecpar;
