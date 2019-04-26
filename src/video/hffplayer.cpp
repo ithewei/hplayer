@@ -179,7 +179,7 @@ int HFFPlayer::start(){
     dst_pix_fmt = AV_PIX_FMT_BGR24;
     hframe.type = GL_BGR;
     hframe.bpp = 24;
-    hframe.buf.init(dw * dh * hframe.bpp / 8);
+    hframe.buf.resize(dw * dh * hframe.bpp / 8);
     data[0] = hframe.buf.base;
     linesize[0] = dw * 3;
 
@@ -187,7 +187,7 @@ int HFFPlayer::start(){
     // hframe.type = GL_I420;
     // hframe.bpp = 12;
     // int y_size = dw * dh;
-    // hframe.buf.init(y_size * 3 / 2);
+    // hframe.buf.resize(y_size * 3 / 2);
     // data[0] = hframe.buf.base;
     // data[1] = data[0] + y_size;
     // data[2] = data[1] + y_size/4;

@@ -31,34 +31,31 @@ INCLUDEPATH += 3rd/include src
 # hw
 INCLUDEPATH += src/hw
 HEADERS += \
-    src/hw/base64.h \
+    src/hw/singleton.h \
     src/hw/h.h \
-    src/hw/hbuf.h \
-    src/hw/hbytearray.h \
+    src/hw/hplatform.h \
     src/hw/hdef.h \
+    src/hw/hversion.h \
+    src/hw/htime.h \
     src/hw/herr.h \
+    src/hw/hbuf.h \
     src/hw/hframe.h \
     src/hw/hgl.h \
     src/hw/hgui.h \
     src/hw/hlog.h \
-    src/hw/hmutex.h \
     src/hw/hobj.h \
-    src/hw/hplatform.h \
+    src/hw/hvar.h \
     src/hw/hscope.h \
     src/hw/hstring.h \
+    src/hw/hmutex.h \
     src/hw/hthread.h \
-    src/hw/htime.h \
-    src/hw/hvar.h \
-    src/hw/hversion.h \
-    src/hw/singleton.h \
 
 SOURCES += \
-    src/hw/base64.cpp \
-    src/hw/herr.cpp \
-    src/hw/hframe.cpp \
+    src/hw/herr.c \
+    src/hw/htime.c \
     src/hw/hlog.cpp \
     src/hw/hstring.cpp \
-    src/hw/htime.cpp \
+    src/hw/hframe.cpp \
 
 # qt
 INCLUDEPATH += src/qt
