@@ -248,7 +248,7 @@ int HFFPlayer::stop(){
     return 0;
 }
 
-int HFFPlayer::seek(int64 ms) {
+int HFFPlayer::seek(int64_t ms) {
     if (fmt_ctx) {
         hlogi("seek=>%lldms", ms);
         return av_seek_frame(fmt_ctx, video_stream_index,

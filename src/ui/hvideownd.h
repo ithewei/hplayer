@@ -24,7 +24,7 @@ public:
     HFrame last_frame;
 
     // for calFPS
-    uint64 tick;
+    uint64_t tick;
     int framecnt;
     int fps;
 };

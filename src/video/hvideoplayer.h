@@ -16,7 +16,7 @@
 
 #define DEFAULT_DECODE_MODE HARDWARE_DECODE
 
-inline string strtime(int64 ms) {
+inline string strtime(int64_t ms) {
     int sec = ms / 1000;
 
     int min = sec / 60;
@@ -46,7 +46,7 @@ public:
     virtual int pause() = 0;
     virtual int resume() = 0;
 
-    virtual int seek(int64 ms) {
+    virtual int seek(int64_t ms) {
         return 0;
     }
 
@@ -82,8 +82,8 @@ public:
     HMedia      media;
     int         fps;
     int         decode_mode;
-    int64       duration; // ms
-    int64       start_time; // ms
+    int64_t     duration; // ms
+    int64_t     start_time; // ms
     int         signal;
 protected:
     HFrameBuf   frame_buf;

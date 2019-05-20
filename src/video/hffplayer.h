@@ -15,7 +15,7 @@ public:
     virtual int stop();
     virtual int pause() {return HThread::pause();}
     virtual int resume() {return HThread::resume();}
-    virtual int seek(int64 ms);
+    virtual int seek(int64_t ms);
 
 private:
     virtual void doTask();
@@ -41,7 +41,7 @@ private:
     // for scale
     AVPixelFormat dst_pix_fmt;
     SwsContext* sws_ctx;
-    uint8* data[4];
+    uint8_t* data[4];
     int linesize[4];
     HFrame hframe;
 };
