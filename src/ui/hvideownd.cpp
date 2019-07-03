@@ -1,5 +1,4 @@
 #include "hvideownd.h"
-#include "hw/htime.h"
 
 HVideoWnd::HVideoWnd(QWidget *parent) : HGLWidget(parent)
 {

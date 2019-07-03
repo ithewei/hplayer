@@ -1,8 +1,8 @@
 #include "hffplayer.h"
 
-#include "hw/hlog.h"
-#include "hw/hstring.h"
-#include "hw/hscope.h"
+#include "hlog.h"
+#include "hstring.h"
+#include "hscope.h"
 
 std::atomic_flag HFFPlayer::s_init_flag;
 

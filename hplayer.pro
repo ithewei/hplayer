@@ -29,33 +29,34 @@ TRANSLATIONS = rc/lang/app_zh_CN.ts rc/lang/app_zh_CN.qm
 INCLUDEPATH += 3rd/include src
 
 # hw
-INCLUDEPATH += src/hw
+INCLUDEPATH += src/hw src/hw/base src/hw/utils
 HEADERS += \
-    src/hw/singleton.h \
     src/hw/h.h \
-    src/hw/hplatform.h \
-    src/hw/hdef.h \
-    src/hw/hversion.h \
-    src/hw/htime.h \
-    src/hw/herr.h \
-    src/hw/hbuf.h \
-    src/hw/hframe.h \
-    src/hw/hgl.h \
-    src/hw/hgui.h \
-    src/hw/hlog.h \
-    src/hw/hobj.h \
-    src/hw/hvar.h \
-    src/hw/hscope.h \
-    src/hw/hstring.h \
-    src/hw/hmutex.h \
-    src/hw/hthread.h \
+    src/hw/base/hplatform.h \
+    src/hw/base/hdef.h \
+    src/hw/base/hversion.h \
+    src/hw/base/htime.h \
+    src/hw/base/herr.h \
+    src/hw/base/hbuf.h \
+    src/hw/base/hgui.h \
+    src/hw/base/hlog.h \
+    src/hw/base/hobj.h \
+    src/hw/base/hvar.h \
+    src/hw/base/hscope.h \
+    src/hw/base/hstring.h \
+    src/hw/base/hmutex.h \
+    src/hw/base/hthread.h \
+    src/hw/utils/singleton.h \
+    src/hw/utils/hframe.h \
+    src/hw/utils/hgl.h \
 
 SOURCES += \
-    src/hw/herr.c \
-    src/hw/htime.c \
-    src/hw/hlog.cpp \
-    src/hw/hstring.cpp \
-    src/hw/hframe.cpp \
+    src/hw/base/hversion.c \
+    src/hw/base/herr.c \
+    src/hw/base/htime.c \
+    src/hw/base/hlog.cpp \
+    src/hw/base/hstring.cpp \
+    src/hw/utils/hframe.cpp \
 
 # qt
 INCLUDEPATH += src/qt

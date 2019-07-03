@@ -10,17 +10,28 @@
 .vscode
 *.user
 
+tags
+cscope*
+.ycm*
+
 # output
+*.o
+*.obj
+
+*.pid
+*.log
+*.db
+
 .qmake.stash
 tmp
 *debug
 *release
-
-# run
-*.log
 
 # toolchains
 # just push msvc14_x86 lib and dll
 msvc14_x64
 mingw32
 mingw64
+
+# mine
+3rd/include/qt5

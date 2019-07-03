@@ -1,8 +1,8 @@
 #ifndef FFMPEG_UTIL_H
 #define FFMPEG_UTIL_H
 
-#include "hw/hframe.h"
-#include "hw/hgl.h"
+#include "hframe.h"
+#include "hgl.h"
 
 extern "C" {
 #include "libavutil/avutil.h"

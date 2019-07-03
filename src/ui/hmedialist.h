@@ -12,6 +12,10 @@ public:
 signals:
 
 public slots:
+
+protected:
+    void initUI();
+    void initConnect();
 };
 
 #endif // HMEIDALIST_H

@@ -2,9 +2,9 @@
 #define HVIDEOPLAYER_H
 
 #include "hmedia.h"
-#include "hw/hframe.h"
-#include "hw/hstring.h"
-#include "hw/hlog.h"
+#include "hframe.h"
+#include "hstring.h"
+#include "hlog.h"
 
 #define DEFAULT_FPS         25
 #define DEFAULT_FRAME_CACHE 5

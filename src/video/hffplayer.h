@@ -4,7 +4,7 @@
 #include "hvideoplayer.h"
 #include "ffmpeg_util.h"
 
-#include "hw/hthread.h"
+#include "hthread.h"
 
 class HFFPlayer : public HVideoPlayer, public HThread {
 public:

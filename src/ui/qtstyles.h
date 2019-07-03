@@ -5,8 +5,8 @@
 #define MEDIA_LIST_VISIBLE  false
 #define INFO_LIST_VISIBLE   true
 
-#define MEDIA_LIST_FACTOR  0
-#define MULTI_VIEW_FACTOR  100
+#define MEDIA_LIST_FACTOR  30
+#define MULTI_VIEW_FACTOR  70
 
 #define WITH_MV_STYLE   1
 #define MV_STYLE_ROW    3
