@@ -180,7 +180,7 @@ int HFFPlayer::start(){
     hframe.type = GL_BGR;
     hframe.bpp = 24;
     hframe.buf.resize(dw * dh * hframe.bpp / 8);
-    data[0] = hframe.buf.base;
+    data[0] = (uint8_t*)hframe.buf.base;
     linesize[0] = dw * 3;
 
     // dst_pix_fmt = AV_PIX_FMT_YUV420P;

@@ -41,7 +41,7 @@ enum RCID{
 #include <QPixmap>
 class HRcLoader
 {
-    DCLR_SINGLETON(HRcLoader)
+    SINGLETON_DECL(HRcLoader)
 private:
     HRcLoader() {}
 

@@ -6,7 +6,7 @@
 #include "hgl.h"
 
 inline void Mat2HFrame(cv::Mat& mat, HFrame& frame){
-    frame.buf.base  = mat.data;
+    frame.buf.base  = (char*)mat.data;
     frame.buf.len   = mat.cols * mat.rows * mat.channels();
     frame.w = mat.cols;
     frame.h = mat.rows;

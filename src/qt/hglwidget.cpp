@@ -214,7 +214,7 @@ void HGLWidget::drawYUV(HFrame* pFrame){
     int w = pFrame->w;
     int h = pFrame->h;
     int y_size = w*h;
-    GLubyte* y = pFrame->buf.base;
+    GLubyte* y = (GLubyte*)pFrame->buf.base;
     GLubyte* u = y + y_size;
     GLubyte* v = u + (y_size>>2);
     if (pFrame->type == GL_YV12) {

@@ -9,7 +9,7 @@
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    DCLR_SINGLETON(MainWindow)
+    SINGLETON_DECL(MainWindow)
 
 public:
     MainWindow(QWidget *parent = 0);

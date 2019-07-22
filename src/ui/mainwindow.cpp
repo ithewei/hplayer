@@ -2,7 +2,7 @@
 #include "appdef.h"
 #include "qtstyles.h"
 
-IMPL_SINGLETON(MainWindow)
+SINGLETON_IMPL(MainWindow)
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

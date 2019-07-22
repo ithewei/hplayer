@@ -2,7 +2,7 @@
 
 #define IMAGE_PATH  "./images/"
 
-IMPL_SINGLETON(HRcLoader)
+SINGLETON_IMPL(HRcLoader)
 
 void HRcLoader::loadIcon(){
 #define LOAD_ICON(rcid, filename) \

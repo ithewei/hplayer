@@ -26,7 +26,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 RESOURCES += rc/skin.qrc rc/image.qrc
 TRANSLATIONS = rc/lang/app_zh_CN.ts rc/lang/app_zh_CN.qm
 
-INCLUDEPATH += 3rd/include src
+INCLUDEPATH += src
 
 # hw
 INCLUDEPATH += src/hw src/hw/base src/hw/utils
@@ -54,7 +54,7 @@ SOURCES += \
     src/hw/base/hversion.c \
     src/hw/base/herr.c \
     src/hw/base/htime.c \
-    src/hw/base/hlog.cpp \
+    src/hw/base/hlog.c \
     src/hw/base/hstring.cpp \
     src/hw/utils/hframe.cpp \
 
@@ -117,6 +117,11 @@ SOURCES += \
     src/video/hvideocapture.cpp \
     src/video/hffplayer.cpp \
 
+# win32
+INCLUDEPATH += src/win32
+HEADERS += src/win32/hdevice.h
+SOURCES += src/win32/hdevice.cpp
+
 # global
 HEADERS += \
     src/appdef.h
@@ -124,28 +129,26 @@ HEADERS += \
 SOURCES += \
     src/main.cpp
 
-## opencv
-LIBS += -lopencv_core341  \
-        -lopencv_highgui341   \
-        -lopencv_imgcodecs341 \
-        -lopencv_imgproc341   \
-        -lopencv_videoio341   \
-
-## FFmpeg
-LIBS += -lavformat  \
-        -lavdevice \
-        -lavcodec   \
-        -lswresample \
-        -lswscale   \
-        -lavutil \
-
 win32 {
     DEFINES += WIN32_LEAN_AND_MEAN
+    INCLUDEPATH += 3rd/include
 
-    INCLUDEPATH += src/win32
-    HEADERS += src/win32/hdevice.h
-    SOURCES += src/win32/hdevice.cpp
+    ## opencv
+    LIBS += -lopencv_core341        \
+            -lopencv_highgui341     \
+            -lopencv_imgcodecs341   \
+            -lopencv_imgproc341     \
+            -lopencv_videoio341     \
 
+    ## FFmpeg
+    LIBS += -lavformat      \
+            -lavdevice      \
+            -lavcodec       \
+            -lswresample    \
+            -lswscale       \
+            -lavutil        \
+
+    ## Windows API
     LIBS += -lkernel32    \
             -luser32      \
             -lgdi32       \
@@ -166,11 +169,13 @@ win32 {
             DESTDIR = bin/msvc14_x64
         } else {
             LIBS += -L3rd/lib/msvc14_x86
-            DESTDIR = bin/msvc14_x86 
+            DESTDIR = bin/msvc14_x86
         }
     }
 
     win32-g++ {
+        QMAKE_CFLAGS += -std=c99
+        QMAKE_CXXFLAGS += -std=c++11
         if (contains(QMAKE_HOST.arch, x86_64)) {
             LIBS += -L3rd/lib/mingw64
             DESTDIR = bin/mingw64
@@ -181,7 +186,7 @@ win32 {
 
         # for ffmpeg staticlib
         LIBS += -liconv \
-        -lz \
+        -lz     \
         -lbz2   \
         -llzma  \
         -lcrypto \
@@ -189,7 +194,30 @@ win32 {
     }
 }
 
-unix{
+unix {
+    ## opencv
+    LIBS += -lopencv_highgui    \
+            -lopencv_imgproc    \
+            -lopencv_core       \
+
+    ## FFmpeg
+    LIBS += -lavformat  \
+            -lavcodec   \
+            -lswscale   \
+            -lavutil    \
+
+    ## sys
+    LIBS += -lGLU   \
+            -lGL    \
+            -lpthread   \
+            -lm         \
+
+    linux-g++ {
+        QMAKE_CFLAGS += -std=c99
+        QMAKE_CXXFLAGS += -std=c++11
+        LIBS += -L3rd/lib/linux
+        DESTDIR = bin/linux
+    }
 }
 
 message(ARCH=$$QMAKE_HOST.arch)
