@@ -886,8 +886,8 @@ tmp\moc\moc_centralwidget.cpp: src\qt\qtheaders.h \
 		src\hw\base\herr.h \
 		src\hw\base\hlog.h \
 		src\hw\base\hmutex.h \
-		src\hw\base\hstring.h \
 		src\hw\base\hsocket.h \
+		src\hw\base\hstring.h \
 		src\hw\base\hvar.h \
 		src\hw\base\hobj.h \
 		src\hw\base\hgui.h \
@@ -1396,8 +1396,8 @@ tmp\moc\moc_hmedialist.cpp: src\qt\qtheaders.h \
 		src\hw\base\herr.h \
 		src\hw\base\hlog.h \
 		src\hw\base\hmutex.h \
-		src\hw\base\hstring.h \
 		src\hw\base\hsocket.h \
+		src\hw\base\hstring.h \
 		src\hw\base\hvar.h \
 		src\hw\base\hobj.h \
 		src\hw\base\hgui.h \
@@ -1896,8 +1896,8 @@ tmp\moc\moc_hmultiview.cpp: src\qt\qtheaders.h \
 		src\hw\base\herr.h \
 		src\hw\base\hlog.h \
 		src\hw\base\hmutex.h \
-		src\hw\base\hstring.h \
 		src\hw\base\hsocket.h \
+		src\hw\base\hstring.h \
 		src\hw\base\hvar.h \
 		src\hw\base\hobj.h \
 		src\hw\base\hgui.h \
@@ -2404,8 +2404,8 @@ tmp\moc\moc_hvideotitlebar.cpp: src\qt\qtheaders.h \
 		src\hw\base\herr.h \
 		src\hw\base\hlog.h \
 		src\hw\base\hmutex.h \
-		src\hw\base\hstring.h \
 		src\hw\base\hsocket.h \
+		src\hw\base\hstring.h \
 		src\hw\base\hvar.h \
 		src\hw\base\hobj.h \
 		src\hw\base\hgui.h \
@@ -2904,8 +2904,8 @@ tmp\moc\moc_hvideotoolbar.cpp: src\qt\qtheaders.h \
 		src\hw\base\herr.h \
 		src\hw\base\hlog.h \
 		src\hw\base\hmutex.h \
-		src\hw\base\hstring.h \
 		src\hw\base\hsocket.h \
+		src\hw\base\hstring.h \
 		src\hw\base\hvar.h \
 		src\hw\base\hobj.h \
 		src\hw\base\hgui.h \
@@ -3404,8 +3404,8 @@ tmp\moc\moc_hvideownd.cpp: src\qt\qtheaders.h \
 		src\hw\base\herr.h \
 		src\hw\base\hlog.h \
 		src\hw\base\hmutex.h \
-		src\hw\base\hstring.h \
 		src\hw\base\hsocket.h \
+		src\hw\base\hstring.h \
 		src\hw\base\hvar.h \
 		src\hw\base\hobj.h \
 		src\hw\base\hgui.h \
@@ -3905,8 +3905,8 @@ tmp\moc\moc_mainwindow.cpp: src\qt\qtheaders.h \
 		src\hw\base\herr.h \
 		src\hw\base\hlog.h \
 		src\hw\base\hmutex.h \
-		src\hw\base\hstring.h \
 		src\hw\base\hsocket.h \
+		src\hw\base\hstring.h \
 		src\hw\base\hvar.h \
 		src\hw\base\hobj.h \
 		src\hw\base\hgui.h \
@@ -4417,8 +4417,8 @@ tmp\moc\moc_hvideowidget.cpp: src\qt\qtheaders.h \
 		src\hw\base\herr.h \
 		src\hw\base\hlog.h \
 		src\hw\base\hmutex.h \
-		src\hw\base\hstring.h \
 		src\hw\base\hsocket.h \
+		src\hw\base\hstring.h \
 		src\hw\base\hvar.h \
 		src\hw\base\hobj.h \
 		src\hw\base\hgui.h \
@@ -4923,8 +4923,8 @@ tmp\moc\moc_hopenmediadlg.cpp: src\qt\qtheaders.h \
 		src\hw\base\herr.h \
 		src\hw\base\hlog.h \
 		src\hw\base\hmutex.h \
-		src\hw\base\hstring.h \
 		src\hw\base\hsocket.h \
+		src\hw\base\hstring.h \
 		src\hw\base\hvar.h \
 		src\hw\base\hobj.h \
 		src\hw\base\hgui.h \
@@ -5434,11 +5434,13 @@ tmp\obj\hversion.obj: src\hw\base\hversion.c src/hw/base/hversion.h \
 tmp\obj\herr.obj: src\hw\base\herr.c src/hw/base/herr.h
 
 tmp\obj\htime.obj: src\hw\base\htime.c src/hw/base/htime.h \
-		src/hw/base/hplatform.h
+		src/hw/base/hplatform.h \
+		src/hw/base/hdef.h
 
 tmp\obj\hlog.obj: src\hw\base\hlog.c src/hw/base/hlog.h \
 		src/hw/base/hplatform.h \
 		src/hw/base/htime.h \
+		src/hw/base/hdef.h \
 		src/hw/base/hmutex.h
 
 tmp\obj\hstring.obj: src\hw\base\hstring.cpp src/hw/base/hstring.h
@@ -5683,8 +5685,8 @@ tmp\obj\centralwidget.obj: src\ui\centralwidget.cpp src/ui/centralwidget.h \
 		src/hw/base/herr.h \
 		src/hw/base/hlog.h \
 		src/hw/base/hmutex.h \
-		src/hw/base/hstring.h \
 		src\hw\base\hsocket.h \
+		src/hw/base/hstring.h \
 		src/hw/base/hvar.h \
 		src/hw/base/hobj.h \
 		src/hw/base/hgui.h \
@@ -6191,8 +6193,8 @@ tmp\obj\hmedialist.obj: src\ui\hmedialist.cpp src/ui/hmedialist.h \
 		src/hw/base/herr.h \
 		src/hw/base/hlog.h \
 		src/hw/base/hmutex.h \
-		src/hw/base/hstring.h \
 		src\hw\base\hsocket.h \
+		src/hw/base/hstring.h \
 		src/hw/base/hvar.h \
 		src/hw/base/hobj.h \
 		src/hw/base/hgui.h \
@@ -6692,8 +6694,8 @@ tmp\obj\hmultiview.obj: src\ui\hmultiview.cpp src/ui/hmultiview.h \
 		src/hw/base/herr.h \
 		src/hw/base/hlog.h \
 		src/hw/base/hmutex.h \
-		src/hw/base/hstring.h \
 		src\hw\base\hsocket.h \
+		src/hw/base/hstring.h \
 		src/hw/base/hvar.h \
 		src/hw/base/hobj.h \
 		src/hw/base/hgui.h \
@@ -7201,8 +7203,8 @@ tmp\obj\hvideotitlebar.obj: src\ui\hvideotitlebar.cpp src/ui/hvideotitlebar.h \
 		src/hw/base/herr.h \
 		src/hw/base/hlog.h \
 		src/hw/base/hmutex.h \
-		src/hw/base/hstring.h \
 		src\hw\base\hsocket.h \
+		src/hw/base/hstring.h \
 		src/hw/base/hvar.h \
 		src/hw/base/hobj.h \
 		src/hw/base/hgui.h \
@@ -7699,8 +7701,8 @@ tmp\obj\hvideotoolbar.obj: src\ui\hvideotoolbar.cpp src/ui/hvideotoolbar.h \
 		src/hw/base/herr.h \
 		src/hw/base/hlog.h \
 		src/hw/base/hmutex.h \
-		src/hw/base/hstring.h \
 		src\hw\base\hsocket.h \
+		src/hw/base/hstring.h \
 		src/hw/base/hvar.h \
 		src/hw/base/hobj.h \
 		src/hw/base/hgui.h \
@@ -8197,8 +8199,8 @@ tmp\obj\hvideownd.obj: src\ui\hvideownd.cpp src/ui/hvideownd.h \
 		src/hw/base/herr.h \
 		src/hw/base/hlog.h \
 		src/hw/base/hmutex.h \
-		src/hw/base/hstring.h \
 		src\hw\base\hsocket.h \
+		src/hw/base/hstring.h \
 		src/hw/base/hvar.h \
 		src/hw/base/hobj.h \
 		src/hw/base/hgui.h \
@@ -8695,8 +8697,8 @@ tmp\obj\mainwindow.obj: src\ui\mainwindow.cpp src/ui/mainwindow.h \
 		src/hw/base/herr.h \
 		src/hw/base/hlog.h \
 		src/hw/base/hmutex.h \
-		src/hw/base/hstring.h \
 		src\hw\base\hsocket.h \
+		src/hw/base/hstring.h \
 		src/hw/base/hvar.h \
 		src/hw/base/hobj.h \
 		src/hw/base/hgui.h \
@@ -9206,8 +9208,8 @@ tmp\obj\hvideowidget.obj: src\ui\hvideowidget.cpp src/ui/hvideowidget.h \
 		src/hw/base/herr.h \
 		src/hw/base/hlog.h \
 		src/hw/base/hmutex.h \
-		src/hw/base/hstring.h \
 		src\hw\base\hsocket.h \
+		src/hw/base/hstring.h \
 		src/hw/base/hvar.h \
 		src/hw/base/hobj.h \
 		src/hw/base/hgui.h \
@@ -9863,8 +9865,8 @@ tmp\obj\hopenmediadlg.obj: src\ui\hopenmediadlg.cpp src/ui/hopenmediadlg.h \
 		src/hw/base/herr.h \
 		src/hw/base/hlog.h \
 		src/hw/base/hmutex.h \
-		src/hw/base/hstring.h \
 		src\hw\base\hsocket.h \
+		src/hw/base/hstring.h \
 		src/hw/base/hvar.h \
 		src/hw/base/hobj.h \
 		src/hw/base/hgui.h \
@@ -11034,8 +11036,8 @@ tmp\obj\main.obj: src\main.cpp src/qt/qtheaders.h \
 		src/hw/base/herr.h \
 		src/hw/base/hlog.h \
 		src/hw/base/hmutex.h \
-		src/hw/base/hstring.h \
 		src\hw\base\hsocket.h \
+		src/hw/base/hstring.h \
 		src/hw/base/hvar.h \
 		src/hw/base/hobj.h \
 		src/hw/base/hgui.h \
