@@ -47,6 +47,7 @@ OBJECTS_DIR   = tmp\obj
 ####### Files
 
 SOURCES       = src\hw\base\hversion.c \
+		src\hw\base\hbase.c \
 		src\hw\base\herr.c \
 		src\hw\base\htime.c \
 		src\hw\base\hlog.c \
@@ -80,6 +81,7 @@ SOURCES       = src\hw\base\hversion.c \
 		tmp\moc\moc_hvideowidget.cpp \
 		tmp\moc\moc_hopenmediadlg.cpp
 OBJECTS       = tmp\obj\hversion.obj \
+		tmp\obj\hbase.obj \
 		tmp\obj\herr.obj \
 		tmp\obj\htime.obj \
 		tmp\obj\hlog.obj \
@@ -117,6 +119,7 @@ OBJECTS       = tmp\obj\hversion.obj \
 DIST          =  src\hw\h.h \
 		src\hw\base\hplatform.h \
 		src\hw\base\hdef.h \
+		src\hw\base\hbase.h \
 		src\hw\base\hversion.h \
 		src\hw\base\htime.h \
 		src\hw\base\herr.h \
@@ -156,6 +159,7 @@ DIST          =  src\hw\h.h \
 		src\video\hffplayer.h \
 		src\win32\hdevice.h \
 		src\appdef.h src\hw\base\hversion.c \
+		src\hw\base\hbase.c \
 		src\hw\base\herr.c \
 		src\hw\base\htime.c \
 		src\hw\base\hlog.c \
@@ -434,7 +438,7 @@ all: Makefile  $(DESTDIR_TARGET)
 
 $(DESTDIR_TARGET):  $(OBJECTS) 
 	$(LINKER) $(LFLAGS) /MANIFEST:embed /OUT:$(DESTDIR_TARGET) @<<
-tmp\obj\hversion.obj tmp\obj\herr.obj tmp\obj\htime.obj tmp\obj\hlog.obj tmp\obj\hstring.obj tmp\obj\hframe.obj tmp\obj\qtrcloader.obj tmp\obj\hglwidget.obj tmp\obj\centralwidget.obj tmp\obj\hmedialist.obj tmp\obj\htable.obj tmp\obj\hmultiview.obj tmp\obj\hvideotitlebar.obj tmp\obj\hvideotoolbar.obj tmp\obj\hvideownd.obj tmp\obj\mainwindow.obj tmp\obj\hvideowidget.obj tmp\obj\hopenmediadlg.obj tmp\obj\glew.obj tmp\obj\hvideocapture.obj tmp\obj\hffplayer.obj tmp\obj\hdevice.obj tmp\obj\main.obj tmp\obj\qrc_skin.obj tmp\obj\qrc_image.obj tmp\obj\moc_centralwidget.obj tmp\obj\moc_hmedialist.obj tmp\obj\moc_hmultiview.obj tmp\obj\moc_hvideotitlebar.obj tmp\obj\moc_hvideotoolbar.obj tmp\obj\moc_hvideownd.obj tmp\obj\moc_mainwindow.obj tmp\obj\moc_hvideowidget.obj tmp\obj\moc_hopenmediadlg.obj
+tmp\obj\hversion.obj tmp\obj\hbase.obj tmp\obj\herr.obj tmp\obj\htime.obj tmp\obj\hlog.obj tmp\obj\hstring.obj tmp\obj\hframe.obj tmp\obj\qtrcloader.obj tmp\obj\hglwidget.obj tmp\obj\centralwidget.obj tmp\obj\hmedialist.obj tmp\obj\htable.obj tmp\obj\hmultiview.obj tmp\obj\hvideotitlebar.obj tmp\obj\hvideotoolbar.obj tmp\obj\hvideownd.obj tmp\obj\mainwindow.obj tmp\obj\hvideowidget.obj tmp\obj\hopenmediadlg.obj tmp\obj\glew.obj tmp\obj\hvideocapture.obj tmp\obj\hffplayer.obj tmp\obj\hdevice.obj tmp\obj\main.obj tmp\obj\qrc_skin.obj tmp\obj\qrc_image.obj tmp\obj\moc_centralwidget.obj tmp\obj\moc_hmedialist.obj tmp\obj\moc_hmultiview.obj tmp\obj\moc_hvideotitlebar.obj tmp\obj\moc_hvideotoolbar.obj tmp\obj\moc_hvideownd.obj tmp\obj\moc_mainwindow.obj tmp\obj\moc_hvideowidget.obj tmp\obj\moc_hopenmediadlg.obj
 $(LIBS)
 <<
 
@@ -779,10 +783,10 @@ qmake: FORCE
 qmake_all: FORCE
 
 dist:
-	$(ZIP) hplayer.zip $(SOURCES) $(DIST) HPlayer.pro D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\spec_pre.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\common\angle.conf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\common\windows-vulkan.conf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\common\msvc-desktop.conf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\qconfig.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3danimation.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3danimation_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dcore.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dcore_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dextras.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dextras_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dinput.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dinput_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dlogic.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dlogic_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquick.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquick_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickanimation.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickanimation_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickextras.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickextras_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickinput.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickinput_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickrender.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickrender_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickscene2d.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickscene2d_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3drender.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3drender_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_accessibility_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axbase.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axbase_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axcontainer.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axcontainer_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axserver.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axserver_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_bluetooth.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_bluetooth_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_bootstrap_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_concurrent.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_concurrent_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_core.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_core_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_dbus.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_dbus_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_designer.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_designer_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_designercomponents_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_devicediscovery_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_edid_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_egl_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_fb_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_fontdatabase_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_gamepad.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_gamepad_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_gui.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_gui_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_help.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_help_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_location.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_location_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_multimedia.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_multimedia_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_multimediawidgets.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_multimediawidgets_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_network.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_network_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_nfc.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_nfc_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_opengl.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_opengl_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_openglextensions.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_openglextensions_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_packetprotocol_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_platformcompositor_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_positioning.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_positioning_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_positioningquick.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_positioningquick_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_printsupport.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_printsupport_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qml.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qml_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qmldebug_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qmldevtools_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qmltest.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qmltest_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quick.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quick_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quickcontrols2.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quickcontrols2_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quickparticles_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quicktemplates2_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quickwidgets.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quickwidgets_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_scxml.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_scxml_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_sensors.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_sensors_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_serialbus.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_serialbus_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_serialport.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_serialport_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_sql.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_sql_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_svg.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_svg_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_testlib.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_testlib_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_texttospeech.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_texttospeech_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_theme_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_uiplugin.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_uitools.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_uitools_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_vulkan_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_webchannel.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_webchannel_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_websockets.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_websockets_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_webview.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_webview_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_widgets.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_widgets_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_windowsuiautomation_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_winextras.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_winextras_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_xml.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_xml_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_xmlpatterns.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_xmlpatterns_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_zlib_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\qt_functions.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\qt_config.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\win32-msvc\qmake.conf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\spec_post.prf .qmake.stash D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\exclusive_builds.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\common\msvc-version.conf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\toolchain.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\default_pre.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\win32\default_pre.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\resolve_config.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\default_post.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\precompile_header.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\warn_on.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\qt.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\resources.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\moc.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\win32\opengl.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\uic.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\qmake_use.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\file_copies.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\win32\windows.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\testcase_targets.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\exceptions.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\yacc.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\lex.prf HPlayer.pro rc\skin.qrc rc\image.qrc D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\qtmain.prl D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Widgets.prl D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Gui.prl D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Core.prl "rc\lang\app_zh_CN.ts rc\lang\app_zh_CN.qm" rc\lang\app_zh_CN.ts rc\lang\app_zh_CN.qm  rc\skin.qrc rc\image.qrc D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\data\dummy.cpp src\hw\h.h src\hw\base\hplatform.h src\hw\base\hdef.h src\hw\base\hversion.h src\hw\base\htime.h src\hw\base\herr.h src\hw\base\hbuf.h src\hw\base\hgui.h src\hw\base\hlog.h src\hw\base\hobj.h src\hw\base\hvar.h src\hw\base\hscope.h src\hw\base\hstring.h src\hw\base\hmutex.h src\hw\base\hthread.h src\hw\utils\singleton.h src\hw\utils\hframe.h src\hw\utils\hgl.h src\qt\qtheaders.h src\qt\qtfunctions.h src\qt\qtrcloader.h src\qt\hglwidget.h src\ui\centralwidget.h src\ui\hmedialist.h src\ui\htable.h src\ui\hmultiview.h src\ui\hvideotitlebar.h src\ui\hvideotoolbar.h src\ui\hvideownd.h src\ui\mainwindow.h src\ui\qtstyles.h src\ui\hvideowidget.h src\ui\hopenmediadlg.h src\GL\glew.h src\video\hmedia.h src\video\hvideoplayer.h src\video\hvideoplayerfactory.h src\video\opencv_util.h src\video\hvideocapture.h src\video\hffplayer.h src\win32\hdevice.h src\appdef.h  src\hw\base\hversion.c src\hw\base\herr.c src\hw\base\htime.c src\hw\base\hlog.c src\hw\base\hstring.cpp src\hw\utils\hframe.cpp src\qt\qtrcloader.cpp src\qt\hglwidget.cpp src\ui\centralwidget.cpp src\ui\hmedialist.cpp src\ui\htable.cpp src\ui\hmultiview.cpp src\ui\hvideotitlebar.cpp src\ui\hvideotoolbar.cpp src\ui\hvideownd.cpp src\ui\mainwindow.cpp src\ui\hvideowidget.cpp src\ui\hopenmediadlg.cpp src\GL\glew.c src\video\hvideocapture.cpp src\video\hffplayer.cpp src\win32\hdevice.cpp src\main.cpp     
+	$(ZIP) hplayer.zip $(SOURCES) $(DIST) HPlayer.pro D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\spec_pre.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\common\angle.conf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\common\windows-vulkan.conf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\common\msvc-desktop.conf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\qconfig.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3danimation.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3danimation_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dcore.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dcore_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dextras.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dextras_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dinput.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dinput_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dlogic.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dlogic_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquick.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquick_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickanimation.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickanimation_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickextras.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickextras_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickinput.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickinput_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickrender.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickrender_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickscene2d.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3dquickscene2d_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3drender.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_3drender_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_accessibility_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axbase.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axbase_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axcontainer.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axcontainer_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axserver.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_axserver_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_bluetooth.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_bluetooth_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_bootstrap_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_concurrent.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_concurrent_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_core.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_core_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_dbus.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_dbus_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_designer.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_designer_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_designercomponents_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_devicediscovery_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_edid_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_egl_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_fb_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_fontdatabase_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_gamepad.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_gamepad_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_gui.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_gui_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_help.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_help_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_location.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_location_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_multimedia.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_multimedia_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_multimediawidgets.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_multimediawidgets_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_network.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_network_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_nfc.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_nfc_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_opengl.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_opengl_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_openglextensions.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_openglextensions_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_packetprotocol_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_platformcompositor_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_positioning.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_positioning_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_positioningquick.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_positioningquick_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_printsupport.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_printsupport_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qml.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qml_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qmldebug_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qmldevtools_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qmltest.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qmltest_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quick.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quick_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quickcontrols2.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quickcontrols2_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quickparticles_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quicktemplates2_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quickwidgets.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_quickwidgets_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_scxml.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_scxml_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_sensors.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_sensors_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_serialbus.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_serialbus_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_serialport.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_serialport_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_sql.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_sql_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_svg.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_svg_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_testlib.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_testlib_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_texttospeech.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_texttospeech_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_theme_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_uiplugin.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_uitools.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_uitools_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_vulkan_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_webchannel.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_webchannel_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_websockets.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_websockets_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_webview.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_webview_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_widgets.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_widgets_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_windowsuiautomation_support_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_winextras.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_winextras_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_xml.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_xml_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_xmlpatterns.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_xmlpatterns_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\modules\qt_lib_zlib_private.pri D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\qt_functions.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\qt_config.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\win32-msvc\qmake.conf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\spec_post.prf .qmake.stash D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\exclusive_builds.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\common\msvc-version.conf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\toolchain.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\default_pre.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\win32\default_pre.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\resolve_config.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\default_post.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\precompile_header.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\warn_on.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\qt.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\resources.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\moc.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\win32\opengl.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\uic.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\qmake_use.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\file_copies.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\win32\windows.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\testcase_targets.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\exceptions.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\yacc.prf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\lex.prf HPlayer.pro rc\skin.qrc rc\image.qrc D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\qtmain.prl D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Widgets.prl D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Gui.prl D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Core.prl "rc\lang\app_zh_CN.ts rc\lang\app_zh_CN.qm" rc\lang\app_zh_CN.ts rc\lang\app_zh_CN.qm  rc\skin.qrc rc\image.qrc D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\data\dummy.cpp src\hw\h.h src\hw\base\hplatform.h src\hw\base\hdef.h src\hw\base\hbase.h src\hw\base\hversion.h src\hw\base\htime.h src\hw\base\herr.h src\hw\base\hbuf.h src\hw\base\hgui.h src\hw\base\hlog.h src\hw\base\hobj.h src\hw\base\hvar.h src\hw\base\hscope.h src\hw\base\hstring.h src\hw\base\hmutex.h src\hw\base\hthread.h src\hw\utils\singleton.h src\hw\utils\hframe.h src\hw\utils\hgl.h src\qt\qtheaders.h src\qt\qtfunctions.h src\qt\qtrcloader.h src\qt\hglwidget.h src\ui\centralwidget.h src\ui\hmedialist.h src\ui\htable.h src\ui\hmultiview.h src\ui\hvideotitlebar.h src\ui\hvideotoolbar.h src\ui\hvideownd.h src\ui\mainwindow.h src\ui\qtstyles.h src\ui\hvideowidget.h src\ui\hopenmediadlg.h src\GL\glew.h src\video\hmedia.h src\video\hvideoplayer.h src\video\hvideoplayerfactory.h src\video\opencv_util.h src\video\hvideocapture.h src\video\hffplayer.h src\win32\hdevice.h src\appdef.h  src\hw\base\hversion.c src\hw\base\hbase.c src\hw\base\herr.c src\hw\base\htime.c src\hw\base\hlog.c src\hw\base\hstring.cpp src\hw\utils\hframe.cpp src\qt\qtrcloader.cpp src\qt\hglwidget.cpp src\ui\centralwidget.cpp src\ui\hmedialist.cpp src\ui\htable.cpp src\ui\hmultiview.cpp src\ui\hvideotitlebar.cpp src\ui\hvideotoolbar.cpp src\ui\hvideownd.cpp src\ui\mainwindow.cpp src\ui\hvideowidget.cpp src\ui\hopenmediadlg.cpp src\GL\glew.c src\video\hvideocapture.cpp src\video\hffplayer.cpp src\win32\hdevice.cpp src\main.cpp     
 
 clean: compiler_clean 
-	-$(DEL_FILE) tmp\obj\hversion.obj tmp\obj\herr.obj tmp\obj\htime.obj tmp\obj\hlog.obj tmp\obj\hstring.obj tmp\obj\hframe.obj tmp\obj\qtrcloader.obj tmp\obj\hglwidget.obj tmp\obj\centralwidget.obj tmp\obj\hmedialist.obj tmp\obj\htable.obj tmp\obj\hmultiview.obj tmp\obj\hvideotitlebar.obj tmp\obj\hvideotoolbar.obj tmp\obj\hvideownd.obj tmp\obj\mainwindow.obj tmp\obj\hvideowidget.obj tmp\obj\hopenmediadlg.obj tmp\obj\glew.obj tmp\obj\hvideocapture.obj tmp\obj\hffplayer.obj tmp\obj\hdevice.obj tmp\obj\main.obj tmp\obj\qrc_skin.obj tmp\obj\qrc_image.obj tmp\obj\moc_centralwidget.obj tmp\obj\moc_hmedialist.obj tmp\obj\moc_hmultiview.obj tmp\obj\moc_hvideotitlebar.obj tmp\obj\moc_hvideotoolbar.obj tmp\obj\moc_hvideownd.obj tmp\obj\moc_mainwindow.obj tmp\obj\moc_hvideowidget.obj tmp\obj\moc_hopenmediadlg.obj
+	-$(DEL_FILE) tmp\obj\hversion.obj tmp\obj\hbase.obj tmp\obj\herr.obj tmp\obj\htime.obj tmp\obj\hlog.obj tmp\obj\hstring.obj tmp\obj\hframe.obj tmp\obj\qtrcloader.obj tmp\obj\hglwidget.obj tmp\obj\centralwidget.obj tmp\obj\hmedialist.obj tmp\obj\htable.obj tmp\obj\hmultiview.obj tmp\obj\hvideotitlebar.obj tmp\obj\hvideotoolbar.obj tmp\obj\hvideownd.obj tmp\obj\mainwindow.obj tmp\obj\hvideowidget.obj tmp\obj\hopenmediadlg.obj tmp\obj\glew.obj tmp\obj\hvideocapture.obj tmp\obj\hffplayer.obj tmp\obj\hdevice.obj tmp\obj\main.obj tmp\obj\qrc_skin.obj tmp\obj\qrc_image.obj tmp\obj\moc_centralwidget.obj tmp\obj\moc_hmedialist.obj tmp\obj\moc_hmultiview.obj tmp\obj\moc_hvideotitlebar.obj tmp\obj\moc_hvideotoolbar.obj tmp\obj\moc_hvideownd.obj tmp\obj\moc_mainwindow.obj tmp\obj\moc_hvideowidget.obj tmp\obj\moc_hopenmediadlg.obj
 	-$(DEL_FILE) bin\msvc14_x86\hplayer.exp
 
 distclean: clean 
@@ -877,6 +881,8 @@ tmp\moc\moc_centralwidget.cpp: src\qt\qtheaders.h \
 		src\hw\base\hbuf.h \
 		src\hw\base\hdef.h \
 		src\hw\base\hplatform.h \
+		src\hw\hconfig.h \
+		src\hw\base\hbase.h \
 		src\hw\h.h \
 		src\hw\base\hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -1387,6 +1393,8 @@ tmp\moc\moc_hmedialist.cpp: src\qt\qtheaders.h \
 		src\hw\base\hbuf.h \
 		src\hw\base\hdef.h \
 		src\hw\base\hplatform.h \
+		src\hw\hconfig.h \
+		src\hw\base\hbase.h \
 		src\hw\h.h \
 		src\hw\base\hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -1887,6 +1895,8 @@ tmp\moc\moc_hmultiview.cpp: src\qt\qtheaders.h \
 		src\hw\base\hbuf.h \
 		src\hw\base\hdef.h \
 		src\hw\base\hplatform.h \
+		src\hw\hconfig.h \
+		src\hw\base\hbase.h \
 		src\hw\h.h \
 		src\hw\base\hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -2395,6 +2405,8 @@ tmp\moc\moc_hvideotitlebar.cpp: src\qt\qtheaders.h \
 		src\hw\base\hbuf.h \
 		src\hw\base\hdef.h \
 		src\hw\base\hplatform.h \
+		src\hw\hconfig.h \
+		src\hw\base\hbase.h \
 		src\hw\h.h \
 		src\hw\base\hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -2895,6 +2907,8 @@ tmp\moc\moc_hvideotoolbar.cpp: src\qt\qtheaders.h \
 		src\hw\base\hbuf.h \
 		src\hw\base\hdef.h \
 		src\hw\base\hplatform.h \
+		src\hw\hconfig.h \
+		src\hw\base\hbase.h \
 		src\hw\h.h \
 		src\hw\base\hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -3395,6 +3409,8 @@ tmp\moc\moc_hvideownd.cpp: src\qt\qtheaders.h \
 		src\hw\base\hbuf.h \
 		src\hw\base\hdef.h \
 		src\hw\base\hplatform.h \
+		src\hw\hconfig.h \
+		src\hw\base\hbase.h \
 		src\hw\h.h \
 		src\hw\base\hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -3896,6 +3912,8 @@ tmp\moc\moc_mainwindow.cpp: src\qt\qtheaders.h \
 		src\hw\base\hbuf.h \
 		src\hw\base\hdef.h \
 		src\hw\base\hplatform.h \
+		src\hw\hconfig.h \
+		src\hw\base\hbase.h \
 		src\hw\h.h \
 		src\hw\base\hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -4408,6 +4426,8 @@ tmp\moc\moc_hvideowidget.cpp: src\qt\qtheaders.h \
 		src\hw\base\hbuf.h \
 		src\hw\base\hdef.h \
 		src\hw\base\hplatform.h \
+		src\hw\hconfig.h \
+		src\hw\base\hbase.h \
 		src\hw\h.h \
 		src\hw\base\hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -4914,6 +4934,8 @@ tmp\moc\moc_hopenmediadlg.cpp: src\qt\qtheaders.h \
 		src\hw\base\hbuf.h \
 		src\hw\base\hdef.h \
 		src\hw\base\hplatform.h \
+		src\hw\hconfig.h \
+		src\hw\base\hbase.h \
 		src\hw\h.h \
 		src\hw\base\hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -5429,26 +5451,37 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 tmp\obj\hversion.obj: src\hw\base\hversion.c src/hw/base/hversion.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/base/htime.h
+
+tmp\obj\hbase.obj: src\hw\base\hbase.c src/hw/base/hbase.h
 
 tmp\obj\herr.obj: src\hw\base\herr.c src/hw/base/herr.h
 
 tmp\obj\htime.obj: src\hw\base\htime.c src/hw/base/htime.h \
 		src/hw/base/hplatform.h \
-		src/hw/base/hdef.h
+		src\hw\hconfig.h \
+		src/hw/base/hdef.h \
+		src/hw/base/hbase.h
 
 tmp\obj\hlog.obj: src\hw\base\hlog.c src/hw/base/hlog.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
 		src/hw/base/htime.h \
 		src/hw/base/hdef.h \
+		src/hw/base/hbase.h \
 		src/hw/base/hmutex.h
 
-tmp\obj\hstring.obj: src\hw\base\hstring.cpp src/hw/base/hstring.h
+tmp\obj\hstring.obj: src\hw\base\hstring.cpp src/hw/base/hstring.h \
+		src/hw/base/hbase.h
 
 tmp\obj\hframe.obj: src\hw\utils\hframe.cpp src/hw/utils/hframe.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/base/hlog.h
 
 tmp\obj\qtrcloader.obj: src\qt\qtrcloader.cpp src/qt/qtrcloader.h \
@@ -5547,6 +5580,8 @@ tmp\obj\hglwidget.obj: src\qt\hglwidget.cpp src/qt/hglwidget.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/base/hgui.h \
 		D:\Qt\Qt5.11.1\toolchains\msvc14_x86\include\QtWidgets\qopenglwidget.h \
 		D:\Qt\Qt5.11.1\toolchains\msvc14_x86\include\QtWidgets\qtwidgetsglobal.h \
@@ -5676,6 +5711,8 @@ tmp\obj\centralwidget.obj: src\ui\centralwidget.cpp src/ui/centralwidget.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/h.h \
 		src/hw/base/hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -6184,6 +6221,8 @@ tmp\obj\hmedialist.obj: src\ui\hmedialist.cpp src/ui/hmedialist.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/h.h \
 		src/hw/base/hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -6675,7 +6714,9 @@ tmp\obj\hmedialist.obj: src\ui\hmedialist.cpp src/ui/hmedialist.h \
 
 tmp\obj\htable.obj: src\ui\htable.cpp src/ui/htable.h \
 		src/hw/base/hdef.h \
-		src/hw/base/hplatform.h
+		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h
 
 tmp\obj\hmultiview.obj: src\ui\hmultiview.cpp src/ui/hmultiview.h \
 		src/qt/qtheaders.h \
@@ -6685,6 +6726,8 @@ tmp\obj\hmultiview.obj: src\ui\hmultiview.cpp src/ui/hmultiview.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/h.h \
 		src/hw/base/hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -7194,6 +7237,8 @@ tmp\obj\hvideotitlebar.obj: src\ui\hvideotitlebar.cpp src/ui/hvideotitlebar.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/h.h \
 		src/hw/base/hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -7692,6 +7737,8 @@ tmp\obj\hvideotoolbar.obj: src\ui\hvideotoolbar.cpp src/ui/hvideotoolbar.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/h.h \
 		src/hw/base/hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -8190,6 +8237,8 @@ tmp\obj\hvideownd.obj: src\ui\hvideownd.cpp src/ui/hvideownd.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/h.h \
 		src/hw/base/hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -8688,6 +8737,8 @@ tmp\obj\mainwindow.obj: src\ui\mainwindow.cpp src/ui/mainwindow.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/h.h \
 		src/hw/base/hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -9199,6 +9250,8 @@ tmp\obj\hvideowidget.obj: src\ui\hvideowidget.cpp src/ui/hvideowidget.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/h.h \
 		src/hw/base/hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -9856,6 +9909,8 @@ tmp\obj\hopenmediadlg.obj: src\ui\hopenmediadlg.cpp src/ui/hopenmediadlg.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/h.h \
 		src/hw/base/hversion.h \
 		src\hw\base\hsysinfo.h \
@@ -10361,6 +10416,8 @@ tmp\obj\hvideocapture.obj: src\video\hvideocapture.cpp src/video/hvideocapture.h
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/base/hstring.h \
 		src/hw/base/hlog.h \
 		src/hw/base/hthread.h \
@@ -10979,6 +11036,8 @@ tmp\obj\hffplayer.obj: src\video\hffplayer.cpp src/video/hffplayer.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/base/hstring.h \
 		src/hw/base/hlog.h \
 		src\video\ffmpeg_util.h \
@@ -11027,6 +11086,8 @@ tmp\obj\main.obj: src\main.cpp src/qt/qtheaders.h \
 		src/hw/base/hbuf.h \
 		src/hw/base/hdef.h \
 		src/hw/base/hplatform.h \
+		src\hw\hconfig.h \
+		src/hw/base/hbase.h \
 		src/hw/h.h \
 		src/hw/base/hversion.h \
 		src\hw\base\hsysinfo.h \

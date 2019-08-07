@@ -34,6 +34,7 @@ HEADERS += \
     src/hw/h.h \
     src/hw/base/hplatform.h \
     src/hw/base/hdef.h \
+    src/hw/base/hbase.h \
     src/hw/base/hversion.h \
     src/hw/base/htime.h \
     src/hw/base/herr.h \
@@ -52,6 +53,7 @@ HEADERS += \
 
 SOURCES += \
     src/hw/base/hversion.c \
+    src/hw/base/hbase.c \
     src/hw/base/herr.c \
     src/hw/base/htime.c \
     src/hw/base/hlog.c \
