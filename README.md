@@ -35,3 +35,7 @@ https://blog.csdn.net/column/details/23763.html
 - 添加多画面合成功能；
 - 添加推流功能；
 - 添加桌面录制功能；
+
+## BUILD
+git submodule update --init
+see BUILD.md
