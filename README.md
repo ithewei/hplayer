@@ -36,6 +36,10 @@ https://blog.csdn.net/column/details/23763.html
 - 添加推流功能；
 - 添加桌面录制功能；
 
+## DEPENDENTS
+
+- git submodule update --init
+
 ## BUILD
-git submodule update --init
+
 see BUILD.md
