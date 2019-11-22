@@ -4,7 +4,7 @@
 
 SINGLETON_IMPL(HRcLoader)
 
-void HRcLoader::loadIcon(){
+void HRcLoader::loadIcon() {
 #define LOAD_ICON(rcid, filename) \
     m_mapIcon[rcid] = QPixmap(QString(IMAGE_PATH) + filename); \
 

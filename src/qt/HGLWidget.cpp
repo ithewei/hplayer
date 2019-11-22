@@ -1,6 +1,6 @@
-#include "hglwidget.h"
+#include "HGLWidget.h"
 
-void bindTexture(GLTexture* tex, QImage* img){
+void bindTexture(GLTexture* tex, QImage* img) {
     if (img->format() != QImage::Format_ARGB32)
         return;
 
@@ -31,35 +31,37 @@ HGLWidget::HGLWidget(QWidget* parent)
 
 }
 
-void HGLWidget::setVertices(double ratio){
+void HGLWidget::setVertices(double ratio) {
     double w = 1.0, h = 1.0;
-    if (ratio < 1.0){
+    if (ratio < 1.0) {
         w = ratio;
-    }else{
+    }
+    else {
         h = 1.0 / ratio;
     }
 
     GLfloat tmp[] = {
-            -w, -h,
-             w, -h,
-            -w,  h,
-             w,  h,
+        -w, -h,
+         w, -h,
+        -w,  h,
+         w,  h,
     };
 
     memcpy(vertices, tmp, sizeof(GLfloat)*8);
 }
 
-void HGLWidget::setVertices(QRect rc){
+void HGLWidget::setVertices(QRect rc) {
     int wnd_w = width();
     int wnd_h = height();
-    if (wnd_w <= 0 || wnd_h <= 0)
+    if (wnd_w <= 0 || wnd_h <= 0) {
         return;
+    }
     GLfloat left = (GLfloat)rc.left() * 2 / wnd_w - 1;
     GLfloat right = (GLfloat)(rc.right()+1) * 2 / wnd_w - 1;
     GLfloat top = 1 - (GLfloat)rc.top() * 2 / wnd_h;
     GLfloat bottom = 1 - (GLfloat)(rc.bottom()+1) * 2 / wnd_h;
-    qDebug("l=%d, r=%d, t=%d, b=%d", rc.left(), rc.right(), rc.top(), rc.bottom());
-    qDebug("l=%f, r=%f, t=%f, b=%f", left, right, top, bottom);
+    qDebug("l=%d r=%d t=%d b=%d", rc.left(), rc.right(), rc.top(), rc.bottom());
+    qDebug("l=%f r=%f t=%f b=%f", left, right, top, bottom);
     GLfloat tmp[] = {
         left,  bottom,
         right, bottom,
@@ -70,7 +72,7 @@ void HGLWidget::setVertices(QRect rc){
     memcpy(vertices, tmp, sizeof(GLfloat)*8);
 }
 
-void HGLWidget::loadYUVShader(){
+void HGLWidget::loadYUVShader() {
     GLuint vs = glCreateShader(GL_VERTEX_SHADER);
     GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -145,7 +147,7 @@ void HGLWidget::loadYUVShader(){
     qDebug("loadYUVShader ok");
 }
 
-void HGLWidget::initVAO(){
+void HGLWidget::initVAO() {
     setVertices(1.0);
 
     GLfloat tmp[] = {
@@ -156,12 +158,14 @@ void HGLWidget::initVAO(){
     };
 
     // reverse
-//  GLfloat tmp[] = {
-//        0.0f, 0.0f,
-//        1.0f, 0.0f,
-//        0.0f, 1.0f,
-//        1.0f, 1.0f,
-//    };
+    /*
+    GLfloat tmp[] = {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 1.0f,
+    };
+    */
     memcpy(textures, tmp, sizeof(GLfloat)*8);
 
     glVertexAttribPointer(VER_ATTR_VER, 2, GL_FLOAT, GL_FALSE, 0, vertices);
@@ -171,9 +175,9 @@ void HGLWidget::initVAO(){
     glEnableVertexAttribArray(VER_ATTR_TEX);
 }
 
-void HGLWidget::initYUV(){
+void HGLWidget::initYUV() {
     glGenTextures(3, tex_yuv);
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < 3; ++i) {
         glBindTexture(GL_TEXTURE_2D, tex_yuv[i]);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -182,9 +186,9 @@ void HGLWidget::initYUV(){
     }
 }
 
-void HGLWidget::initializeGL(){
-    if (!s_init_flag.test_and_set()){
-        if (glewInit() != 0){
+void HGLWidget::initializeGL() {
+    if (!s_init_flag.test_and_set()) {
+        if (glewInit() != 0) {
             s_init_flag.clear();
             qFatal("glewInit failed");
             return;
@@ -197,16 +201,16 @@ void HGLWidget::initializeGL(){
     initYUV();
 }
 
-void HGLWidget::resizeGL(int w, int h){
+void HGLWidget::resizeGL(int w, int h) {
     glViewport(0,0,w,h);
 }
 
-void HGLWidget::paintGL(){
+void HGLWidget::paintGL() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void HGLWidget::drawYUV(HFrame* pFrame){
+void HGLWidget::drawYUV(HFrame* pFrame) {
     assert(pFrame->type == GL_I420 || pFrame->type == GL_YV12);
 
     glUseProgram(prog_yuv);
@@ -243,10 +247,11 @@ void HGLWidget::drawYUV(HFrame* pFrame){
     glUseProgram(0);
 }
 
-void HGLWidget::drawFrame(HFrame *pFrame){
-    if (pFrame->type == GL_I420 || pFrame->type == GL_YV12){
+void HGLWidget::drawFrame(HFrame *pFrame) {
+    if (pFrame->type == GL_I420 || pFrame->type == GL_YV12) {
         drawYUV(pFrame);
-    }else{
+    }
+    else {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glRasterPos3f(-1.0f,1.0f,0);
@@ -255,7 +260,7 @@ void HGLWidget::drawFrame(HFrame *pFrame){
     }
 }
 
-void HGLWidget::drawTexture(HRect rc, GLTexture *tex){
+void HGLWidget::drawTexture(HRect rc, GLTexture *tex) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0.0, width(), height(), 0.0, -1.0, 1.0);
@@ -278,14 +283,15 @@ void HGLWidget::drawTexture(HRect rc, GLTexture *tex){
     glDisable(GL_BLEND);
 }
 
-void HGLWidget::drawRect(HRect rc, HColor clr, int line_width, bool bFill){
+void HGLWidget::drawRect(HRect rc, HColor clr, int line_width, bool bFill) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0.0, width(), height(), 0.0, -1.0, 1.0);
 
-    if (bFill){
+    if (bFill) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }else{
+    }
+    else {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
@@ -303,7 +309,7 @@ void HGLWidget::drawRect(HRect rc, HColor clr, int line_width, bool bFill){
 }
 
 #include <QPainter>
-void HGLWidget::drawText(QPoint lb, const char* text, int fontsize, QColor clr){
+void HGLWidget::drawText(QPoint lb, const char* text, int fontsize, QColor clr) {
     QPainter painter(this);
     QFont font = painter.font();
     font.setPointSize(fontsize);

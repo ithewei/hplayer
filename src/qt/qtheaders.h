@@ -1,5 +1,5 @@
-#ifndef QTHEADERS_H
-#define QTHEADERS_H
+#ifndef QT_HEADERS_H
+#define QT_HEADERS_H
 
 // using glew.h not gl.h
 #include "hgl.h"
@@ -28,4 +28,4 @@
 #include "qtfunctions.h"
 #include "qtrcloader.h"
 //============================================================================
-#endif // QTHEADERS_H
+#endif // QT_HEADERS_H

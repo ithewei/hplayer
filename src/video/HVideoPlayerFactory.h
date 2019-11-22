@@ -1,5 +1,5 @@
-#ifndef HVIDEOPLAYERFACTORY_H
-#define HVIDEOPLAYERFACTORY_H
+#ifndef H_VIDEO_PLAYER_FACTORY_H
+#define H_VIDEO_PLAYER_FACTORY_H
 
 #include "hmedia.h"
 #include "HVideoPlayer.h"
@@ -23,4 +23,4 @@ public:
     }
 };
 
-#endif // HVIDEOPLAYERFACTORY_H
+#endif // H_VIDEO_PLAYER_FACTORY_H

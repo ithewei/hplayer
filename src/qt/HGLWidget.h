@@ -1,5 +1,5 @@
-#ifndef HGLWIDGET_H
-#define HGLWIDGET_H
+#ifndef H_GL_WIDGET_H
+#define H_GL_WIDGET_H
 
 #include "hgl.h"
 #include "hframe.h"
@@ -51,4 +51,4 @@ protected:
     };
 };
 
-#endif // HGLWIDGET_H
+#endif // H_GL_WIDGET_H
