@@ -1,7 +1,7 @@
-#ifndef HVIDEOCAPTURE_H
-#define HVIDEOCAPTURE_H
+#ifndef H_VIDEO_CAPTURE_H
+#define H_VIDEO_CAPTURE_H
 
-#include "hvideoplayer.h"
+#include "HVideoPlayer.h"
 #include "hthread.h"
 #include "opencv2/opencv.hpp"
 

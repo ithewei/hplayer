@@ -1,5 +1,5 @@
-#ifndef HVIDEOPLAYER_H
-#define HVIDEOPLAYER_H
+#ifndef H_VIDEO_PLAYER_H
+#define H_VIDEO_PLAYER_H
 
 #include "hmedia.h"
 #include "hframe.h"
@@ -31,7 +31,7 @@ inline string strtime(int64_t ms) {
 class HVideoPlayer
 {
 public:
-    HVideoPlayer(){
+    HVideoPlayer() {
         set_frame_cache(DEFAULT_FRAME_CACHE);
         fps = DEFAULT_FPS;
         decode_mode = DEFAULT_DECODE_MODE;
@@ -39,6 +39,7 @@ public:
         start_time = 0;
         signal = 0;
     }
+
     virtual ~HVideoPlayer() {}
 
     virtual int start() = 0;
@@ -58,23 +59,23 @@ public:
         decode_mode = mode;
     }
 
-    FrameStats get_frame_stats(){
+    FrameStats get_frame_stats() {
         return frame_buf.frame_stats;
     }
 
-    FrameInfo get_frame_info(){
+    FrameInfo get_frame_info() {
         return frame_buf.frame_info;
     }
 
-    void set_frame_cache(int cache){
+    void set_frame_cache(int cache) {
         frame_buf.setCache(cache);
     }
 
-    int push_frame(HFrame* pFrame){
+    int push_frame(HFrame* pFrame) {
         return frame_buf.push(pFrame);
     }
 
-    int pop_frame(HFrame* pFrame){
+    int pop_frame(HFrame* pFrame) {
         return frame_buf.pop(pFrame);
     }
 
@@ -82,11 +83,11 @@ public:
     HMedia      media;
     int         fps;
     int         decode_mode;
-    int64_t     duration; // ms
+    int64_t     duration;   // ms
     int64_t     start_time; // ms
     int         signal;
 protected:
     HFrameBuf   frame_buf;
 };
 
-#endif // HVIDEOPLAYER_H
+#endif // H_VIDEO_PLAYER_H

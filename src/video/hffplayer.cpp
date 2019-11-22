@@ -52,22 +52,22 @@ int HFFPlayer::start(){
     AVInputFormat* ifmt = NULL;
     switch (media.type) {
     case MEDIA_TYPE_CAPTURE:
-        {
-            ifile = "video=";
-            ifile += media.src;
+    {
+        ifile = "video=";
+        ifile += media.src;
 #ifdef _WIN32
-            const char drive[] = "dshow";
+        const char drive[] = "dshow";
 #elif defined(__linux__)
-            const char drive[] = "v4l2";
+        const char drive[] = "v4l2";
 #else
-            const char drive[] = "avfoundation";
+        const char drive[] = "avfoundation";
 #endif
-            ifmt = av_find_input_format(drive);
-            if (ifmt == NULL) {
-                hloge("Can not find dshow");
-                return -5;
-            }
+        ifmt = av_find_input_format(drive);
+        if (ifmt == NULL) {
+            hloge("Can not find dshow");
+            return -5;
         }
+    }
         break;
     case MEDIA_TYPE_FILE:
     case MEDIA_TYPE_NETWORK:
@@ -258,7 +258,7 @@ int HFFPlayer::seek(int64_t ms) {
     return 0;
 }
 
-void HFFPlayer::doTask(){
+void HFFPlayer::doTask() {
     // loop until get a video frame
     while (1) {
         av_init_packet(packet);

@@ -1,8 +1,9 @@
-#include "hvideocapture.h"
+#include "HVideoCapture.h"
 #include "opencv_util.h"
 
 #include "qtheaders.h"
-int HVideoCapture::start(){
+
+int HVideoCapture::start() {
     switch (media.type) {
     case MEDIA_TYPE_CAPTURE:
         vc.open(media.index, cv::CAP_DSHOW);
@@ -15,8 +16,9 @@ int HVideoCapture::start(){
         return -10;
     }
 
-    if (!vc.isOpened())
+    if (!vc.isOpened()) {
         return -20;
+    }
 
     vc.set(cv::CAP_PROP_FPS, fps);
     HThread::setSleepPolicy(HThread::SLEEP_UNTIL, 1000/fps);
@@ -24,18 +26,17 @@ int HVideoCapture::start(){
     return HThread::start();
 }
 
-int HVideoCapture::stop(){
+int HVideoCapture::stop() {
     HThread::stop();
     vc.release();
     return 0;
 }
 
-void HVideoCapture::doTask(){
+void HVideoCapture::doTask() {
     cv::Mat mat;
-    if (!vc.read(mat))
+    if (!vc.read(mat)) {
         return;
-
-    //...ALG
+    }
 
     HFrame hframe;
     Mat2HFrame(mat, hframe);

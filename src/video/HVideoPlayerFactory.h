@@ -2,14 +2,14 @@
 #define HVIDEOPLAYERFACTORY_H
 
 #include "hmedia.h"
-#include "hvideoplayer.h"
-#include "hvideocapture.h"
+#include "HVideoPlayer.h"
+#include "HVideoCapture.h"
 #include "hffplayer.h"
 
 class HVideoPlayerFactory
 {
 public:
-    static HVideoPlayer* create(MEDIA_TYPE type){
+    static HVideoPlayer* create(MEDIA_TYPE type) {
         switch (type) {
         case MEDIA_TYPE_FILE:
         case MEDIA_TYPE_NETWORK:

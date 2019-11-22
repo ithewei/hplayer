@@ -1,9 +1,9 @@
-#ifndef HMEDIA_H
-#define HMEDIA_H
+#ifndef H_MEDIA_H
+#define H_MEDIA_H
 
 #include <string>
 
-enum MEDIA_TYPE{
+enum MEDIA_TYPE {
     MEDIA_TYPE_FILE = 0,
     MEDIA_TYPE_NETWORK,
     MEDIA_TYPE_CAPTURE,
@@ -13,16 +13,16 @@ enum MEDIA_TYPE{
 
 #define DEFAULT_MEDIA_TYPE  MEDIA_TYPE_CAPTURE
 
-typedef struct media_s{
+typedef struct media_s {
     MEDIA_TYPE  type;
     int         index; // for camera index
     std::string src;
     std::string descr;
 
-    media_s(){
+    media_s() {
         type = MEDIA_TYPE_NONE;
         index = -1;
     }
-}HMedia;
+} HMedia;
 
-#endif // HMEDIA_H
+#endif // H_MEDIA_H
