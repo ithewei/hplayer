@@ -1,9 +1,10 @@
-#ifndef HVIDEOWND_H
-#define HVIDEOWND_H
+#ifndef H_VIDEO_WND_H
+#define H_VIDEO_WND_H
 
 #include "qtheaders.h"
-#include "hglwidget.h"
 #include "hframe.h"
+
+#include "HGLWidget.h"
 
 class HVideoWnd : public HGLWidget
 {
@@ -29,4 +30,4 @@ public:
     int fps;
 };
 
-#endif // HVIDEOWND_H
+#endif // H_VIDEO_WND_H

@@ -1,5 +1,5 @@
-#ifndef HVIDEOTITLEBAR_H
-#define HVIDEOTITLEBAR_H
+#ifndef H_VIDEO_TITLEBAR_H
+#define H_VIDEO_TITLEBAR_H
 
 #include "qtheaders.h"
 
@@ -18,4 +18,4 @@ public:
     QPushButton *btnClose;
 };
 
-#endif // HVIDEOTITLEBAR_H
+#endif // H_VIDEO_TITLEBAR_H

@@ -1,5 +1,5 @@
-#ifndef HOPENMEDIADLG_H
-#define HOPENMEDIADLG_H
+#ifndef H_OPEN_MEDIA_DLG_H
+#define H_OPEN_MEDIA_DLG_H
 
 #include "qtheaders.h"
 
@@ -55,4 +55,4 @@ public:
     HMedia media;
 };
 
-#endif // HOPENMEDIADLG_H
+#endif // H_OPEN_MEDIA_DLG_H

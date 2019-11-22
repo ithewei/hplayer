@@ -1,17 +1,18 @@
-#ifndef HVIDEOWIDGET_H
-#define HVIDEOWIDGET_H
+#ifndef H_VIDEO_WIDGET_H
+#define H_VIDEO_WIDGET_H
 
 #include "qtheaders.h"
-#include "hvideownd.h"
-#include "hvideotitlebar.h"
-#include "hvideotoolbar.h"
-#include "hvideoplayer.h"
+
+#include "HVideoWnd.h"
+#include "HVideoTitlebar.h"
+#include "HVideoToolbar.h"
+#include "HVideoPlayer.h"
 
 class  HVideoWidget : public QFrame
 {
     Q_OBJECT
 public:
-    enum Status{
+    enum Status {
         STOP,
         PAUSE,
         PLAY,
@@ -65,4 +66,4 @@ private:
     HVideoPlayer* pImpl_player;
 };
 
-#endif // HVIDEOWIDGET_H
+#endif // H_VIDEO_WIDGET_H

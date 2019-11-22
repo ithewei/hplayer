@@ -1,16 +1,22 @@
-#ifndef QTSTYLES_H
-#define QTSTYLES_H
+#ifndef QT_STYLES_H
+#define QT_STYLES_H
 
-//----------------changed-----------------------
-#define MEDIA_LIST_VISIBLE  false
-#define INFO_LIST_VISIBLE   true
+//----------------mutable-----------------------
+#define LSIDE_VISIBLE       false
+#define RSIDE_VISIBLE       false
 
-#define MEDIA_LIST_FACTOR  30
-#define MULTI_VIEW_FACTOR  70
+#define LSIDE_MIN_WIDTH     200
+#define LSIDE_MAX_WIDTH     400
 
-#define WITH_MV_STYLE   1
-#define MV_STYLE_ROW    3
-#define MV_STYLE_COL    3
+#define MV_MIN_WIDTH        640
+#define MV_MIN_HEIGHT       480
+
+#define RSIDE_MIN_WIDTH     200
+#define RSIDE_MAX_WIDTH     400
+
+#define WITH_MV_STYLE       1
+#define MV_STYLE_ROW        3
+#define MV_STYLE_COL        3
 //==============================================
 
 #define DEFAULT_SKIN            ":/skin/dark.qss"
@@ -37,4 +43,4 @@
 #define DRAG_QSS    "border:3px groove #FF8C00"
 #define RECT_QSS    "border:2px solid red; background:transparent;"
 
-#endif // QTSTYLES_H
+#endif // QT_STYLES_H

@@ -1,5 +1,5 @@
-#ifndef HVIDEOTOOLBAR_H
-#define HVIDEOTOOLBAR_H
+#ifndef H_VIDEO_TOOLBAR_H
+#define H_VIDEO_TOOLBAR_H
 
 #include "qtheaders.h"
 
@@ -32,4 +32,4 @@ public:
     QLabel      *lblDuration;
 };
 
-#endif // HVIDEOTOOLBAR_H
+#endif // H_VIDEO_TOOLBAR_H

@@ -1,4 +1,5 @@
-#include "mainwindow.h"
+#include "MainWindow.h"
+
 #include "appdef.h"
 #include "qtstyles.h"
 
@@ -16,7 +17,7 @@ MainWindow::~MainWindow() {
     hlogd("~MainWindow");
 }
 
-void MainWindow::initMenu(){
+void MainWindow::initMenu() {
     // Media
     QMenu *mediaMenu = menuBar()->addMenu(tr("&Media"));
     QToolBar *mediaToolbar = addToolBar(tr("&Media"));
@@ -109,12 +110,28 @@ void MainWindow::initMenu(){
     });
     viewMenu->addAction(actStatusbar);
 
+    QAction *actLside = new QAction(tr(" Leftside"));
+    actLside->setCheckable(true);
+    actLside->setChecked(LSIDE_VISIBLE);
+    connect( actLside, &QAction::triggered, [=](bool check){
+        center->lside->setVisible(check);
+    });
+    viewMenu->addAction(actLside);
+
+    QAction *actRside = new QAction(tr(" Rightside"));
+    actRside->setCheckable(true);
+    actRside->setChecked(RSIDE_VISIBLE);
+    connect( actRside, &QAction::triggered, [=](bool check){
+        center->rside->setVisible(check);
+    });
+    viewMenu->addAction(actRside);
+
     // Help
     QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
     helpMenu->addAction(tr(" &About"), this, SLOT(about()));
 }
 
-void MainWindow::initUI(){
+void MainWindow::initUI() {
     setWindowIcon(QIcon(":/image/icon.png"));
     setBaseSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT);
     centerWidget(this);
@@ -127,18 +144,19 @@ void MainWindow::initUI(){
     statusBar()->showMessage(tr("No Message!"));
 }
 
-void MainWindow::initConnect(){
+void MainWindow::initConnect() {
 
 }
 
-void MainWindow::fullscreen(){
+void MainWindow::fullscreen() {
     static QRect rcOld;
-    if (isFullScreen()){
+    if (isFullScreen()) {
         menuBar()->setVisible(true);
         showNormal();
         setGeometry(rcOld);
         status = NORMAL;
-    }else{
+    }
+    else {
         rcOld = geometry();
         menuBar()->setVisible(false);
         showFullScreen();
@@ -148,13 +166,14 @@ void MainWindow::fullscreen(){
     actMenubar->setChecked(menuBar()->isVisible());
 }
 
-void MainWindow::mv_fullscreen(){
+void MainWindow::mv_fullscreen() {
     HMultiView* mv = center->mv;
-    if (mv->windowType() & Qt::Window){
+    if (mv->windowType() & Qt::Window) {
         mv->setWindowFlags(Qt::SubWindow);
         this->show();
         status = NORMAL;
-    }else{
+    }
+    else {
         mv->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
         this->hide();
         mv->showFullScreen();
@@ -166,12 +185,13 @@ void MainWindow::mv_fullscreen(){
     actMvFullscreen->setChecked(status == MV_FULLSCREEN);
 }
 
-void MainWindow::keyPressEvent(QKeyEvent* e){
-    if (status == MV_FULLSCREEN){
+void MainWindow::keyPressEvent(QKeyEvent* e) {
+    if (status == MV_FULLSCREEN) {
         if (e->key() == Qt::Key_F12 || e->key() == Qt::Key_Escape)
             mv_fullscreen();
-    }else{
-        switch(e->key()){
+    }
+    else {
+        switch(e->key()) {
         case Qt::Key_F10:
             toggle(menuBar());
             actMenubar->setChecked(menuBar()->isVisible());
@@ -189,7 +209,7 @@ void MainWindow::keyPressEvent(QKeyEvent* e){
     }
 }
 
-void MainWindow::about(){
+void MainWindow::about() {
     QString strAbout = APP_NAME " " APP_VERSION "\n\n";
 
     strAbout += "Build on ";
@@ -201,7 +221,7 @@ void MainWindow::about(){
     QMessageBox::information(this, tr("About Application"), strAbout);
 }
 
-void MainWindow::onMVStyleSelected(int id){
+void MainWindow::onMVStyleSelected(int id) {
     int r,c;
     switch (id) {
 #define CASE_MV_STYLE(id, row, col, lable, image) \
@@ -218,11 +238,11 @@ void MainWindow::onMVStyleSelected(int id){
     center->mv->setLayout(r,c);
 }
 
-#include "hopenmediadlg.h"
-void MainWindow::OpenMediaDlg(int index){
+#include "HOpenMediaDlg.h"
+void MainWindow::OpenMediaDlg(int index) {
     HOpenMediaDlg dlg(this);
     dlg.tab->setCurrentIndex(index);
-    if (dlg.exec() == QDialog::Accepted){
+    if (dlg.exec() == QDialog::Accepted) {
         center->mv->play(dlg.media);
     }
 }

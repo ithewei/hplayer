@@ -1,4 +1,4 @@
-#include "hvideotoolbar.h"
+#include "HVideoToolbar.h"
 #include "qtstyles.h"
 
 HVideoToolbar::HVideoToolbar(QWidget *parent) : QFrame(parent)
@@ -7,7 +7,7 @@ HVideoToolbar::HVideoToolbar(QWidget *parent) : QFrame(parent)
     initConnect();
 }
 
-void HVideoToolbar::initUI(){
+void HVideoToolbar::initUI() {
     setFixedHeight(VIDEO_TITLEBAR_HEIGHT);
 
     QSize sz(VIDEO_TOOLBAR_ICON_WIDTH, VIDEO_TOOLBAR_ICON_HEIGHT);
@@ -50,7 +50,7 @@ void HVideoToolbar::initUI(){
     setLayout(hbox);
 }
 
-void HVideoToolbar::initConnect(){
+void HVideoToolbar::initConnect() {
     connectButtons(btnStart, btnPause);
 
     connect(btnStart, SIGNAL(clicked(bool)), this, SIGNAL(sigStart()));

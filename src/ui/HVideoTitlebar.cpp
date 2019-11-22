@@ -1,4 +1,4 @@
-#include "hvideotitlebar.h"
+#include "HVideoTitlebar.h"
 #include "qtstyles.h"
 
 HVideoTitlebar::HVideoTitlebar(QWidget *parent) : QFrame(parent)
@@ -7,7 +7,7 @@ HVideoTitlebar::HVideoTitlebar(QWidget *parent) : QFrame(parent)
     initConnect();
 }
 
-void HVideoTitlebar::initUI(){
+void HVideoTitlebar::initUI() {
     setFixedHeight(VIDEO_TITLEBAR_HEIGHT);
 
     labTitle = new QLabel;
@@ -21,6 +21,6 @@ void HVideoTitlebar::initUI(){
     setLayout(hbox);
 }
 
-void HVideoTitlebar::initConnect(){
+void HVideoTitlebar::initConnect() {
 
 }

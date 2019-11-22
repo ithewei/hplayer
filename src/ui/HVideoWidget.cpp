@@ -1,7 +1,9 @@
-#include "hvideowidget.h"
-#include "hvideoplayerfactory.h"
+#include "HVideoWidget.h"
+
 #include "qtstyles.h"
-#include "hopenmediadlg.h"
+
+#include "HOpenMediaDlg.h"
+#include "HVideoPlayerFactory.h"
 
 HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
 {
@@ -13,12 +15,12 @@ HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
     initConnect();
 }
 
-HVideoWidget::~HVideoWidget(){
+HVideoWidget::~HVideoWidget() {
     hlogd("~HVideoWidget");
     close();
 }
 
-void HVideoWidget::initUI(){
+void HVideoWidget::initUI() {
     setFocusPolicy(Qt::ClickFocus);
 
     videoWnd = new HVideoWnd(this);
@@ -38,19 +40,19 @@ void HVideoWidget::initUI(){
     toolbar->hide();
 }
 
-void HVideoWidget::initConnect(){
-    connect( btnMedia, &QPushButton::clicked, [this]{
+void HVideoWidget::initConnect() {
+    connect( btnMedia, &QPushButton::clicked, [this] {
         HOpenMediaDlg dlg(this);
-        if (dlg.exec() == QDialog::Accepted){
+        if (dlg.exec() == QDialog::Accepted) {
             open(dlg.media);
         }
-    } );
+    });
     connect( titlebar->btnClose, SIGNAL(clicked(bool)), this, SLOT(close()) );
 
     connect( toolbar, SIGNAL(sigStart()), this, SLOT(start()) );
     connect( toolbar, SIGNAL(sigPause()), this, SLOT(pause()) );
-    connect( toolbar, SIGNAL(sigStop()), this, SLOT(stop()) );
-    connect( toolbar->sldProgress, &QSlider::sliderReleased, [this](){
+    connect( toolbar, SIGNAL(sigStop()),  this, SLOT(stop())  );
+    connect( toolbar->sldProgress, &QSlider::sliderReleased, [this]() {
         if (pImpl_player) {
             pImpl_player->seek(toolbar->sldProgress->value()*1000);
         }
@@ -61,7 +63,7 @@ void HVideoWidget::initConnect(){
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimerUpdate()));
 }
 
-void HVideoWidget::updateUI(){
+void HVideoWidget::updateUI() {
     titlebar->labTitle->setText(QString::asprintf("%02d ", playerid) + title);
 
     toolbar->btnStart->setVisible(status != PLAY);
@@ -75,66 +77,63 @@ void HVideoWidget::updateUI(){
     }
 }
 
-void HVideoWidget::resizeEvent(QResizeEvent *e){
+void HVideoWidget::resizeEvent(QResizeEvent *e) {
     setVideoArea();
 }
 
-void HVideoWidget::enterEvent(QEvent *e){
+void HVideoWidget::enterEvent(QEvent *e) {
     updateUI();
 
     titlebar->show();
     toolbar->show();
 }
 
-void HVideoWidget::leaveEvent(QEvent *e){
+void HVideoWidget::leaveEvent(QEvent *e) {
     titlebar->hide();
     toolbar->hide();
 }
 
-void HVideoWidget::mousePressEvent(QMouseEvent *e){
+void HVideoWidget::mousePressEvent(QMouseEvent *e) {
     ptMousePress = e->pos();
 #if WITH_MV_STYLE
     e->ignore();
 #endif
 }
 
-void HVideoWidget::mouseReleaseEvent(QMouseEvent *e){
+void HVideoWidget::mouseReleaseEvent(QMouseEvent *e) {
 #if WITH_MV_STYLE
     e->ignore();
 #endif
 }
 
-void HVideoWidget::mouseMoveEvent(QMouseEvent *e){
-    if (e->buttons() == Qt::LeftButton){
-
-    }
+void HVideoWidget::mouseMoveEvent(QMouseEvent *e) {
 #if WITH_MV_STYLE
     e->ignore();
 #endif
 }
 
-void HVideoWidget::open(HMedia& media){
+void HVideoWidget::open(HMedia& media) {
     this->media = media;
     start();
 }
 
-void HVideoWidget::close(){
+void HVideoWidget::close() {
     stop();
     this->media.type = MEDIA_TYPE_NONE;
     title = "";
     updateUI();
 }
 
-void HVideoWidget::start(){
-    if (media.type == MEDIA_TYPE_NONE){
+void HVideoWidget::start() {
+    if (media.type == MEDIA_TYPE_NONE) {
         QMessageBox::information(this, tr("Info"), tr("Please first set media source, then start."));
         goto end;
     }
 
-    if (!pImpl_player){
+    if (!pImpl_player) {
         pImpl_player = HVideoPlayerFactory::create(media.type);
         pImpl_player->set_media(media);
-        if (pImpl_player->start() != 0){
+        if (pImpl_player->start() != 0) {
             QMessageBox::critical(this, tr("ERROR"), tr("Could not open media: \n")
                                   + media.src.c_str() + QString::asprintf("[%d]", media.index));
             SAFE_DELETE(pImpl_player);
@@ -146,11 +145,13 @@ void HVideoWidget::start(){
             toolbar->sldProgress->setRange(0, pImpl_player->duration/1000);
             toolbar->lblDuration->show();
             toolbar->sldProgress->show();
-        } else {
+        }
+        else {
             toolbar->lblDuration->hide();
             toolbar->sldProgress->hide();
         }
-    }else{
+    }
+    else {
         pImpl_player->resume();
     }
 
@@ -161,10 +162,10 @@ end:
     updateUI();
 }
 
-void HVideoWidget::stop(){
+void HVideoWidget::stop() {
     timer->stop();
 
-    if (pImpl_player){
+    if (pImpl_player) {
         pImpl_player->stop();
         SAFE_DELETE(pImpl_player);
     }
@@ -176,8 +177,8 @@ void HVideoWidget::stop(){
     updateUI();
 }
 
-void HVideoWidget::pause(){
-    if (pImpl_player){
+void HVideoWidget::pause() {
+    if (pImpl_player) {
         pImpl_player->pause();
     }
     timer->stop();
@@ -195,7 +196,8 @@ void HVideoWidget::onTimerUpdate() {
                 toolbar->sldProgress->setValue(progress);
             }
             videoWnd->update();
-        } else {
+        }
+        else {
             if (pImpl_player->signal == SIGNAL_END_OF_FILE) {
                 stop();
             }

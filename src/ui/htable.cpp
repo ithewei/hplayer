@@ -56,7 +56,8 @@ HTableCell HTable::merge(int lt, int rb) {
         while (iter != m_mapCells.end()) {
             if (overlap(comb, iter->second, inter, comb)) {
                 iter = m_mapCells.erase(iter);
-            } else {
+            }
+            else {
                 ++iter;
             }
         }

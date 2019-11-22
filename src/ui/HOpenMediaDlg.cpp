@@ -1,7 +1,7 @@
-#include "hopenmediadlg.h"
+#include "HOpenMediaDlg.h"
 #include "hdevice.h"
 
-FileTab::FileTab(QWidget *parent) : QWidget(parent){
+FileTab::FileTab(QWidget *parent) : QWidget(parent) {
     QVBoxLayout* vbox = new QVBoxLayout;
 
     vbox->addStretch();
@@ -11,11 +11,11 @@ FileTab::FileTab(QWidget *parent) : QWidget(parent){
     edit = new QLineEdit;
     hbox->addWidget(edit);
     btnBrowse = new QPushButton("...");
-    connect(btnBrowse, &QPushButton::clicked, this, [=](){
+    connect(btnBrowse, &QPushButton::clicked, this, [=]() {
         QString file = QFileDialog::getOpenFileName(this, tr("Open Meida File"), "",
             "Video Files(*.3gp *.amv *.asf *.avi *.flv *.m2v *.m4v *.mkv *.mp2 *.mp4 *.mpg *.swf *.ts *.rmvb *.wmv)\n"
             "All Files(*)");
-        if (!file.isEmpty()){
+        if (!file.isEmpty()) {
             edit->setText(file);
         }
     });
@@ -27,7 +27,7 @@ FileTab::FileTab(QWidget *parent) : QWidget(parent){
     setLayout(vbox);
 }
 
-NetworkTab::NetworkTab(QWidget *parent) : QWidget(parent){
+NetworkTab::NetworkTab(QWidget *parent) : QWidget(parent) {
     QVBoxLayout* vbox = new QVBoxLayout;
 
     vbox->addStretch();
@@ -41,14 +41,14 @@ NetworkTab::NetworkTab(QWidget *parent) : QWidget(parent){
     setLayout(vbox);
 }
 
-CaptureTab::CaptureTab(QWidget *parent) : QWidget(parent){
+CaptureTab::CaptureTab(QWidget *parent) : QWidget(parent) {
     QVBoxLayout* vbox = new QVBoxLayout;
 
     vbox->addStretch();
     vbox->addWidget(new QLabel(tr("Device:")));
 
     cmb = new QComboBox;
-    vector<HDevice> devs = getVideoDevices();
+    std::vector<HDevice> devs = getVideoDevices();
     for (int i = 0; i < devs.size(); ++i){
         cmb->addItem(devs[i].name);
     }
@@ -65,7 +65,7 @@ HOpenMediaDlg::HOpenMediaDlg(QWidget *parent) : QDialog(parent)
     initConnect();
 }
 
-void HOpenMediaDlg::initUI(){
+void HOpenMediaDlg::initUI() {
     setWindowTitle(tr("Open media"));
     setFixedSize(600, 300);
 
@@ -87,31 +87,34 @@ void HOpenMediaDlg::initUI(){
     setLayout(vbox);
 }
 
-void HOpenMediaDlg::initConnect(){
+void HOpenMediaDlg::initConnect() {
 
 }
 
-void HOpenMediaDlg::accept(){
+void HOpenMediaDlg::accept() {
     switch (tab->currentIndex()) {
-    case MEDIA_TYPE_FILE:{
+    case MEDIA_TYPE_FILE:
+    {
         FileTab* filetab = qobject_cast<FileTab*>(tab->currentWidget());
-        if (filetab){
+        if (filetab) {
             media.type = MEDIA_TYPE_FILE;
             media.src  = qPrintable(filetab->edit->text());
         }
     }
         break;
-    case MEDIA_TYPE_NETWORK:{
+    case MEDIA_TYPE_NETWORK:
+    {
         NetworkTab* nettab = qobject_cast<NetworkTab*>(tab->currentWidget());
-        if (nettab){
+        if (nettab) {
             media.type = MEDIA_TYPE_NETWORK;
             media.src  = qPrintable(nettab->edit->text());
         }
     }
         break;
-    case MEDIA_TYPE_CAPTURE:{
+    case MEDIA_TYPE_CAPTURE:
+    {
         CaptureTab* captab = qobject_cast<CaptureTab*>(tab->currentWidget());
-        if (captab){
+        if (captab) {
             media.type = MEDIA_TYPE_CAPTURE;
             media.src  = qPrintable(captab->cmb->currentText());
             media.index = captab->cmb->currentIndex();

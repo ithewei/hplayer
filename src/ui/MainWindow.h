@@ -1,10 +1,11 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
 #include "qtheaders.h"
 #include "qtstyles.h"
-#include "centralwidget.h"
 #include "singleton.h"
+
+#include "CentralWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,11 +16,11 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    enum STATUS{
+    enum STATUS {
         NORMAL,
         FULLSCREEN,
         MV_FULLSCREEN,
-    }status;
+    } status;
 
 protected:
     void initUI();
@@ -41,14 +42,15 @@ public slots:
     void OpenMediaDlg(int index);
 
 public:
-    CentralWidget* center;
     QAction *actMenubar;
     QAction *actFullscreen;
     QAction *actMvFullscreen;
 
     QVector<QToolBar*> toolbars;
+
+    CentralWidget* center;
 };
 
 #define g_mainwnd MainWindow::instance()
 
-#endif // MAINWINDOW_H
+#endif // MAIN_WINDOW_H
