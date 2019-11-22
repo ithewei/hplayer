@@ -248,6 +248,14 @@
         <source>About Application</source>
         <translation>关于 应用程序</translation>
     </message>
+    <message>
+        <source> Leftside</source>
+        <translation> 左边栏</translation>
+    </message>
+    <message>
+        <source> Rightside</source>
+        <translation> 右边栏</translation>
+    </message>
 </context>
 <context>
     <name>NetworkTab</name>

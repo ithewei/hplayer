@@ -13,6 +13,7 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TEMPLATE = app
+RC_ICONS = favicon.ico
 
 TARGET          = hplayer
 MOC_DIR         = tmp/moc
@@ -66,38 +67,38 @@ HEADERS += \
     src/qt/qtheaders.h \
     src/qt/qtfunctions.h \
     src/qt/qtrcloader.h \
-    src/qt/hglwidget.h \
+    src/qt/HGLWidget.h \
 
 SOURCES += \
     src/qt/qtrcloader.cpp \
-    src/qt/hglwidget.cpp \
+    src/qt/HGLWidget.cpp \
 
 # ui
 INCLUDEPATH += src/ui
 HEADERS +=  \
-    src/ui/centralwidget.h \
-    src/ui/hmedialist.h \
-    src/ui/htable.h \
-    src/ui/hmultiview.h \
-    src/ui/hvideotitlebar.h \
-    src/ui/hvideotoolbar.h \
-    src/ui/hvideownd.h \
-    src/ui/mainwindow.h \
     src/ui/qtstyles.h   \
-    src/ui/hvideowidget.h \
-    src/ui/hopenmediadlg.h \
+    src/ui/htable.h \
+    src/ui/MainWindow.h \
+    src/ui/CentralWidget.h \
+    src/ui/HMultiView.h \
+    src/ui/HVideoWidget.h \
+    src/ui/HVideoTitlebar.h \
+    src/ui/HVideoToolbar.h \
+    src/ui/HVideoWnd.h \
+    src/ui/HOpenMediaDlg.h \
+    src/ui/HMediaInfoDlg.h \
 
 SOURCES +=  \
-    src/ui/centralwidget.cpp \
-    src/ui/hmedialist.cpp \
     src/ui/htable.cpp \
-    src/ui/hmultiview.cpp \
-    src/ui/hvideotitlebar.cpp \
-    src/ui/hvideotoolbar.cpp \
-    src/ui/hvideownd.cpp \
-    src/ui/mainwindow.cpp \
-    src/ui/hvideowidget.cpp \
-    src/ui/hopenmediadlg.cpp \
+    src/ui/MainWindow.cpp \
+    src/ui/CentralWidget.cpp \
+    src/ui/HMultiView.cpp \
+    src/ui/HVideoWidget.cpp \
+    src/ui/HVideoTitlebar.cpp \
+    src/ui/HVideoToolbar.cpp \
+    src/ui/HVideoWnd.cpp \
+    src/ui/HOpenMediaDlg.cpp \
+    src/ui/HMediaInfoDlg.cpp \
 
 # GL
 DEFINES += GLEW_STATIC
@@ -108,15 +109,16 @@ SOURCES += src/GL/glew.c
 # video
 INCLUDEPATH += src/video
 HEADERS +=  \
-    src/video/hmedia.h \
-    src/video/hvideoplayer.h \
-    src/video/hvideoplayerfactory.h \
     src/video/opencv_util.h \
-    src/video/hvideocapture.h \
+    src/video/ffmpeg_util.h \
+    src/video/hmedia.h \
+    src/video/HVideoPlayer.h \
+    src/video/HVideoPlayerFactory.h \
+    src/video/HVideoCapture.h \
     src/video/hffplayer.h \
 
 SOURCES += \
-    src/video/hvideocapture.cpp \
+    src/video/HVideoCapture.cpp \
     src/video/hffplayer.cpp \
 
 # win32
@@ -167,11 +169,11 @@ win32 {
 
     win32-msvc {
         if (contains(QMAKE_HOST.arch, x86_64)) {
-            LIBS += -L3rd/lib/msvc14_x64
-            DESTDIR = bin/msvc14_x64
+            LIBS += -L$$PWD/3rd/lib/msvc14_x64
+            DESTDIR = $$PWD/bin/msvc14_x64
         } else {
-            LIBS += -L3rd/lib/msvc14_x86
-            DESTDIR = bin/msvc14_x86
+            LIBS += -L$$PWD/3rd/lib/msvc14_x86
+            DESTDIR = $$PWD/bin/msvc14_x86
         }
     }
 
@@ -179,11 +181,11 @@ win32 {
         QMAKE_CFLAGS += -std=c99
         QMAKE_CXXFLAGS += -std=c++11
         if (contains(QMAKE_HOST.arch, x86_64)) {
-            LIBS += -L3rd/lib/mingw64
-            DESTDIR = bin/mingw64
+            LIBS += -L$$PWD/3rd/lib/mingw64
+            DESTDIR = $$PWD/bin/mingw64
         } else {
-            LIBS += -L3rd/lib/mingw32
-            DESTDIR = bin/mingw32
+            LIBS += -L$$PWD/3rd/lib/mingw32
+            DESTDIR = $$PWD/bin/mingw32
         }
 
         # for ffmpeg staticlib
@@ -217,8 +219,8 @@ unix {
     linux-g++ {
         QMAKE_CFLAGS += -std=c99
         QMAKE_CXXFLAGS += -std=c++11
-        LIBS += -L3rd/lib/linux
-        DESTDIR = bin/linux
+        LIBS += -L$$PWD/3rd/lib/linux
+        DESTDIR = $$PWD/bin/linux
     }
 }
 
