@@ -1,16 +1,14 @@
-#ifndef HDEVICE_H
-#define HDEVICE_H
+#ifndef H_DEVICE_H
+#define H_DEVICE_H
 
-#include <string>
 #include <vector>
-using namespace std;
 
-struct HDevice{
+struct HDevice {
     char name[256];
     //...
 };
 
-vector<HDevice> getVideoDevices();
-vector<HDevice> getAudioDevices();
+std::vector<HDevice> getVideoDevices();
+std::vector<HDevice> getAudioDevices();
 
-#endif // HDEVICE_H
+#endif // H_DEVICE_H

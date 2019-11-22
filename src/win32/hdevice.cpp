@@ -5,32 +5,27 @@
 #define NO_DSHOW_STRSAFE
 #include <dshow.h>
 
-vector<HDevice> getDevicesList(REFGUID category){
-    vector<HDevice> ret;
+static std::vector<HDevice> getDevicesList(REFGUID category){
+    std::vector<HDevice> ret;
     //HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     HRESULT hr = S_OK;
-    if (SUCCEEDED(hr)){
-        IEnumMoniker *pEnum;
-        ICreateDevEnum *pDevEnum;
+    if (SUCCEEDED(hr)) {
+        ICreateDevEnum *pDevEnum = NULL;
         HRESULT hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL,
             CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pDevEnum));
-
-        if (SUCCEEDED(hr))
-        {
-            // Create an enumerator for the category.
+        if (SUCCEEDED(hr) && pDevEnum) {
+            IEnumMoniker *pEnum = NULL;
             hr = pDevEnum->CreateClassEnumerator(category, &pEnum, 0);
-            if (hr == S_FALSE)
-            {
-                hr = VFW_E_NOT_FOUND;  // The category is empty. Treat as an error.
+            if (hr == S_FALSE || pEnum == NULL) {
+                pDevEnum->Release();
+                return ret;
             }
-            pDevEnum->Release();
 
             IMoniker *pMoniker = NULL;
-            while (pEnum->Next(1, &pMoniker, NULL) == S_OK){
-                IPropertyBag *pPropBag;
+            while (pEnum->Next(1, &pMoniker, NULL) == S_OK && pMoniker) {
+                IPropertyBag *pPropBag = NULL;
                 HRESULT hr = pMoniker->BindToStorage(0, 0, IID_PPV_ARGS(&pPropBag));
-                if (FAILED(hr))
-                {
+                if (FAILED(hr) || pPropBag == NULL) {
                     pMoniker->Release();
                     continue;
                 }
@@ -40,12 +35,10 @@ vector<HDevice> getDevicesList(REFGUID category){
 
                 // Get description or friendly name.
                 hr = pPropBag->Read(L"Description", &var, 0);
-                if (FAILED(hr))
-                {
+                if (FAILED(hr)) {
                     hr = pPropBag->Read(L"FriendlyName", &var, 0);
                 }
-                if (SUCCEEDED(hr))
-                {
+                if (SUCCEEDED(hr)) {
                     HDevice dev;
                     sprintf(dev.name, "%S", var.bstrVal);
                     ret.push_back(dev);
@@ -57,15 +50,13 @@ vector<HDevice> getDevicesList(REFGUID category){
 
 //                // WaveInID applies only to audio capture devices.
 //                hr = pPropBag->Read(L"WaveInID", &var, 0);
-//                if (SUCCEEDED(hr))
-//                {
+//                if (SUCCEEDED(hr)) {
 //                    printf("WaveIn ID: %d\n", var.lVal);
 //                    VariantClear(&var);
 //                }
 
 //                hr = pPropBag->Read(L"DevicePath", &var, 0);
-//                if (SUCCEEDED(hr))
-//                {
+//                if (SUCCEEDED(hr)) {
 //                    // The device path is not intended for display.
 //                    printf("Device path: %S\n", var.bstrVal);
 //                    VariantClear(&var);
@@ -74,6 +65,9 @@ vector<HDevice> getDevicesList(REFGUID category){
                 pPropBag->Release();
                 pMoniker->Release();
             }
+
+            pEnum->Release();
+            pDevEnum->Release();
         }
 
         //CoUninitialize();
@@ -82,19 +76,19 @@ vector<HDevice> getDevicesList(REFGUID category){
     return ret;
 }
 
-vector<HDevice> getVideoDevices(){
+std::vector<HDevice> getVideoDevices() {
     return getDevicesList(CLSID_VideoInputDeviceCategory);
 }
 
-vector<HDevice> getAudioDevices(){
+std::vector<HDevice> getAudioDevices() {
     return getDevicesList(CLSID_AudioInputDeviceCategory);
 }
 #else
-vector<HDevice> getVideoDevices(){
-    return vector<HDevice>();
+std::vector<HDevice> getVideoDevices() {
+    return std::vector<HDevice>();
 }
 
-vector<HDevice> getAudioDevices(){
-    return vector<HDevice>();
+std::vector<HDevice> getAudioDevices() {
+    return std::vector<HDevice>();
 }
 #endif
