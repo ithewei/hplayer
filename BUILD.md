@@ -1,14 +1,25 @@
-> git submodule update --init
+# submodule
 
-# msvc
+```
+git clone https://github.com/ithewei/hplayer.git
+cd hplayer
+git submodule update --init
+```
+
+# CLI
 
 - qmake
-- nmake
+- nmake / mingw32-make
 
-# mingw
+# IDE
 
-- qmake
-- mingw32-make
+## Qt Creator
+
+- hplayer.pro
+
+## Qt VS Tools
+
+- hplayer.sln
 
 # note
 

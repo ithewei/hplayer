@@ -27,6 +27,13 @@ tmp
 *debug
 *release
 
+# msvc
+*.VC.db
+*.VC.VC.opendb
+*.vcxproj.filters
+Debug
+Release
+
 # toolchains
 # just push msvc14_x86 lib and dll
 msvc14_x64
