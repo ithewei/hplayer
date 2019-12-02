@@ -1,6 +1,6 @@
 #include <windows.h>
 
-IDI_ICON1	ICON	DISCARDABLE	"G:\\Qt\\HPlayer\\favicon.ico"
+IDI_ICON1	ICON	DISCARDABLE	"favicon.ico"
 
 VS_VERSION_INFO VERSIONINFO
 	FILEVERSION 0,0,0,0
