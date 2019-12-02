@@ -1,5 +1,6 @@
 #include "HOpenMediaDlg.h"
 #include "hdevice.h"
+#include "confile.h"
 
 FileTab::FileTab(QWidget *parent) : QWidget(parent) {
     QVBoxLayout* vbox = new QVBoxLayout;
@@ -9,6 +10,7 @@ FileTab::FileTab(QWidget *parent) : QWidget(parent) {
 
     QHBoxLayout* hbox = new QHBoxLayout;
     edit = new QLineEdit;
+    edit->setText(g_confile->GetValue("last_file_source").c_str());
     hbox->addWidget(edit);
     btnBrowse = new QPushButton("...");
     connect(btnBrowse, &QPushButton::clicked, this, [=]() {
@@ -34,6 +36,7 @@ NetworkTab::NetworkTab(QWidget *parent) : QWidget(parent) {
     vbox->addWidget(new QLabel(tr("URL:")));
 
     edit = new QLineEdit;
+    edit->setText(g_confile->GetValue("last_network_source").c_str());
 
     vbox->addWidget(edit);
     vbox->addStretch();
@@ -99,6 +102,8 @@ void HOpenMediaDlg::accept() {
         if (filetab) {
             media.type = MEDIA_TYPE_FILE;
             media.src  = qPrintable(filetab->edit->text());
+            g_confile->SetValue("last_file_source", media.src);
+            g_confile->Save();
         }
     }
         break;
@@ -108,6 +113,8 @@ void HOpenMediaDlg::accept() {
         if (nettab) {
             media.type = MEDIA_TYPE_NETWORK;
             media.src  = qPrintable(nettab->edit->text());
+            g_confile->SetValue("last_network_source", media.src);
+            g_confile->Save();
         }
     }
         break;

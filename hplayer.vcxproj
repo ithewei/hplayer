@@ -129,6 +129,7 @@
     <ClCompile Include="src\hw\base\herr.c" />
     <ClCompile Include="src\video\hffplayer.cpp" />
     <ClCompile Include="src\hw\utils\hframe.cpp" />
+    <ClCompile Include="src\hw\utils\iniparser.cpp" />
     <ClCompile Include="src\hw\base\hlog.c" />
     <ClCompile Include="src\hw\base\hstring.cpp" />
     <ClCompile Include="src\ui\htable.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="src\video\hffplayer.h" />
     <ClInclude Include="src\hw\utils\hframe.h" />
     <ClInclude Include="src\hw\utils\hgl.h" />
+    <ClInclude Include="src\hw\utils\iniparser.h" />
     <ClInclude Include="src\hw\base\hgui.h" />
     <ClInclude Include="src\hw\base\hlog.h" />
     <ClInclude Include="src\video\hmedia.h" />

@@ -4,9 +4,9 @@
 #include "hstring.h"
 #include "hscope.h"
 
-std::atomic_flag HFFPlayer::s_init_flag;
+std::atomic_flag HFFPlayer::s_init_flag = ATOMIC_FLAG_INIT;
 
-void list_devices() {
+static void list_devices() {
     AVFormatContext* fmt_ctx = avformat_alloc_context();
     AVDictionary* options = NULL;
     av_dict_set(&options, "list_devices", "true", 0);
@@ -46,7 +46,7 @@ HFFPlayer::~HFFPlayer() {
     cleanup();
 }
 
-int HFFPlayer::start(){
+int HFFPlayer::start() {
     std::string ifile;
 
     AVInputFormat* ifmt = NULL;
@@ -113,14 +113,7 @@ int HFFPlayer::start(){
     AVStream* video_stream = fmt_ctx->streams[video_stream_index];
     video_time_base_num = video_stream->time_base.num;
     video_time_base_den = video_stream->time_base.den;
-    if (video_stream->avg_frame_rate.num && video_stream->avg_frame_rate.den) {
-        fps = video_stream->avg_frame_rate.num / video_stream->avg_frame_rate.den;
-    }
-    if (video_time_base_num && video_time_base_den) {
-        duration = video_stream->duration / (double)video_time_base_den * video_time_base_num * 1000;
-        start_time = video_stream->start_time / (double)video_time_base_den * video_time_base_num * 1000;
-    }
-    hlogi("fps=%d duration=%lldms start_time=%lldms", fps, duration, start_time);
+    hlogi("video_stream time_base=%d/%d", video_stream->time_base.num, video_stream->time_base.den);
 
     AVCodecParameters* codecpar = video_stream->codecpar;
     hlogi("codec_id=%d:%s", codecpar->codec_id, avcodec_get_name(codecpar->codec_id));
@@ -130,7 +123,7 @@ int HFFPlayer::start(){
     hlogi("cuvid=%s", cuvid.c_str());
 
     AVCodec* codec = NULL;
-    if (decode_mode == HARDWARE_DECODE && codec == NULL) {
+    if (decode_mode == HARDWARE_DECODE) {
         codec = avcodec_find_decoder_by_name(cuvid.c_str());
         if (codec == NULL) {
             hlogi("Can not find decoder %s!", cuvid.c_str());
@@ -202,6 +195,23 @@ int HFFPlayer::start(){
     hlogi("src_pix_fmt=%d:%s dst_pix_fmt=%d:%s", src_pix_fmt, av_get_pix_fmt_name(src_pix_fmt),
         dst_pix_fmt, av_get_pix_fmt_name(dst_pix_fmt));
 
+    // HVideoPlayer member vars
+    if (video_stream->avg_frame_rate.num && video_stream->avg_frame_rate.den) {
+        fps = video_stream->avg_frame_rate.num / video_stream->avg_frame_rate.den;
+    }
+    duration = 0;
+    start_time = 0;
+    error = 0;
+    flags = 0;
+    if (video_time_base_num && video_time_base_den) {
+        if (video_stream->duration > 0) {
+            duration = video_stream->duration / (double)video_time_base_den * video_time_base_num * 1000;
+        }
+        if (video_stream->start_time > 0) {
+            start_time = video_stream->start_time / (double)video_time_base_den * video_time_base_num * 1000;
+        }
+    }
+    hlogi("fps=%d duration=%lldms start_time=%lldms", fps, duration, start_time);
     HThread::setSleepPolicy(HThread::SLEEP_UNTIL, 1000/fps);
     return HThread::start();
 }
@@ -215,9 +225,6 @@ void HFFPlayer::cleanup() {
 
     if (fmt_ctx) {
         avformat_close_input(&fmt_ctx);
-    }
-
-    if (fmt_ctx) {
         avformat_free_context(fmt_ctx);
         fmt_ctx = NULL;
     }
@@ -234,15 +241,15 @@ void HFFPlayer::cleanup() {
         packet = NULL;
     }
 
-    hframe.buf.cleanup();
-
     if (sws_ctx) {
         sws_freeContext(sws_ctx);
         sws_ctx = NULL;
     }
+
+    hframe.buf.cleanup();
 }
 
-int HFFPlayer::stop(){
+int HFFPlayer::stop() {
     HThread::stop();
     cleanup();
     return 0;
@@ -265,7 +272,12 @@ void HFFPlayer::doTask() {
         int iRet = av_read_frame(fmt_ctx, packet);
         if (iRet != 0) {
             hlogi("No frame: %d", iRet);
-            signal = SIGNAL_END_OF_FILE;
+            if (iRet == AVERROR_EOF) {
+                flags = EOF;
+            }
+            else {
+                error = iRet;
+            }
             return;
         }
 
@@ -285,7 +297,9 @@ void HFFPlayer::doTask() {
 
     sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, data, linesize);
 
-    hframe.ts = frame->pts / (double)video_time_base_den * video_time_base_num * 1000;
+    if (video_time_base_num && video_time_base_den) {
+        hframe.ts = frame->pts / (double)video_time_base_den * video_time_base_num * 1000;
+    }
     //hlogi("ts=%lldms", hframe.ts);
 
     push_frame(&hframe);

@@ -8,7 +8,7 @@
 #include "HVideoToolbar.h"
 #include "HVideoPlayer.h"
 
-class  HVideoWidget : public QFrame
+class HVideoWidget : public QFrame
 {
     Q_OBJECT
 public:
@@ -64,6 +64,11 @@ private:
 
     HMedia        media;
     HVideoPlayer* pImpl_player;
+    // for retry when SIGNAL_END_OF_FILE
+    uint64_t      retry_interval;
+    int           max_retry_cnt;
+    uint64_t      last_retry_time;
+    int           retry_cnt;
 };
 
 #endif // H_VIDEO_WIDGET_H

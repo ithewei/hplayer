@@ -5,11 +5,19 @@
 #include "HOpenMediaDlg.h"
 #include "HVideoPlayerFactory.h"
 
+#define DEFAULT_RETRY_INTERVAL  3000  // ms
+#define DEFAULT_RETRY_MAXCNT    100
+
 HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
 {
     playerid = 0;
     status = STOP;
     pImpl_player = NULL;
+    // retry
+    retry_interval = DEFAULT_RETRY_INTERVAL;
+    max_retry_cnt = DEFAULT_RETRY_MAXCNT;
+    last_retry_time = 0;
+    retry_cnt = 0;
 
     initUI();
     initConnect();
@@ -155,7 +163,7 @@ void HVideoWidget::start() {
         pImpl_player->resume();
     }
 
-    timer->start(1000/pImpl_player->fps);
+    timer->start(1000 / pImpl_player->fps);
     status = PLAY;
 
 end:
@@ -173,6 +181,9 @@ void HVideoWidget::stop() {
     videoWnd->last_frame.buf.cleanup();
     videoWnd->update();
     status = STOP;
+
+    last_retry_time = 0;
+    retry_cnt = 0;
 
     updateUI();
 }
@@ -198,8 +209,38 @@ void HVideoWidget::onTimerUpdate() {
             videoWnd->update();
         }
         else {
-            if (pImpl_player->signal == SIGNAL_END_OF_FILE) {
+            if (pImpl_player->flags == EOF) {
                 stop();
+                return;
+            }
+            if (pImpl_player->error != 0) {
+                switch (media.type) {
+                case MEDIA_TYPE_NETWORK:
+                    // retry
+                    if (retry_cnt < max_retry_cnt) {
+                        uint64_t cur_time = timestamp_ms();
+                        if (cur_time - last_retry_time > retry_interval) {
+                            ++retry_cnt;
+                            last_retry_time = cur_time;
+                            pImpl_player->stop();
+                            int ret = pImpl_player->start();
+                            if (ret != 0) {
+                                hlogw("retry cnt=%d media.src=%s failed!", retry_cnt, media.src.c_str());
+                            }
+                            else {
+                                hlogi("retry cnt=%d media.src=%s succeed!", retry_cnt, media.src.c_str());
+                                retry_cnt = 0;
+                            }
+                        }
+                    }
+                    else {
+                        stop();
+                    }
+                    break;
+                default:
+                    stop();
+                    break;
+                }
             }
         }
     }

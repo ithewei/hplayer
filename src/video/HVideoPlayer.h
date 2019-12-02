@@ -9,8 +9,6 @@
 #define DEFAULT_FPS         25
 #define DEFAULT_FRAME_CACHE 5
 
-#define SIGNAL_END_OF_FILE  0x01
-
 #define HARDWARE_DECODE     1
 #define SOFTWARE_DECODE     2
 
@@ -37,7 +35,8 @@ public:
         decode_mode = DEFAULT_DECODE_MODE;
         duration = 0;
         start_time = 0;
-        signal = 0;
+        error = 0;
+        flags = 0;
     }
 
     virtual ~HVideoPlayer() {}
@@ -85,7 +84,8 @@ public:
     int         decode_mode;
     int64_t     duration;   // ms
     int64_t     start_time; // ms
-    int         signal;
+    int         error;
+    int         flags;
 protected:
     HFrameBuf   frame_buf;
 };

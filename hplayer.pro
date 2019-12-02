@@ -49,8 +49,9 @@ HEADERS += \
     src/hw/base/hmutex.h \
     src/hw/base/hthread.h \
     src/hw/utils/singleton.h \
-    src/hw/utils/hframe.h \
     src/hw/utils/hgl.h \
+    src/hw/utils/hframe.h \
+    src/hw/utils/iniparser.h \
 
 SOURCES += \
     src/hw/base/hversion.c \
@@ -60,6 +61,7 @@ SOURCES += \
     src/hw/base/hlog.c \
     src/hw/base/hstring.cpp \
     src/hw/utils/hframe.cpp \
+    src/hw/utils/iniparser.cpp \
 
 # qt
 INCLUDEPATH += src/qt

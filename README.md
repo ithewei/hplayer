@@ -33,11 +33,22 @@
 - 添加人脸检测与识别功能；
 - 添加美颜功能；
 
-## DEPENDENTS
+## Submodule
+```
+git clone --recurse-submodules https://github.com/ithewei/hplayer.git
+```
+or
+```
+git clone https://github.com/ithewei/hplayer.git
+git submodule update --init
+```
 
-      git submodule update --init
+## Mirror
+```
+https://gitee.com/ithewei/hplayer.git
+```
 
-## BUILD
+## Build
 
 see BUILD.md
 
