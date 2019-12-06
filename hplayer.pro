@@ -79,6 +79,7 @@ SOURCES += \
 INCLUDEPATH += src/ui
 HEADERS +=  \
     src/ui/qtstyles.h   \
+    src/ui/CustomEventType.h \
     src/ui/htable.h \
     src/ui/MainWindow.h \
     src/ui/CentralWidget.h \

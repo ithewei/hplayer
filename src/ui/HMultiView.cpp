@@ -1,5 +1,6 @@
 #include "HMultiView.h"
 
+#include "confile.h"
 #include "qtstyles.h"
 #include "MainWindow.h"
 
@@ -23,7 +24,9 @@ void HMultiView::initUI() {
         views.push_back(player);
     }
 
-    setLayout(MV_STYLE_ROW, MV_STYLE_COL);
+    int row = g_confile->Get<int>("mv_row", "ui", MV_STYLE_ROW);
+    int col = g_confile->Get<int>("mv_col", "ui", MV_STYLE_COL);
+    setLayout(row, col);
 
     labDrag = new QLabel(this);
     labDrag->setFixedSize(DRAG_WIDTH, DRAG_HEIGHT);
@@ -35,7 +38,7 @@ void HMultiView::initUI() {
     labRect->setStyleSheet(RECT_QSS);
 }
 
-void HMultiView::initConnect(){
+void HMultiView::initConnect() {
 
 }
 
@@ -43,6 +46,8 @@ void HMultiView::setLayout(int row, int col) {
     saveLayout();
     table.init(row,col);
     updateUI();
+    g_confile->Set<int>("mv_row", row, "ui");
+    g_confile->Set<int>("mv_col", col, "ui");
 }
 
 void HMultiView::mergeCells(int lt, int rb) {

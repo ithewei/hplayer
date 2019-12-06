@@ -1,5 +1,6 @@
 #include "HVideoWidget.h"
 
+#include "confile.h"
 #include "qtstyles.h"
 
 #include "HOpenMediaDlg.h"
@@ -8,14 +9,39 @@
 #define DEFAULT_RETRY_INTERVAL  3000  // ms
 #define DEFAULT_RETRY_MAXCNT    100
 
+#include "CustomEventType.h"
+static int hplayer_event_callback(hplayer_event_e e, void* userdata) {
+    HVideoWidget* wdg = (HVideoWidget*)userdata;
+    int custom_event_type = QCustomEvent::User;
+    switch (e) {
+    case HPLAYER_OPEN_FAILED:
+        custom_event_type = QCustomEvent::OpenMediaFailed;
+        break;
+    case HPLAYER_OPENED:
+        custom_event_type = QCustomEvent::OpenMediaSucceed;
+        break;
+    case HPLAYER_EOF:
+        custom_event_type = QCustomEvent::PlayerEOF;
+        break;
+    case HPLAYER_ERROR:
+        custom_event_type = QCustomEvent::PlayerError;
+        break;
+    default:
+        return 0;
+    }
+    hlogi("postEvent %d", custom_event_type);
+    QApplication::postEvent(wdg, new QEvent((QEvent::Type)custom_event_type));
+    return 0;
+}
+
 HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
 {
     playerid = 0;
     status = STOP;
     pImpl_player = NULL;
     // retry
-    retry_interval = DEFAULT_RETRY_INTERVAL;
-    max_retry_cnt = DEFAULT_RETRY_MAXCNT;
+    retry_interval = g_confile->Get<int>("retry_interval", "video", DEFAULT_RETRY_INTERVAL);
+    retry_maxcnt = g_confile->Get<int>("retry_maxcnt", "video", DEFAULT_RETRY_MAXCNT);
     last_retry_time = 0;
     retry_cnt = 0;
 
@@ -120,6 +146,25 @@ void HVideoWidget::mouseMoveEvent(QMouseEvent *e) {
 #endif
 }
 
+void HVideoWidget::customEvent(QEvent* e) {
+    switch(e->type()) {
+    case QCustomEvent::OpenMediaSucceed:
+        onOpenSucceed();
+        break;
+    case QCustomEvent::OpenMediaFailed:
+        onOpenFailed();
+        break;
+    case QCustomEvent::PlayerEOF:
+        onPlayerEOF();
+        break;
+    case QCustomEvent::PlayerError:
+        onPlayerError();
+        break;
+    default:
+        break;
+    }
+}
+
 void HVideoWidget::open(HMedia& media) {
     this->media = media;
     start();
@@ -135,39 +180,28 @@ void HVideoWidget::close() {
 void HVideoWidget::start() {
     if (media.type == MEDIA_TYPE_NONE) {
         QMessageBox::information(this, tr("Info"), tr("Please first set media source, then start."));
-        goto end;
+        updateUI();
+        return;
     }
 
     if (!pImpl_player) {
         pImpl_player = HVideoPlayerFactory::create(media.type);
         pImpl_player->set_media(media);
-        if (pImpl_player->start() != 0) {
-            QMessageBox::critical(this, tr("ERROR"), tr("Could not open media: \n")
-                                  + media.src.c_str() + QString::asprintf("[%d]", media.index));
-            SAFE_DELETE(pImpl_player);
-            goto end;
-        }
+        pImpl_player->set_event_callback(hplayer_event_callback, this);
         title = media.src.c_str();
-        if (pImpl_player->duration > 0) {
-            toolbar->lblDuration->setText(strtime(pImpl_player->duration).c_str());
-            toolbar->sldProgress->setRange(0, pImpl_player->duration/1000);
-            toolbar->lblDuration->show();
-            toolbar->sldProgress->show();
+        int ret = pImpl_player->start();
+        if (ret != 0) {
+            onOpenFailed();
         }
         else {
-            toolbar->lblDuration->hide();
-            toolbar->sldProgress->hide();
+            onOpenSucceed();
         }
     }
     else {
-        pImpl_player->resume();
+        if (status == PAUSE) {
+            resume();
+        }
     }
-
-    timer->start(1000 / pImpl_player->fps);
-    status = PLAY;
-
-end:
-    updateUI();
 }
 
 void HVideoWidget::stop() {
@@ -198,50 +232,92 @@ void HVideoWidget::pause() {
     updateUI();
 }
 
+void HVideoWidget::resume() {
+    if (status == PAUSE && pImpl_player) {
+        pImpl_player->resume();
+        timer->start(1000 / pImpl_player->fps);
+        status = PLAY;
+
+        updateUI();
+    }
+}
+
+void HVideoWidget::restart() {
+    if (retry_cnt < retry_maxcnt) {
+        uint64_t cur_time = timestamp_ms();
+        if (cur_time - last_retry_time > retry_interval) {
+            ++retry_cnt;
+            last_retry_time = cur_time;
+            if (pImpl_player) {
+                pImpl_player->stop();
+                pImpl_player->start();
+            }
+            else {
+                start();
+            }
+        }
+    }
+    else {
+        stop();
+    }
+}
+
+void HVideoWidget::onOpenSucceed() {
+    timer->start(1000 / pImpl_player->fps);
+    status = PLAY;
+    if (pImpl_player->duration > 0) {
+        toolbar->lblDuration->setText(strtime(pImpl_player->duration).c_str());
+        toolbar->sldProgress->setRange(0, pImpl_player->duration/1000);
+        toolbar->lblDuration->show();
+        toolbar->sldProgress->show();
+    }
+
+    if (retry_cnt != 0) {
+        hlogi("retry succeed: cnt=%d media.src=%s", retry_cnt, media.src.c_str());
+    }
+}
+
+void HVideoWidget::onOpenFailed() {
+    if (retry_cnt == 0) {
+        QMessageBox::critical(this, tr("ERROR"), tr("Could not open media: \n") +
+                              media.src.c_str() +
+                              QString::asprintf("\nerrcode=%d", pImpl_player->error));
+        stop();
+    }
+    else {
+        hlogw("retry failed: cnt=%d media.src=%s", retry_cnt, media.src.c_str());
+        restart();
+    }
+}
+
+void HVideoWidget::onPlayerEOF() {
+    stop();
+}
+
+void HVideoWidget::onPlayerError() {
+    switch (media.type) {
+    case MEDIA_TYPE_NETWORK:
+        restart();
+        break;
+    default:
+        stop();
+        break;
+    }
+}
+
 void HVideoWidget::onTimerUpdate() {
-    if (pImpl_player) {
-        if (pImpl_player->pop_frame(&videoWnd->last_frame) == 0) {
+    if (pImpl_player == NULL)   return;
+
+    if (pImpl_player->pop_frame(&videoWnd->last_frame) == 0) {
+        // update progress bar
+        if (toolbar->sldProgress->isVisible()) {
             int progress = (videoWnd->last_frame.ts - pImpl_player->start_time) / 1000;
             if (toolbar->sldProgress->value() != progress &&
                 !toolbar->sldProgress->isSliderDown()) {
                 toolbar->sldProgress->setValue(progress);
             }
-            videoWnd->update();
         }
-        else {
-            if (pImpl_player->flags == EOF) {
-                stop();
-                return;
-            }
-            if (pImpl_player->error != 0) {
-                switch (media.type) {
-                case MEDIA_TYPE_NETWORK:
-                    // retry
-                    if (retry_cnt < max_retry_cnt) {
-                        uint64_t cur_time = timestamp_ms();
-                        if (cur_time - last_retry_time > retry_interval) {
-                            ++retry_cnt;
-                            last_retry_time = cur_time;
-                            pImpl_player->stop();
-                            int ret = pImpl_player->start();
-                            if (ret != 0) {
-                                hlogw("retry cnt=%d media.src=%s failed!", retry_cnt, media.src.c_str());
-                            }
-                            else {
-                                hlogi("retry cnt=%d media.src=%s succeed!", retry_cnt, media.src.c_str());
-                                retry_cnt = 0;
-                            }
-                        }
-                    }
-                    else {
-                        stop();
-                    }
-                    break;
-                default:
-                    stop();
-                    break;
-                }
-            }
-        }
+        // update video frame
+        videoWnd->update();
     }
 }

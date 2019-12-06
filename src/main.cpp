@@ -22,12 +22,12 @@ void qLogHandler(QtMsgType type, const QMessageLogContext & ctx, const QString &
 
 
 #ifdef QT_NO_DEBUG
-    QString strLog = QString::asprintf("[%s][%s]: %s\n",
+    QString strLog = QString::asprintf("[%s][%s] %s\n",
                                        QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz").toLocal8Bit().data(),
                                        szType,
                                        msg.toLocal8Bit().data());
 #else
-    QString strLog = QString::asprintf("[%s][%s]: %s [%s:%d-%s]\n",
+    QString strLog = QString::asprintf("[%s][%s] %s [%s:%d-%s]\n",
                                        QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz").toLocal8Bit().data(),
                                        szType,
                                        msg.toLocal8Bit().data(),
@@ -62,12 +62,7 @@ int main(int argc, char *argv[]) {
     g_confile->LoadFromFile(APP_NAME".conf");
     // logfile
     string str = g_confile->GetValue("logfile");
-    if (!str.empty()) {
-        hlog_set_file(str.c_str());
-    }
-    else {
-        hlog_set_file(APP_NAME".log");
-    }
+    hlog_set_file(str.empty() ? APP_NAME".log" : str.c_str());
     // loglevel
     const char* szLoglevel = g_confile->GetValue("loglevel").c_str();
     int loglevel = LOG_LEVEL_DEBUG;
@@ -125,25 +120,69 @@ int main(int argc, char *argv[]) {
     hlog_fsync();
 
     qInfo("-------------------app start----------------------------------");
-    QApplication a(argc, argv);
-    a.setApplicationName(APP_NAME);
+    QApplication app(argc, argv);
+    app.setApplicationName(APP_NAME);
 
-    setFont(DEFAULT_FONT_SIZE);
-    loadSkin(DEFAULT_SKIN);
-    setPalette(DEFAULT_PALETTE_COLOR);
-    loadLang(DEFAULT_LANGUAGE);
+    str = g_confile->GetValue("skin", "ui");
+    loadSkin(str.empty() ? DEFAULT_SKIN : str.c_str());
 
-    // note: replace with image.qrc
+    str = g_confile->GetValue("palette", "ui");
+    setPalette(str.empty() ? DEFAULT_PALETTE_COLOR : strtoul(str.c_str(), NULL, 16));
+
+    str = g_confile->GetValue("language", "ui");
+    loadLang(str.empty() ? DEFAULT_LANGUAGE : str.c_str());
+
+    setFont(g_confile->Get<int>("fontsize", "ui", DEFAULT_FONT_SIZE));
+
+    // NOTE: replace with image.qrc
     // rcloader->loadIcon();
 
-    g_mainwnd->showMaximized();
+    MainWindow::instance();
 
-    int retcode = a.exec();
+    if (g_confile->Get<bool>("fullscreen", "ui")) {
+        g_mainwnd->status = MainWindow::FULLSCREEN;
+    }
+    else if (g_confile->Get<bool>("maximized", "ui")) {
+        g_mainwnd->status = MainWindow::MAXIMIZED;
+    }
+
+    switch (g_mainwnd->status) {
+    case MainWindow::FULLSCREEN:
+        g_mainwnd->showFullScreen();
+        break;
+    case MainWindow::MAXIMIZED:
+        g_mainwnd->showMaximized();
+        break;
+    default:
+        str = g_confile->GetValue("main_window_rect", "ui");
+        if (!str.empty()) {
+            int x,y,w,h;
+            x = y = w = h = 0;
+            sscanf(str.c_str(), "rect(%d,%d,%d,%d)", &x, &y, &w, &h);
+            if (w && h) {
+                g_mainwnd->setGeometry(x, y, w, h);
+            }
+        }
+        g_mainwnd->show();
+        break;
+    }
+
+    int exitcode = app.exec();
+
+    g_confile->Set<bool>("fullscreen", g_mainwnd->isFullScreen(), "ui");
+    g_confile->Set<bool>("maximized", g_mainwnd->isMaximized(), "ui");
+    str = asprintf("rect(%d,%d,%d,%d)",
+                    g_mainwnd->x(),
+                    g_mainwnd->y(),
+                    g_mainwnd->width(),
+                    g_mainwnd->height());
+    g_confile->SetValue("main_window_rect", str, "ui");
 
     MainWindow::exitInstance();
     qInfo("-------------------app end----------------------------------");
 
     g_confile->Save();
     SAFE_DELETE(g_confile);
-    return retcode;
+
+    return exitcode;
 }

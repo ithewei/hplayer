@@ -10,7 +10,10 @@ FileTab::FileTab(QWidget *parent) : QWidget(parent) {
 
     QHBoxLayout* hbox = new QHBoxLayout;
     edit = new QLineEdit;
-    edit->setText(g_confile->GetValue("last_file_source").c_str());
+    std::string str = g_confile->GetValue("last_file_source", "media");
+    if (!str.empty()) {
+        edit->setText(str.c_str());
+    }
     hbox->addWidget(edit);
     btnBrowse = new QPushButton("...");
     connect(btnBrowse, &QPushButton::clicked, this, [=]() {
@@ -36,7 +39,10 @@ NetworkTab::NetworkTab(QWidget *parent) : QWidget(parent) {
     vbox->addWidget(new QLabel(tr("URL:")));
 
     edit = new QLineEdit;
-    edit->setText(g_confile->GetValue("last_network_source").c_str());
+    std::string str = g_confile->GetValue("last_network_source", "media");
+    if (!str.empty()) {
+        edit->setText(str.c_str());
+    }
 
     vbox->addWidget(edit);
     vbox->addStretch();
@@ -81,7 +87,7 @@ void HOpenMediaDlg::initUI() {
     tab->addTab(new NetworkTab, QIcon(":/image/network.png"), tr("Network"));
     tab->addTab(new CaptureTab, QIcon(":/image/capture.png"), tr("Capture"));
 
-    tab->setCurrentIndex(DEFAULT_MEDIA_TYPE);
+    tab->setCurrentIndex(g_confile->Get<int>("last_tab", "media", DEFAULT_MEDIA_TYPE));
 
     QVBoxLayout* vbox = genVBoxLayout();
     vbox->addWidget(tab);
@@ -102,7 +108,7 @@ void HOpenMediaDlg::accept() {
         if (filetab) {
             media.type = MEDIA_TYPE_FILE;
             media.src  = qPrintable(filetab->edit->text());
-            g_confile->SetValue("last_file_source", media.src);
+            g_confile->SetValue("last_file_source", media.src, "media");
             g_confile->Save();
         }
     }
@@ -113,7 +119,7 @@ void HOpenMediaDlg::accept() {
         if (nettab) {
             media.type = MEDIA_TYPE_NETWORK;
             media.src  = qPrintable(nettab->edit->text());
-            g_confile->SetValue("last_network_source", media.src);
+            g_confile->SetValue("last_network_source", media.src, "media");
             g_confile->Save();
         }
     }
@@ -137,6 +143,9 @@ void HOpenMediaDlg::accept() {
         QMessageBox::information(this, tr("Info"), tr("Invalid media source!"));
         return;
     }
+
+    g_confile->Set<int>("last_tab", tab->currentIndex(), "media");
+    g_confile->Save();
 
     QDialog::accept();
 }

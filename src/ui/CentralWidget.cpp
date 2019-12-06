@@ -21,9 +21,6 @@ void CentralWidget::initUI() {
     split->addWidget(mv);
     split->addWidget(rside);
 
-    lside->setVisible(LSIDE_VISIBLE);
-    rside->setVisible(RSIDE_VISIBLE);
-
     lside->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
     lside->setMinimumWidth(LSIDE_MIN_WIDTH);
     lside->setMaximumWidth(LSIDE_MAX_WIDTH);

@@ -18,6 +18,7 @@ public:
 
     enum STATUS {
         NORMAL,
+        MAXIMIZED,
         FULLSCREEN,
         MV_FULLSCREEN,
     } status;

@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 
 #include "appdef.h"
+#include "confile.h"
 #include "qtstyles.h"
 
 SINGLETON_IMPL(MainWindow)
@@ -87,42 +88,60 @@ void MainWindow::initMenu() {
 
     actMenubar = new QAction(tr(" Menubar F10"));
     actMenubar->setCheckable(true);
-    actMenubar->setChecked(true);
-    connect( actMenubar, &QAction::triggered, [=](bool check){
+    bool menubar_visible = g_confile->Get<bool>("menubar_visible", "ui", true);
+    actMenubar->setChecked(menubar_visible);
+    menuBar()->setVisible(menubar_visible);
+    connect(actMenubar, &QAction::triggered, [=](bool check) {
         menuBar()->setVisible(check);
+        g_confile->Set<bool>("menubar_visible", check, "ui");
     });
     viewMenu->addAction(actMenubar);
 
     QAction *actToolbar = new QAction(tr(" Toolbar"));
     actToolbar->setCheckable(true);
-    actToolbar->setChecked(true);
-    connect( actToolbar, &QAction::triggered, [=](bool check){
-        foreach(auto toolbar, toolbars)
+    bool toolbar_visible = g_confile->Get<bool>("toolbar_visible", "ui", true);
+    actToolbar->setChecked(toolbar_visible);
+    foreach(auto toolbar, toolbars) {
+        toolbar->setVisible(toolbar_visible);
+    }
+    connect(actToolbar, &QAction::triggered, [=](bool check) {
+        foreach(auto toolbar, toolbars) {
             toolbar->setVisible(check);
+        }
+        g_confile->Set<bool>("toolbar_visible", check, "ui");
     });
     viewMenu->addAction(actToolbar);
 
     QAction *actStatusbar = new QAction(tr(" Statusbar"));
     actStatusbar->setCheckable(true);
-    actStatusbar->setChecked(true);
-    connect( actStatusbar, &QAction::triggered, [=](bool check){
+    bool statusbar_visible = g_confile->Get<bool>("statusbar_visible", "ui", false);
+    actStatusbar->setChecked(statusbar_visible);
+    statusBar()->setVisible(statusbar_visible);
+    connect(actStatusbar, &QAction::triggered, [=](bool check) {
         statusBar()->setVisible(check);
+        g_confile->Set<bool>("statusbar_visible", check, "ui");
     });
     viewMenu->addAction(actStatusbar);
 
     QAction *actLside = new QAction(tr(" Leftside"));
     actLside->setCheckable(true);
-    actLside->setChecked(LSIDE_VISIBLE);
-    connect( actLside, &QAction::triggered, [=](bool check){
+    bool lside_visible = g_confile->Get<bool>("lside_visible", "ui", false);
+    actLside->setChecked(lside_visible);
+    center->lside->setVisible(lside_visible);
+    connect(actLside, &QAction::triggered, [=](bool check) {
         center->lside->setVisible(check);
+        g_confile->Set<bool>("lside_visible", check, "ui");
     });
     viewMenu->addAction(actLside);
 
     QAction *actRside = new QAction(tr(" Rightside"));
     actRside->setCheckable(true);
-    actRside->setChecked(RSIDE_VISIBLE);
-    connect( actRside, &QAction::triggered, [=](bool check){
+    bool rside_visible = g_confile->Get<bool>("rside_visible", "ui", false);
+    actRside->setChecked(rside_visible);
+    center->rside->setVisible(rside_visible);
+    connect(actRside, &QAction::triggered, [=](bool check) {
         center->rside->setVisible(check);
+        g_confile->Set<bool>("rside_visible", check, "ui");
     });
     viewMenu->addAction(actRside);
 
@@ -133,13 +152,17 @@ void MainWindow::initMenu() {
 
 void MainWindow::initUI() {
     setWindowIcon(QIcon(":/image/icon.png"));
-    setBaseSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT);
-    centerWidget(this);
 
-    initMenu();
+    int w = g_confile->Get<int>("main_window_width", "ui", MAIN_WINDOW_WIDTH);
+    int h = g_confile->Get<int>("main_window_height", "ui", MAIN_WINDOW_HEIGHT);
+    setBaseSize(w, h);
+
+    centerWidget(this);
 
     center = new CentralWidget;
     setCentralWidget(center);
+
+    initMenu();
 
     statusBar()->showMessage(tr("No Message!"));
 }

@@ -16,22 +16,33 @@ inline void setPalette(QColor clr) {
     qApp->setPalette(QPalette(clr));
 }
 
-inline void loadSkin(const char *qss) {
-    QFile file(qss);
+inline void loadSkin(const char *skin) {
+    // :/skin/dark.qss
+    QFile file(QString(":/skin/") + QString(skin) + QString(".qss"));
     if (file.open(QFile::ReadOnly)) {
         qApp->setStyleSheet(file.readAll());
         file.close();
     }
 }
 
-inline void loadLang(const char* qm) {
-    QTranslator *translator = new QTranslator(qApp);
-    translator->load(qm);
-    qApp->installTranslator(translator);
+inline void loadLang(const char* lang) {
+    // :/lang/app_zh_CN.qm
+    QTranslator *app_translator = new QTranslator(qApp);
+    if (lang && *lang) {
+        app_translator->load(QString(":/lang/app_") + QString(lang) + QString(".qm"));
+    }
+    else {
+        app_translator->load(QLocale(), "app", "_", ":/lang");
+    }
+    qApp->installTranslator(app_translator);
 
     QTranslator *qt_translator = new QTranslator(qApp);
-    qt_translator->load(QLocale(), "qt", "_", ":/lang");
-    //qt_translator->load(":/lang/qt_zh_CN.qm");
+    if (lang && *lang) {
+        qt_translator->load(QString(":/lang/qt_") + QString(lang) + QString(".qm"));
+    }
+    else {
+        qt_translator->load(QLocale(), "qt", "_", ":/lang");
+    }
     qApp->installTranslator(qt_translator);
 }
 

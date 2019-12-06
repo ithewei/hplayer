@@ -182,6 +182,7 @@
     <ClInclude Include="src\hw\base\hscope.h" />
     <ClInclude Include="src\hw\base\hstring.h" />
     <ClInclude Include="src\ui\htable.h" />
+    <ClInclude Include="src\ui\CustomEventType.h" />
     <ClInclude Include="src\hw\base\hthread.h" />
     <ClInclude Include="src\hw\base\htime.h" />
     <ClInclude Include="src\hw\base\hvar.h" />

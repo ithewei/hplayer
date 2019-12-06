@@ -1,8 +1,12 @@
 #include "hffplayer.h"
 
+#include "confile.h"
 #include "hlog.h"
 #include "hstring.h"
 #include "hscope.h"
+#include "htime.h"
+
+#define DEFAULT_BLOCK_TIMEOUT   10  // s
 
 std::atomic_flag HFFPlayer::s_init_flag = ATOMIC_FLAG_INIT;
 
@@ -26,6 +30,18 @@ static void list_devices() {
     av_dict_free(&options);
 }
 
+// NOTE: avformat_open_input,av_read_frame block
+static int interrupt_callback(void* opaque) {
+    if (opaque == NULL) return 0;
+    HFFPlayer* player = (HFFPlayer*)opaque;
+    if (player->quit ||
+        time(NULL) - player->block_starttime > player->block_timeout) {
+        hlogi("interrupt quit=%d media.src=%s", player->quit, player->media.src.c_str());
+        return 1;
+    }
+    return 0;
+}
+
 HFFPlayer::HFFPlayer()
 : HVideoPlayer()
 , HThread() {
@@ -33,6 +49,22 @@ HFFPlayer::HFFPlayer()
     codec_ctx = NULL;
     packet = NULL;
     frame = NULL;
+    sws_ctx = NULL;
+
+    block_starttime = time(NULL);
+    block_timeout = DEFAULT_BLOCK_TIMEOUT;
+    quit = 0;
+
+    dst_pix_fmt = AV_PIX_FMT_YUV420P;
+    std::string str = g_confile->GetValue("dst_pix_fmt", "video");
+    if (!str.empty()) {
+        if (strcmp(str.c_str(), "YUV420P") == 0) {
+            dst_pix_fmt = AV_PIX_FMT_YUV420P;
+        }
+        else if (strcmp(str.c_str(), "BGR24") == 0) {
+            dst_pix_fmt = AV_PIX_FMT_BGR24;
+        }
+    }
 
     if (!s_init_flag.test_and_set()) {
         av_register_all();
@@ -43,10 +75,10 @@ HFFPlayer::HFFPlayer()
 }
 
 HFFPlayer::~HFFPlayer() {
-    cleanup();
+    close();
 }
 
-int HFFPlayer::start() {
+int HFFPlayer::open() {
     std::string ifile;
 
     AVInputFormat* ifmt = NULL;
@@ -78,24 +110,43 @@ int HFFPlayer::start() {
     }
 
     hlogi("ifile:%s", ifile.c_str());
-    int iRet = 0;
+    int ret = 0;
     fmt_ctx = avformat_alloc_context();
     if (fmt_ctx == NULL) {
         hloge("avformat_alloc_context");
-        return -10;
+        ret = -10;
+        return ret;
     }
-    iRet = avformat_open_input(&fmt_ctx, ifile.c_str(), ifmt, NULL);
-    if (iRet != 0) {
-        hloge("Open input file[%s] failed: %d", ifile.c_str(), iRet);
-        return iRet;
-    }
+    defer (if (ret != 0 && fmt_ctx) {avformat_free_context(fmt_ctx); fmt_ctx = NULL;})
 
-    iRet = avformat_find_stream_info(fmt_ctx, NULL);
-    if (iRet != 0) {
-        hloge("Can not find stream: %d", iRet);
-        return iRet;
+    AVDictionary* opts = NULL;
+    if (media.type == MEDIA_TYPE_NETWORK) {
+        if (strncmp(media.src.c_str(), "rtsp:", 5) == 0) {
+            std::string str = g_confile->GetValue("rtsp_transport", "video");
+            if (strcmp(str.c_str(), "tcp") == 0 ||
+                strcmp(str.c_str(), "udp") == 0) {
+                av_dict_set(&opts, "rtsp_transport", str.c_str(), 0);
+            }
+        }
+        av_dict_set(&opts, "stimeout", "5000000", 0);   // us
     }
+    av_dict_set(&opts, "buffer_size", "2048000", 0);
+    fmt_ctx->interrupt_callback.callback = interrupt_callback;
+    fmt_ctx->interrupt_callback.opaque = this;
+    block_starttime = time(NULL);
+    ret = avformat_open_input(&fmt_ctx, ifile.c_str(), ifmt, &opts);
+    if (ret != 0) {
+        hloge("Open input file[%s] failed: %d", ifile.c_str(), ret);
+        return ret;
+    }
+    fmt_ctx->interrupt_callback.callback = NULL;
+    defer (if (ret != 0 && fmt_ctx) {avformat_close_input(&fmt_ctx);})
 
+    ret = avformat_find_stream_info(fmt_ctx, NULL);
+    if (ret != 0) {
+        hloge("Can not find stream: %d", ret);
+        return ret;
+    }
     hlogi("stream_num=%d", fmt_ctx->nb_streams);
 
     video_stream_index = av_find_best_stream(fmt_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
@@ -107,7 +158,8 @@ int HFFPlayer::start() {
 
     if (video_stream_index < 0) {
         hloge("Can not find video stream.");
-        return -20;
+        ret = -20;
+        return ret;
     }
 
     AVStream* video_stream = fmt_ctx->streams[video_stream_index];
@@ -115,81 +167,107 @@ int HFFPlayer::start() {
     video_time_base_den = video_stream->time_base.den;
     hlogi("video_stream time_base=%d/%d", video_stream->time_base.num, video_stream->time_base.den);
 
-    AVCodecParameters* codecpar = video_stream->codecpar;
-    hlogi("codec_id=%d:%s", codecpar->codec_id, avcodec_get_name(codecpar->codec_id));
-
-    std::string cuvid(avcodec_get_name(codecpar->codec_id));
-    cuvid += "_cuvid";
-    hlogi("cuvid=%s", cuvid.c_str());
+    AVCodecParameters* codec_param = video_stream->codecpar;
+    hlogi("codec_id=%d:%s", codec_param->codec_id, avcodec_get_name(codec_param->codec_id));
 
     AVCodec* codec = NULL;
-    if (decode_mode == HARDWARE_DECODE) {
-        codec = avcodec_find_decoder_by_name(cuvid.c_str());
-        if (codec == NULL) {
-            hlogi("Can not find decoder %s!", cuvid.c_str());
-            // no return, try soft-decoder
+    if (decode_mode != SOFTWARE_DECODE) {
+try_hardware_decode:
+        std::string decoder(avcodec_get_name(codec_param->codec_id));
+        if (decode_mode == HARDWARE_DECODE_CUVID) {
+            decoder += "_cuvid";
+            real_decode_mode = HARDWARE_DECODE_CUVID;
         }
+        else if (decode_mode == HARDWARE_DECODE_QSV) {
+            decoder += "_qsv";
+            real_decode_mode = HARDWARE_DECODE_QSV;
+        }
+        codec = avcodec_find_decoder_by_name(decoder.c_str());
+        if (codec == NULL) {
+            hlogi("Can not find decoder %s", decoder.c_str());
+            // goto try_software_decode;
+        }
+        hlogi("decoder=%s", decoder.c_str());
     }
 
     if (codec == NULL) {
-        codec = avcodec_find_decoder(codecpar->codec_id);
+try_software_decode:
+        codec = avcodec_find_decoder(codec_param->codec_id);
         if (codec == NULL) {
-            hloge("Can not find decoder %s!", avcodec_get_name(codecpar->codec_id));
-            return -20;
+            hloge("Can not find decoder %s", avcodec_get_name(codec_param->codec_id));
+            ret = -30;
+            return ret;
         }
+        real_decode_mode = SOFTWARE_DECODE;
     }
 
     hlogi("codec_name: %s=>%s", codec->name, codec->long_name);
 
     codec_ctx = avcodec_alloc_context3(codec);
     if (codec_ctx == NULL) {
-        hloge("avcodec_alloc_context3!");
-        return -60;
+        hloge("avcodec_alloc_context3");
+        ret = -40;
+        return ret;
+    }
+    defer (if (ret != 0 && codec_ctx) {avcodec_free_context(&codec_ctx); codec_ctx = NULL;})
+
+    ret = avcodec_parameters_to_context(codec_ctx, codec_param);
+    if (ret != 0) {
+        hloge("avcodec_parameters_to_context error: %d", ret);
+        return ret;
     }
 
-    iRet = avcodec_parameters_to_context(codec_ctx, codecpar);
-    if (iRet != 0) {
-        hloge("avcodec_parameters_to_context error: %d", iRet);
-        return iRet;
-    }
-
-    iRet = avcodec_open2(codec_ctx, codec, NULL);
-    if (iRet != 0) {
-        hloge("Can not open codec: %d", iRet);
-        return iRet;
+    ret = avcodec_open2(codec_ctx, codec, NULL);
+    if (ret != 0) {
+        if (real_decode_mode != SOFTWARE_DECODE) {
+            hlogi("Can not open hardwrae codec error: %d, try software codec.", ret);
+            goto try_software_decode;
+        }
+        hloge("Can not open software codec error: %d", ret);
+        return ret;
     }
 
     int sw = codec_ctx->width;
     int sh = codec_ctx->height;
-    AVPixelFormat src_pix_fmt = codec_ctx->pix_fmt;
+    src_pix_fmt = codec_ctx->pix_fmt;
 
     int dw = sw >> 2 << 2; // align = 4
     int dh = sh;
 
+    sws_ctx = sws_getContext(sw, sh, src_pix_fmt, dw, dh, dst_pix_fmt, SWS_BICUBIC, NULL, NULL, NULL);
+    if (sws_ctx == NULL) {
+        hloge("sws_getContext=NULL");
+        ret = -50;
+        return ret;
+    }
+
+    packet = av_packet_alloc();
+    frame = av_frame_alloc();
+
     hframe.w = dw;
     hframe.h = dh;
+    // ARGB
+    hframe.buf.resize(dw * dh * 4);
 
-    dst_pix_fmt = AV_PIX_FMT_BGR24;
-    hframe.type = GL_BGR;
-    hframe.bpp = 24;
-    hframe.buf.resize(dw * dh * hframe.bpp / 8);
-    data[0] = (uint8_t*)hframe.buf.base;
-    linesize[0] = dw * 3;
-
-    // dst_pix_fmt = AV_PIX_FMT_YUV420P;
-    // hframe.type = GL_I420;
-    // hframe.bpp = 12;
-    // int y_size = dw * dh;
-    // hframe.buf.resize(y_size * 3 / 2);
-    // data[0] = hframe.buf.base;
-    // data[1] = data[0] + y_size;
-    // data[2] = data[1] + y_size/4;
-    // linesize[0] = dw;
-    // linesize[1] = linesize[2] = dw / 2;
-
-    frame = av_frame_alloc();
-    packet = av_packet_alloc();
-    sws_ctx = sws_getContext(sw, sh, src_pix_fmt, dw, dh, dst_pix_fmt, SWS_FAST_BILINEAR, NULL, NULL, NULL);
+    if (dst_pix_fmt == AV_PIX_FMT_YUV420P) {
+        hframe.type = GL_I420;
+        hframe.bpp = 12;
+        int y_size = dw * dh;
+        hframe.buf.len = y_size * 3 / 2;
+        data[0] = (uint8_t*)hframe.buf.base;
+        data[1] = data[0] + y_size;
+        data[2] = data[1] + y_size / 4;
+        linesize[0] = dw;
+        linesize[1] = linesize[2] = dw / 2;
+    }
+    else {
+        dst_pix_fmt = AV_PIX_FMT_BGR24;
+        hframe.type = GL_BGR;
+        hframe.bpp = 24;
+        hframe.buf.len = dw * dh * 3;
+        data[0] = (uint8_t*)hframe.buf.base;
+        linesize[0] = dw * 3;
+    }
 
     hlogi("sw=%d sh=%d dw=%d dh=%d", sw, sh, dw, dh);
     hlogi("src_pix_fmt=%d:%s dst_pix_fmt=%d:%s", src_pix_fmt, av_get_pix_fmt_name(src_pix_fmt),
@@ -202,7 +280,6 @@ int HFFPlayer::start() {
     duration = 0;
     start_time = 0;
     error = 0;
-    flags = 0;
     if (video_time_base_num && video_time_base_den) {
         if (video_stream->duration > 0) {
             duration = video_stream->duration / (double)video_time_base_den * video_time_base_num * 1000;
@@ -212,11 +289,12 @@ int HFFPlayer::start() {
         }
     }
     hlogi("fps=%d duration=%lldms start_time=%lldms", fps, duration, start_time);
-    HThread::setSleepPolicy(HThread::SLEEP_UNTIL, 1000/fps);
-    return HThread::start();
+
+    HThread::setSleepPolicy(HThread::SLEEP_UNTIL, 1000 / fps);
+    return ret;
 }
 
-void HFFPlayer::cleanup() {
+int HFFPlayer::close() {
     if (codec_ctx) {
         avcodec_close(codec_ctx);
         avcodec_free_context(&codec_ctx);
@@ -247,11 +325,6 @@ void HFFPlayer::cleanup() {
     }
 
     hframe.buf.cleanup();
-}
-
-int HFFPlayer::stop() {
-    HThread::stop();
-    cleanup();
     return 0;
 }
 
@@ -265,42 +338,100 @@ int HFFPlayer::seek(int64_t ms) {
     return 0;
 }
 
+bool HFFPlayer::doPrepare() {
+    int ret = open();
+    if (ret != 0) {
+        error = ret;
+        event_callback(HPLAYER_OPEN_FAILED);
+        return false;
+    }
+    else {
+        event_callback(HPLAYER_OPENED);
+    }
+    return true;
+}
+
+bool HFFPlayer::doFinish() {
+    int ret = close();
+    event_callback(HPLAYER_CLOSED);
+    return ret == 0;
+}
+
 void HFFPlayer::doTask() {
     // loop until get a video frame
-    while (1) {
+    while (!quit) {
         av_init_packet(packet);
-        int iRet = av_read_frame(fmt_ctx, packet);
-        if (iRet != 0) {
-            hlogi("No frame: %d", iRet);
-            if (iRet == AVERROR_EOF) {
-                flags = EOF;
+
+        fmt_ctx->interrupt_callback.callback = interrupt_callback;
+        fmt_ctx->interrupt_callback.opaque = this;
+        block_starttime = time(NULL);
+        //hlogi("av_read_frame");
+        int ret = av_read_frame(fmt_ctx, packet);
+        //hlogi("av_read_frame retval=%d", ret);
+        fmt_ctx->interrupt_callback.callback = NULL;
+        if (ret != 0) {
+            hlogi("No frame: %d", ret);
+            if (ret == AVERROR_EOF) {
+                event_callback(HPLAYER_EOF);
             }
             else {
-                error = iRet;
+                error = ret;
+                event_callback(HPLAYER_ERROR);
             }
             return;
         }
 
+        // NOTE: if not call av_packet_unref, memory leak.
+        defer (av_packet_unref(packet);)
+
+        // hlogi("stream_index=%d data=%p len=%d", packet->stream_index, packet->data, packet->size);
         if (packet->stream_index != video_stream_index) {
             continue;
         }
 
+#if 1
+        // hlogi("avcodec_send_packet");
+        ret = avcodec_send_packet(codec_ctx, packet);
+        if (ret != 0) {
+            hloge("avcodec_send_packet error: %d", ret);
+            return;
+        }
+        // hlogi("avcodec_receive_frame");
+        ret = avcodec_receive_frame(codec_ctx, frame);
+        if (ret != 0) {
+            if (ret != -EAGAIN) {
+                hloge("avcodec_receive_frame error: %d", ret);
+                return;
+            }
+        }
+        else {
+            break;
+        }
+#else
         int got_pic = 0;
-        iRet = avcodec_decode_video2(codec_ctx, frame, &got_pic, packet);
-        if (iRet < 0) {
-            hloge("decoder error: %d", iRet);
+        // hlogi("avcodec_decode_video2");
+        ret = avcodec_decode_video2(codec_ctx, frame, &got_pic, packet);
+        // hlogi("avcodec_decode_video2 retval=%d got_pic=%d", ret, got_pic);
+        if (ret < 0) {
+            hloge("decoder error: %d", ret);
             return;
         }
 
         if (got_pic)    break;  // exit loop
+#endif
     }
 
-    sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, data, linesize);
+    // hlogi("sws_scale w=%d h=%d data=%p", frame->width, frame->height, frame->data);
+    int h = sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, data, linesize);
+    // hlogi("sws_scale h=%d", h);
+    if (h <= 0 || h != frame->height) {
+        return;
+    }
 
     if (video_time_base_num && video_time_base_den) {
         hframe.ts = frame->pts / (double)video_time_base_den * video_time_base_num * 1000;
     }
-    //hlogi("ts=%lldms", hframe.ts);
+    // hlogi("ts=%lldms", hframe.ts);
 
     push_frame(&hframe);
 }

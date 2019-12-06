@@ -1,10 +1,12 @@
 #include "HVideoWnd.h"
+#include "confile.h"
 
 HVideoWnd::HVideoWnd(QWidget *parent) : HGLWidget(parent)
 {
     fps = 0;
     framecnt = 0;
     tick = 0;
+    draw_fps = g_confile->Get<bool>("draw_fps", "ui", false);
 }
 
 void HVideoWnd::calFps() {
@@ -26,6 +28,7 @@ void HVideoWnd::drawFPS() {
     drawText(pt, szFPS, 16, Qt::blue);
 }
 
+#include <QPainter>
 void HVideoWnd::paintGL() {
     calFps();
     HGLWidget::paintGL();
@@ -45,6 +48,8 @@ void HVideoWnd::paintGL() {
     }
     else {
         drawFrame(&last_frame);
-        drawFPS();
+        if (draw_fps) {
+            drawFPS();
+        }
     }
 }

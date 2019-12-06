@@ -20,29 +20,6 @@
     </message>
 </context>
 <context>
-    <name>HAddFaceDlg</name>
-    <message>
-        <source>name:</source>
-        <translation type="vanished">姓名：</translation>
-    </message>
-    <message>
-        <source>image:</source>
-        <translation type="vanished">图片：</translation>
-    </message>
-    <message>
-        <source>&amp;OK</source>
-        <translation type="vanished">确认(&amp;O)</translation>
-    </message>
-    <message>
-        <source>&amp;Cancel</source>
-        <translation type="vanished">取消(&amp;C)</translation>
-    </message>
-    <message>
-        <source>Select Image</source>
-        <translation type="vanished">选择图片</translation>
-    </message>
-</context>
-<context>
     <name>HMultiView</name>
     <message>
         <source>Info</source>
@@ -181,20 +158,8 @@
         <translation type="vanished"> 8*8画面</translation>
     </message>
     <message>
-        <source>&amp;Face</source>
-        <translation type="vanished">人脸库(&amp;F)</translation>
-    </message>
-    <message>
         <source>&amp;Help</source>
         <translation>帮助(&amp;H)</translation>
-    </message>
-    <message>
-        <source> &amp;Add</source>
-        <translation type="vanished"> 添加(&amp;A)</translation>
-    </message>
-    <message>
-        <source>Add a face image into face databases.</source>
-        <translation type="vanished">添加人脸图片到人脸数据库</translation>
     </message>
     <message>
         <source>&amp;Media</source>

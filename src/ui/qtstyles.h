@@ -19,9 +19,9 @@
 #define MV_STYLE_COL        3
 //==============================================
 
-#define DEFAULT_SKIN            ":/skin/dark.qss"
+#define DEFAULT_SKIN            "dark"
 #define DEFAULT_PALETTE_COLOR   0xFF132D48
-#define DEFAULT_LANGUAGE        ":/lang/app_zh_CN.qm"
+#define DEFAULT_LANGUAGE        ""
 #define DEFAULT_FONT_SIZE       12
 
 #define MAIN_WINDOW_WIDTH   800

@@ -28,6 +28,7 @@ public:
     uint64_t tick;
     int framecnt;
     int fps;
+    bool draw_fps;
 };
 
 #endif // H_VIDEO_WND_H

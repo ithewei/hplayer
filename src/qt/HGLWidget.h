@@ -44,10 +44,10 @@ protected:
     GLfloat vertices[8];
     GLfloat textures[8];
 
+    // NOTE: QPainter used 3 VertexAttribArray
     enum VER_ATTR{
-        VER_ATTR_VER,
+        VER_ATTR_VER = 3,
         VER_ATTR_TEX,
-        VER_ATTR_NUM
     };
 };
 

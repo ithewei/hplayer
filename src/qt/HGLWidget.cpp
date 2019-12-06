@@ -213,8 +213,6 @@ void HGLWidget::paintGL() {
 void HGLWidget::drawYUV(HFrame* pFrame) {
     assert(pFrame->type == GL_I420 || pFrame->type == GL_YV12);
 
-    glUseProgram(prog_yuv);
-
     int w = pFrame->w;
     int h = pFrame->h;
     int y_size = w*h;
@@ -226,6 +224,8 @@ void HGLWidget::drawYUV(HFrame* pFrame) {
         u = v;
         v = tmp;
     }
+
+    glUseProgram(prog_yuv);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex_yuv[0]);

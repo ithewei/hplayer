@@ -31,22 +31,29 @@ public slots:
     void close();
 
     void start();
-    void pause();
     void stop();
+    void pause();
+    void resume();
+    void restart();
 
     void onTimerUpdate();
+    void onOpenSucceed();
+    void onOpenFailed();
+    void onPlayerEOF();
+    void onPlayerError();
 
 protected:
     void initUI();
     void initConnect();
     void updateUI();
 
-    void resizeEvent(QResizeEvent *e);
-    void enterEvent(QEvent *e);
-    void leaveEvent(QEvent *e);
+    virtual void resizeEvent(QResizeEvent *e);
+    virtual void enterEvent(QEvent *e);
+    virtual void leaveEvent(QEvent *e);
     virtual void mousePressEvent(QMouseEvent *e);
     virtual void mouseReleaseEvent(QMouseEvent *e);
     virtual void mouseMoveEvent(QMouseEvent *e);
+    virtual void customEvent(QEvent* e);
 
 public:
     int playerid;
@@ -65,8 +72,8 @@ private:
     HMedia        media;
     HVideoPlayer* pImpl_player;
     // for retry when SIGNAL_END_OF_FILE
-    uint64_t      retry_interval;
-    int           max_retry_cnt;
+    int           retry_interval;
+    int           retry_maxcnt;
     uint64_t      last_retry_time;
     int           retry_cnt;
 };

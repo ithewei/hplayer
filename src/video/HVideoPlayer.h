@@ -4,15 +4,26 @@
 #include "hmedia.h"
 #include "hframe.h"
 #include "hstring.h"
-#include "hlog.h"
+#include "confile.h"
 
 #define DEFAULT_FPS         25
 #define DEFAULT_FRAME_CACHE 5
 
-#define HARDWARE_DECODE     1
-#define SOFTWARE_DECODE     2
+enum {
+    SOFTWARE_DECODE         = 1,
+    HARDWARE_DECODE_QSV     = 2,
+    HARDWARE_DECODE_CUVID   = 3,
+};
+#define DEFAULT_DECODE_MODE HARDWARE_DECODE_CUVID
 
-#define DEFAULT_DECODE_MODE HARDWARE_DECODE
+enum hplayer_event_e {
+    HPLAYER_OPEN_FAILED,
+    HPLAYER_OPENED,
+    HPLAYER_EOF,
+    HPLAYER_CLOSED,
+    HPLAYER_ERROR,
+};
+typedef int (*hplayer_event_cb)(hplayer_event_e e, void* userdata);
 
 inline string strtime(int64_t ms) {
     int sec = ms / 1000;
@@ -30,13 +41,14 @@ class HVideoPlayer
 {
 public:
     HVideoPlayer() {
-        set_frame_cache(DEFAULT_FRAME_CACHE);
-        fps = DEFAULT_FPS;
-        decode_mode = DEFAULT_DECODE_MODE;
+        set_frame_cache(g_confile->Get<int>("frame_cache", "video", DEFAULT_FRAME_CACHE));
+        fps = g_confile->Get<int>("fps", "video", DEFAULT_FPS);
+        decode_mode = g_confile->Get<int>("decode_mode", "video", DEFAULT_DECODE_MODE);
+
         duration = 0;
         start_time = 0;
         error = 0;
-        flags = 0;
+        event_cb = NULL;
     }
 
     virtual ~HVideoPlayer() {}
@@ -78,16 +90,30 @@ public:
         return frame_buf.pop(pFrame);
     }
 
+    void set_event_callback(hplayer_event_cb cb, void* userdata) {
+        event_cb = cb;
+        event_cb_userdata = userdata;
+    }
+
+    void event_callback(hplayer_event_e e) {
+        if (event_cb) {
+            event_cb(e, event_cb_userdata);
+        }
+    }
+
 public:
     HMedia      media;
     int         fps;
     int         decode_mode;
+    int         real_decode_mode;
+
     int64_t     duration;   // ms
     int64_t     start_time; // ms
     int         error;
-    int         flags;
 protected:
     HFrameBuf   frame_buf;
+    hplayer_event_cb    event_cb;
+    void*               event_cb_userdata;
 };
 
 #endif // H_VIDEO_PLAYER_H
