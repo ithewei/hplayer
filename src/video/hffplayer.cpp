@@ -341,8 +341,10 @@ int HFFPlayer::seek(int64_t ms) {
 bool HFFPlayer::doPrepare() {
     int ret = open();
     if (ret != 0) {
-        error = ret;
-        event_callback(HPLAYER_OPEN_FAILED);
+        if (!quit) {
+            error = ret;
+            event_callback(HPLAYER_OPEN_FAILED);
+        }
         return false;
     }
     else {
@@ -371,12 +373,14 @@ void HFFPlayer::doTask() {
         fmt_ctx->interrupt_callback.callback = NULL;
         if (ret != 0) {
             hlogi("No frame: %d", ret);
-            if (ret == AVERROR_EOF) {
-                event_callback(HPLAYER_EOF);
-            }
-            else {
-                error = ret;
-                event_callback(HPLAYER_ERROR);
+            if (!quit) {
+                if (ret == AVERROR_EOF) {
+                    event_callback(HPLAYER_EOF);
+                }
+                else {
+                    error = ret;
+                    event_callback(HPLAYER_ERROR);
+                }
             }
             return;
         }

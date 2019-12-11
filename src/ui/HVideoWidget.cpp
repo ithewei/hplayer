@@ -6,19 +6,19 @@
 #include "HOpenMediaDlg.h"
 #include "HVideoPlayerFactory.h"
 
-#define DEFAULT_RETRY_INTERVAL  3000  // ms
-#define DEFAULT_RETRY_MAXCNT    100
+#define DEFAULT_RETRY_INTERVAL  10000  // ms
+#define DEFAULT_RETRY_MAXCNT    60
 
 #include "CustomEventType.h"
 static int hplayer_event_callback(hplayer_event_e e, void* userdata) {
     HVideoWidget* wdg = (HVideoWidget*)userdata;
     int custom_event_type = QCustomEvent::User;
     switch (e) {
-    case HPLAYER_OPEN_FAILED:
-        custom_event_type = QCustomEvent::OpenMediaFailed;
-        break;
     case HPLAYER_OPENED:
         custom_event_type = QCustomEvent::OpenMediaSucceed;
+        break;
+    case HPLAYER_OPEN_FAILED:
+        custom_event_type = QCustomEvent::OpenMediaFailed;
         break;
     case HPLAYER_EOF:
         custom_event_type = QCustomEvent::PlayerEOF;
@@ -243,18 +243,33 @@ void HVideoWidget::resume() {
 }
 
 void HVideoWidget::restart() {
-    if (retry_cnt < retry_maxcnt) {
-        uint64_t cur_time = timestamp_ms();
-        if (cur_time - last_retry_time > retry_interval) {
-            ++retry_cnt;
+    hlogi("restart...");
+    if (pImpl_player) {
+        pImpl_player->stop();
+        pImpl_player->start();
+    }
+    else {
+        start();
+    }
+}
+
+void HVideoWidget::retry() {
+    if (retry_maxcnt < 0 || retry_cnt < retry_maxcnt) {
+        ++retry_cnt;
+        int64_t cur_time = timestamp_ms();
+        int64_t timespan = cur_time - last_retry_time;
+        if (timespan >= retry_interval) {
             last_retry_time = cur_time;
+            restart();
+        }
+        else {
+            last_retry_time += retry_interval;
             if (pImpl_player) {
                 pImpl_player->stop();
-                pImpl_player->start();
             }
-            else {
-                start();
-            }
+            int retry_after = retry_interval - timespan;
+            hlogi("retry after %dms", retry_after);
+            QTimer::singleShot(retry_after, this, SLOT(restart()));
         }
     }
     else {
@@ -286,7 +301,7 @@ void HVideoWidget::onOpenFailed() {
     }
     else {
         hlogw("retry failed: cnt=%d media.src=%s", retry_cnt, media.src.c_str());
-        restart();
+        retry();
     }
 }
 
@@ -297,7 +312,8 @@ void HVideoWidget::onPlayerEOF() {
 void HVideoWidget::onPlayerError() {
     switch (media.type) {
     case MEDIA_TYPE_NETWORK:
-        restart();
+        hlogi("retry?");
+        retry();
         break;
     default:
         stop();

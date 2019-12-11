@@ -266,7 +266,7 @@
     <None Include="rc\image\voice.png" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include=".\rc\hplayer_resource.rc" />
+    <ResourceCompile Include=".\hplayer.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

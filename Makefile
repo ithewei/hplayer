@@ -18,13 +18,13 @@ CXXFLAGS      = -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStri
 INCPATH       = -I. -Isrc -Isrc\hw -Isrc\hw\base -Isrc\hw\utils -Isrc\qt -Isrc\ui -Isrc\GL -Isrc\video -Isrc\win32 -I3rd\include -ID:\Qt\Qt5.11.1\toolchains\msvc14_x86\include -ID:\Qt\Qt5.11.1\toolchains\msvc14_x86\include\QtWidgets -ID:\Qt\Qt5.11.1\toolchains\msvc14_x86\include\QtGui -ID:\Qt\Qt5.11.1\toolchains\msvc14_x86\include\QtANGLE -ID:\Qt\Qt5.11.1\toolchains\msvc14_x86\include\QtCore -Itmp\moc -I\include -ID:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\win32-msvc 
 LINKER        = link
 LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /INCREMENTAL:NO /SUBSYSTEM:WINDOWS "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'"
-LIBS          = /LIBPATH:D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\qtmain.lib /LIBPATH:C:\opensslx86\lib /LIBPATH:C:\Utils\my_sql\mysql-5.6.11-win32\lib /LIBPATH:C:\Utils\postgresqlx86\pgsql\lib shell32.lib opencv_core341.lib opencv_highgui341.lib opencv_imgcodecs341.lib opencv_imgproc341.lib opencv_videoio341.lib avformat.lib avdevice.lib avcodec.lib swresample.lib swscale.lib avutil.lib kernel32.lib user32.lib gdi32.lib opengl32.lib glu32.lib ole32.lib oleaut32.lib strmiids.lib ws2_32.lib secur32.lib /LIBPATH:G:\Qt\HPlayer\3rd\lib\msvc14_x86 D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Widgets.lib D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Gui.lib D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Core.lib tmp\obj\hplayer_resource.res 
+LIBS          = /LIBPATH:D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\qtmain.lib /LIBPATH:C:\opensslx86\lib /LIBPATH:C:\Utils\my_sql\mysql-5.6.11-win32\lib /LIBPATH:C:\Utils\postgresqlx86\pgsql\lib shell32.lib opencv_core341.lib opencv_highgui341.lib opencv_imgcodecs341.lib opencv_imgproc341.lib opencv_videoio341.lib avformat.lib avdevice.lib avcodec.lib swresample.lib swscale.lib avutil.lib kernel32.lib user32.lib gdi32.lib opengl32.lib glu32.lib ole32.lib oleaut32.lib strmiids.lib ws2_32.lib secur32.lib /LIBPATH:G:\Qt\HPlayer\3rd\lib\msvc14_x86 D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Widgets.lib D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Gui.lib D:\Qt\Qt5.11.1\toolchains\msvc14_x86\lib\Qt5Core.lib tmp\obj\hplayer.res 
 QMAKE         = D:\Qt\Qt5.11.1\toolchains\msvc14_x86\bin\qmake.exe
 IDC           = idc
 IDL           = midl /NOLOGO
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = tmp\obj\hplayer_resource.res
+RES_FILE      = tmp\obj\hplayer.res
 COPY          = copy /y
 SED           = $(QMAKE) -install sed
 COPY_FILE     = copy /y
@@ -442,14 +442,14 @@ DESTDIR_TARGET = bin\msvc14_x86\hplayer.exe
 first: all
 all: Makefile  $(DESTDIR_TARGET)
 
-$(DESTDIR_TARGET):  $(OBJECTS) tmp\obj\hplayer_resource.res
+$(DESTDIR_TARGET):  $(OBJECTS) tmp\obj\hplayer.res
 	$(LINKER) $(LFLAGS) /MANIFEST:embed /OUT:$(DESTDIR_TARGET) @<<
 tmp\obj\hversion.obj tmp\obj\hbase.obj tmp\obj\herr.obj tmp\obj\htime.obj tmp\obj\hlog.obj tmp\obj\hstring.obj tmp\obj\hframe.obj tmp\obj\iniparser.obj tmp\obj\qtrcloader.obj tmp\obj\HGLWidget.obj tmp\obj\htable.obj tmp\obj\MainWindow.obj tmp\obj\CentralWidget.obj tmp\obj\HMultiView.obj tmp\obj\HVideoWidget.obj tmp\obj\HVideoTitlebar.obj tmp\obj\HVideoToolbar.obj tmp\obj\HVideoWnd.obj tmp\obj\HOpenMediaDlg.obj tmp\obj\HMediaInfoDlg.obj tmp\obj\glew.obj tmp\obj\HVideoCapture.obj tmp\obj\hffplayer.obj tmp\obj\hdevice.obj tmp\obj\main.obj tmp\obj\qrc_skin.obj tmp\obj\qrc_image.obj tmp\obj\moc_MainWindow.obj tmp\obj\moc_CentralWidget.obj tmp\obj\moc_HMultiView.obj tmp\obj\moc_HVideoWidget.obj tmp\obj\moc_HVideoTitlebar.obj tmp\obj\moc_HVideoToolbar.obj tmp\obj\moc_HVideoWnd.obj tmp\obj\moc_HOpenMediaDlg.obj tmp\obj\moc_HMediaInfoDlg.obj
 $(LIBS)
 <<
 
-tmp\obj\hplayer_resource.res: hplayer_resource.rc
-	rc /NOLOGO $(DEFINES) -fo tmp\obj\hplayer_resource.res hplayer_resource.rc
+tmp\obj\hplayer.res: hplayer.rc
+	rc /NOLOGO $(DEFINES) -fo tmp\obj\hplayer.res hplayer.rc
 
 Makefile: HPlayer.pro D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\win32-msvc\qmake.conf D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\features\spec_pre.prf \
 		D:\Qt\Qt5.11.1\toolchains\msvc14_x86\mkspecs\common\angle.conf \
@@ -797,7 +797,7 @@ dist:
 clean: compiler_clean 
 	-$(DEL_FILE) tmp\obj\hversion.obj tmp\obj\hbase.obj tmp\obj\herr.obj tmp\obj\htime.obj tmp\obj\hlog.obj tmp\obj\hstring.obj tmp\obj\hframe.obj tmp\obj\iniparser.obj tmp\obj\qtrcloader.obj tmp\obj\HGLWidget.obj tmp\obj\htable.obj tmp\obj\MainWindow.obj tmp\obj\CentralWidget.obj tmp\obj\HMultiView.obj tmp\obj\HVideoWidget.obj tmp\obj\HVideoTitlebar.obj tmp\obj\HVideoToolbar.obj tmp\obj\HVideoWnd.obj tmp\obj\HOpenMediaDlg.obj tmp\obj\HMediaInfoDlg.obj tmp\obj\glew.obj tmp\obj\HVideoCapture.obj tmp\obj\hffplayer.obj tmp\obj\hdevice.obj tmp\obj\main.obj tmp\obj\qrc_skin.obj tmp\obj\qrc_image.obj tmp\obj\moc_MainWindow.obj tmp\obj\moc_CentralWidget.obj tmp\obj\moc_HMultiView.obj tmp\obj\moc_HVideoWidget.obj tmp\obj\moc_HVideoTitlebar.obj tmp\obj\moc_HVideoToolbar.obj tmp\obj\moc_HVideoWnd.obj tmp\obj\moc_HOpenMediaDlg.obj tmp\obj\moc_HMediaInfoDlg.obj
 	-$(DEL_FILE) bin\msvc14_x86\hplayer.exp
-	-$(DEL_FILE) tmp\obj\hplayer_resource.res
+	-$(DEL_FILE) tmp\obj\hplayer.res
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash bin\msvc14_x86\hplayer.lib

@@ -14,6 +14,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TEMPLATE = app
 RC_ICONS = favicon.ico
+RC_FILE = hplayer.rc
 
 TARGET          = hplayer
 MOC_DIR         = tmp/moc

@@ -35,6 +35,7 @@ public slots:
     void pause();
     void resume();
     void restart();
+    void retry();
 
     void onTimerUpdate();
     void onOpenSucceed();
@@ -74,7 +75,7 @@ private:
     // for retry when SIGNAL_END_OF_FILE
     int           retry_interval;
     int           retry_maxcnt;
-    uint64_t      last_retry_time;
+    int64_t       last_retry_time;
     int           retry_cnt;
 };
 
