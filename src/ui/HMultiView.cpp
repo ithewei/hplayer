@@ -114,6 +114,7 @@ HVideoWidget* HMultiView::getIdlePlayer() {
 void HMultiView::updateUI() {
     int row = table.row;
     int col = table.col;
+    if (row == 0 || col == 0) return;
     int cell_w = width()/col;
     int cell_h = height()/row;
 
@@ -126,15 +127,17 @@ void HMultiView::updateUI() {
     }
 
     int cnt = 0;
+    HTableCell cell;
     for (int r = 0; r < row; ++r) {
         for (int c = 0; c < col; ++c) {
             int id = r*col + c + 1;
-            HTableCell cell;
-            QWidget *wdg = getPlayerByID(id);
             if (table.getTableCell(id, cell)) {
-                wdg->setGeometry(x, y, cell_w*cell.colspan() - CELL_BORDER, cell_h*cell.rowspan()- CELL_BORDER);
-                wdg->show();
-                ++cnt;
+                QWidget *wdg = getPlayerByID(id);
+                if (wdg) {
+                    wdg->setGeometry(x, y, cell_w*cell.colspan() - CELL_BORDER, cell_h*cell.rowspan()- CELL_BORDER);
+                    wdg->show();
+                    ++cnt;
+                }
             }
             x += cell_w;
         }
@@ -210,6 +213,7 @@ void HMultiView::mouseDoubleClickEvent(QMouseEvent *e) {
 }
 
 void HMultiView::stretch(QWidget* wdg) {
+    if (table.row == 1 && table.col == 1) return;
     if (bStretch) {
         restoreLayout();
         bStretch = false;
