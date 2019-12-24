@@ -54,7 +54,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;.;src;src\hw;src\hw\base;src\hw\utils;src\qt;src\ui;src\GL;src\video;src\win32;3rd\include;$(QTDIR)\include;tmp\moc;\include;$(QTDIR)\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;.;src;src\hv;src\hv\base;src\hv\utils;src\qt;src\ui;src\GL;src\video;src\win32;3rd\include;$(QTDIR)\include;tmp\moc;\include;$(QTDIR)\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>tmp\obj\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -124,17 +124,17 @@
     <ClCompile Include="src\ui\HVideoWnd.cpp" />
     <ClCompile Include="src\ui\MainWindow.cpp" />
     <ClCompile Include="src\GL\glew.c" />
-    <ClCompile Include="src\hw\base\hbase.c" />
+    <ClCompile Include="src\hv\base\hbase.c" />
     <ClCompile Include="src\win32\hdevice.cpp" />
-    <ClCompile Include="src\hw\base\herr.c" />
+    <ClCompile Include="src\hv\base\herr.c" />
     <ClCompile Include="src\video\hffplayer.cpp" />
-    <ClCompile Include="src\hw\utils\hframe.cpp" />
-    <ClCompile Include="src\hw\utils\iniparser.cpp" />
-    <ClCompile Include="src\hw\base\hlog.c" />
-    <ClCompile Include="src\hw\base\hstring.cpp" />
+    <ClCompile Include="src\hv\utils\hframe.cpp" />
+    <ClCompile Include="src\hv\utils\iniparser.cpp" />
+    <ClCompile Include="src\hv\base\hlog.c" />
+    <ClCompile Include="src\hv\base\hstring.cpp" />
     <ClCompile Include="src\ui\htable.cpp" />
-    <ClCompile Include="src\hw\base\htime.c" />
-    <ClCompile Include="src\hw\base\hversion.c" />
+    <ClCompile Include="src\hv\base\htime.c" />
+    <ClCompile Include="src\hv\base\hversion.c" />
     <ClCompile Include="src\qt\qtrcloader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,36 +163,36 @@
     <ClInclude Include="src\appdef.h" />
     <ClInclude Include="src\video\ffmpeg_util.h" />
     <ClInclude Include="src\GL\glew.h" />
-    <ClInclude Include="src\hw\h.h" />
-    <ClInclude Include="src\hw\base\hbase.h" />
-    <ClInclude Include="src\hw\base\hbuf.h" />
-    <ClInclude Include="src\hw\base\hdef.h" />
+    <ClInclude Include="src\hv\hv.h" />
+    <ClInclude Include="src\hv\base\hbase.h" />
+    <ClInclude Include="src\hv\base\hbuf.h" />
+    <ClInclude Include="src\hv\base\hdef.h" />
     <ClInclude Include="src\win32\hdevice.h" />
-    <ClInclude Include="src\hw\base\herr.h" />
+    <ClInclude Include="src\hv\base\herr.h" />
     <ClInclude Include="src\video\hffplayer.h" />
-    <ClInclude Include="src\hw\utils\hframe.h" />
-    <ClInclude Include="src\hw\utils\hgl.h" />
-    <ClInclude Include="src\hw\utils\iniparser.h" />
-    <ClInclude Include="src\hw\base\hgui.h" />
-    <ClInclude Include="src\hw\base\hlog.h" />
+    <ClInclude Include="src\hv\utils\hframe.h" />
+    <ClInclude Include="src\hv\utils\hgl.h" />
+    <ClInclude Include="src\hv\utils\iniparser.h" />
+    <ClInclude Include="src\hv\base\hgui.h" />
+    <ClInclude Include="src\hv\base\hlog.h" />
     <ClInclude Include="src\video\hmedia.h" />
-    <ClInclude Include="src\hw\base\hmutex.h" />
-    <ClInclude Include="src\hw\base\hobj.h" />
-    <ClInclude Include="src\hw\base\hplatform.h" />
-    <ClInclude Include="src\hw\base\hscope.h" />
-    <ClInclude Include="src\hw\base\hstring.h" />
+    <ClInclude Include="src\hv\base\hmutex.h" />
+    <ClInclude Include="src\hv\base\hobj.h" />
+    <ClInclude Include="src\hv\base\hplatform.h" />
+    <ClInclude Include="src\hv\base\hscope.h" />
+    <ClInclude Include="src\hv\base\hstring.h" />
     <ClInclude Include="src\ui\htable.h" />
     <ClInclude Include="src\ui\CustomEventType.h" />
-    <ClInclude Include="src\hw\base\hthread.h" />
-    <ClInclude Include="src\hw\base\htime.h" />
-    <ClInclude Include="src\hw\base\hvar.h" />
-    <ClInclude Include="src\hw\base\hversion.h" />
+    <ClInclude Include="src\hv\base\hthread.h" />
+    <ClInclude Include="src\hv\base\htime.h" />
+    <ClInclude Include="src\hv\base\hvar.h" />
+    <ClInclude Include="src\hv\base\hversion.h" />
     <ClInclude Include="src\video\opencv_util.h" />
     <ClInclude Include="src\qt\qtfunctions.h" />
     <ClInclude Include="src\qt\qtheaders.h" />
     <ClInclude Include="src\qt\qtrcloader.h" />
     <ClInclude Include="src\ui\qtstyles.h" />
-    <ClInclude Include="src\hw\utils\singleton.h" />
+    <ClInclude Include="src\hv\utils\singleton.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="tmp\moc\moc_predefs.h.cbt">

@@ -4,7 +4,7 @@
 // using glew.h not gl.h
 #include "hgl.h"
 
-#include "h.h"
+#include "hv.h"
 
 #include <QtCore>
 #include <QtGui>

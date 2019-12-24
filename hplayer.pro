@@ -30,39 +30,39 @@ TRANSLATIONS = rc/lang/app_zh_CN.ts rc/lang/app_zh_CN.qm
 
 INCLUDEPATH += src
 
-# hw
-INCLUDEPATH += src/hw src/hw/base src/hw/utils
+# hv
+INCLUDEPATH += src/hv src/hv/base src/hv/utils
 HEADERS += \
-    src/hw/h.h \
-    src/hw/base/hplatform.h \
-    src/hw/base/hdef.h \
-    src/hw/base/hbase.h \
-    src/hw/base/hversion.h \
-    src/hw/base/htime.h \
-    src/hw/base/herr.h \
-    src/hw/base/hbuf.h \
-    src/hw/base/hgui.h \
-    src/hw/base/hlog.h \
-    src/hw/base/hobj.h \
-    src/hw/base/hvar.h \
-    src/hw/base/hscope.h \
-    src/hw/base/hstring.h \
-    src/hw/base/hmutex.h \
-    src/hw/base/hthread.h \
-    src/hw/utils/singleton.h \
-    src/hw/utils/hgl.h \
-    src/hw/utils/hframe.h \
-    src/hw/utils/iniparser.h \
+    src/hv/hv.h \
+    src/hv/base/hplatform.h \
+    src/hv/base/hdef.h \
+    src/hv/base/hbase.h \
+    src/hv/base/hversion.h \
+    src/hv/base/htime.h \
+    src/hv/base/herr.h \
+    src/hv/base/hbuf.h \
+    src/hv/base/hgui.h \
+    src/hv/base/hlog.h \
+    src/hv/base/hobj.h \
+    src/hv/base/hvar.h \
+    src/hv/base/hscope.h \
+    src/hv/base/hstring.h \
+    src/hv/base/hmutex.h \
+    src/hv/base/hthread.h \
+    src/hv/utils/singleton.h \
+    src/hv/utils/hgl.h \
+    src/hv/utils/hframe.h \
+    src/hv/utils/iniparser.h \
 
 SOURCES += \
-    src/hw/base/hversion.c \
-    src/hw/base/hbase.c \
-    src/hw/base/herr.c \
-    src/hw/base/htime.c \
-    src/hw/base/hlog.c \
-    src/hw/base/hstring.cpp \
-    src/hw/utils/hframe.cpp \
-    src/hw/utils/iniparser.cpp \
+    src/hv/base/hversion.c \
+    src/hv/base/hbase.c \
+    src/hv/base/herr.c \
+    src/hv/base/htime.c \
+    src/hv/base/hlog.c \
+    src/hv/base/hstring.cpp \
+    src/hv/utils/hframe.cpp \
+    src/hv/utils/iniparser.cpp \
 
 # qt
 INCLUDEPATH += src/qt
