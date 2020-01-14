@@ -12,7 +12,7 @@ FileTab::FileTab(QWidget *parent) : QWidget(parent) {
     edit = new QLineEdit;
     std::string str = g_confile->GetValue("last_file_source", "media");
     if (!str.empty()) {
-        edit->setText(str.c_str());
+        edit->setText(QString::fromUtf8(str.c_str()));
     }
     hbox->addWidget(edit);
     btnBrowse = new QPushButton("...");
@@ -41,7 +41,7 @@ NetworkTab::NetworkTab(QWidget *parent) : QWidget(parent) {
     edit = new QLineEdit;
     std::string str = g_confile->GetValue("last_network_source", "media");
     if (!str.empty()) {
-        edit->setText(str.c_str());
+        edit->setText(QString::fromUtf8(str.c_str()));
     }
 
     vbox->addWidget(edit);
@@ -107,8 +107,8 @@ void HOpenMediaDlg::accept() {
         FileTab* filetab = qobject_cast<FileTab*>(tab->currentWidget());
         if (filetab) {
             media.type = MEDIA_TYPE_FILE;
-            media.src  = qPrintable(filetab->edit->text());
-            g_confile->SetValue("last_file_source", media.src, "media");
+            media.src = filetab->edit->text().toUtf8().data();
+            g_confile->SetValue("last_file_source", media.src.c_str(), "media");
             g_confile->Save();
         }
     }
@@ -118,8 +118,8 @@ void HOpenMediaDlg::accept() {
         NetworkTab* nettab = qobject_cast<NetworkTab*>(tab->currentWidget());
         if (nettab) {
             media.type = MEDIA_TYPE_NETWORK;
-            media.src  = qPrintable(nettab->edit->text());
-            g_confile->SetValue("last_network_source", media.src, "media");
+            media.src = nettab->edit->text().toUtf8().data();
+            g_confile->SetValue("last_network_source", media.src.c_str(), "media");
             g_confile->Save();
         }
     }
