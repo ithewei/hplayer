@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
         logger_enable_fsync(hlog, getboolean(str.c_str()));
     }
     // first log here
-    hlogi("%s version: %s", argv[0], get_compile_version());
+    hlogi("%s version: %s", argv[0], hv_compile_version());
     hlog_fsync();
 
     qInfo("-------------------app start----------------------------------");
@@ -139,7 +139,10 @@ int main(int argc, char *argv[]) {
 
     MainWindow::instance();
 
-    if (g_confile->Get<bool>("fullscreen", "ui")) {
+    if (g_confile->Get<bool>("mv_fullscreen", "ui")) {
+        g_mainwnd->status = MainWindow::MV_FULLSCREEN;
+    }
+    else if (g_confile->Get<bool>("fullscreen", "ui")) {
         g_mainwnd->status = MainWindow::FULLSCREEN;
     }
     else if (g_confile->Get<bool>("maximized", "ui")) {
@@ -147,6 +150,9 @@ int main(int argc, char *argv[]) {
     }
 
     switch (g_mainwnd->status) {
+    case MainWindow::MV_FULLSCREEN:
+        g_mainwnd->mv_fullscreen();
+        break;
     case MainWindow::FULLSCREEN:
         g_mainwnd->showFullScreen();
         break;

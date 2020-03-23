@@ -148,26 +148,6 @@ void HGLWidget::loadYUVShader() {
 }
 
 void HGLWidget::initVAO() {
-    setVertices(1.0);
-
-    GLfloat tmp[] = {
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-    };
-
-    // reverse
-    /*
-    GLfloat tmp[] = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-    };
-    */
-    memcpy(textures, tmp, sizeof(GLfloat)*8);
-
     glVertexAttribPointer(VER_ATTR_VER, 2, GL_FLOAT, GL_FALSE, 0, vertices);
     glEnableVertexAttribArray(VER_ATTR_VER);
 
@@ -193,9 +173,28 @@ void HGLWidget::initializeGL() {
             qFatal("glewInit failed");
             return;
         }
-
-        loadYUVShader();
     }
+    loadYUVShader();
+
+    setVertices(1.0);
+
+    GLfloat tmp[] = {
+        0.0f, 1.0f,
+        1.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+    };
+
+    // reverse
+    /*
+    GLfloat tmp[] = {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 1.0f,
+    };
+    */
+    memcpy(textures, tmp, sizeof(GLfloat)*8);
 
     initVAO();
     initYUV();
