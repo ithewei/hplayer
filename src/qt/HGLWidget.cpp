@@ -28,7 +28,25 @@ GLuint HGLWidget::texUniformV;
 HGLWidget::HGLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
 {
+    setVertices(1.0);
 
+    GLfloat tmp[] = {
+        0.0f, 1.0f,
+        1.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+    };
+
+    // reverse
+    /*
+    GLfloat tmp[] = {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 1.0f,
+    };
+    */
+    memcpy(textures, tmp, sizeof(GLfloat)*8);
 }
 
 void HGLWidget::setVertices(double ratio) {
@@ -174,29 +192,10 @@ void HGLWidget::initializeGL() {
             return;
         }
     }
-    loadYUVShader();
-
-    setVertices(1.0);
-
-    GLfloat tmp[] = {
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-    };
-
-    // reverse
-    /*
-    GLfloat tmp[] = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-    };
-    */
-    memcpy(textures, tmp, sizeof(GLfloat)*8);
 
     initVAO();
+
+    loadYUVShader();
     initYUV();
 }
 
