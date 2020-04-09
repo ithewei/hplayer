@@ -18,6 +18,12 @@ public:
         PLAY,
     };
 
+    enum AspectRatio {
+        SPREAD,
+        ORIGINAL_RATIO,
+        CUSTOM_RATIO
+    };
+
     explicit HVideoWidget(QWidget *parent = nullptr);
     ~HVideoWidget();
 
@@ -43,6 +49,8 @@ public slots:
     void onPlayerEOF();
     void onPlayerError();
 
+    void setAspectRatio(AspectRatio e, double ratio = 0.0);
+
 protected:
     void initUI();
     void initConnect();
@@ -60,6 +68,8 @@ public:
     int playerid;
     int status;
     QString title;
+    AspectRatio eAspectRatio;
+    double  aspect_ratio;
 private:
     QPoint ptMousePress;
 

@@ -39,6 +39,26 @@ HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
     playerid = 0;
     status = STOP;
     pImpl_player = NULL;
+    // aspect_ratio
+    string str = g_confile->GetValue("aspect_ratio", "video");
+    if (str.empty()) {
+        eAspectRatio = SPREAD;
+    }
+    else if (stricmp(str.c_str(), "w:h") == 0) {
+        eAspectRatio = ORIGINAL_RATIO;
+    }
+    else {
+        int x = 0;
+        int y = 0;
+        sscanf(str.c_str(), "%d:%d", &x, &y);
+        if (x && y) {
+            eAspectRatio = CUSTOM_RATIO;
+            aspect_ratio = (double)x / (double)y;
+        }
+        else {
+            eAspectRatio = SPREAD;
+        }
+    }
     // retry
     retry_interval = g_confile->Get<int>("retry_interval", "video", DEFAULT_RETRY_INTERVAL);
     retry_maxcnt = g_confile->Get<int>("retry_maxcnt", "video", DEFAULT_RETRY_MAXCNT);
@@ -281,6 +301,7 @@ void HVideoWidget::retry() {
 void HVideoWidget::onOpenSucceed() {
     timer->start(1000 / pImpl_player->fps);
     status = PLAY;
+    setAspectRatio(eAspectRatio, aspect_ratio);
     if (pImpl_player->duration > 0) {
         toolbar->lblDuration->setText(strtime(pImpl_player->duration).c_str());
         toolbar->sldProgress->setRange(0, pImpl_player->duration/1000);
@@ -336,5 +357,25 @@ void HVideoWidget::onTimerUpdate() {
         }
         // update video frame
         videoWnd->update();
+    }
+}
+
+void HVideoWidget::setAspectRatio(AspectRatio e, double ratio) {
+    eAspectRatio = e;
+    switch(e) {
+    case SPREAD:
+        aspect_ratio = 0.0;
+        break;
+    case ORIGINAL_RATIO:
+        if (pImpl_player && pImpl_player->height > 0) {
+            aspect_ratio = (double)pImpl_player->width / (double)pImpl_player->height;
+        }
+        break;
+    case CUSTOM_RATIO:
+        aspect_ratio = ratio;
+        break;
+    }
+    if (videoWnd) {
+        videoWnd->setAspectRatio(aspect_ratio);
     }
 }

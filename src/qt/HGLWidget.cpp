@@ -28,6 +28,7 @@ GLuint HGLWidget::texUniformV;
 HGLWidget::HGLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
 {
+    aspect_ratio = 0.0;
     setVertices(1.0);
 
     GLfloat tmp[] = {
@@ -47,6 +48,16 @@ HGLWidget::HGLWidget(QWidget* parent)
     };
     */
     memcpy(textures, tmp, sizeof(GLfloat)*8);
+}
+
+void HGLWidget::setAspectRatio(double ratio) {
+    aspect_ratio = ratio;
+    if (FLOAT_EQUAL_ZERO(aspect_ratio)) {
+        setVertices(1.0);
+    }
+    else {
+        setVertices((double)height()/(double)width() * aspect_ratio);
+    }
 }
 
 void HGLWidget::setVertices(double ratio) {
@@ -201,6 +212,7 @@ void HGLWidget::initializeGL() {
 
 void HGLWidget::resizeGL(int w, int h) {
     glViewport(0,0,w,h);
+    setAspectRatio(aspect_ratio);
 }
 
 void HGLWidget::paintGL() {

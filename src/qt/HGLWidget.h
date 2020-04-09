@@ -14,8 +14,8 @@ class HGLWidget : public QOpenGLWidget
 public:
     HGLWidget(QWidget* parent = NULL);
 
-    void setVertices(double ratio);
-    void setVertices(QRect rc);
+    // ratio = 0 means spread
+    void setAspectRatio(double ratio);
 
     void drawFrame(HFrame *pFrame);
     void drawTexture(HRect rc, GLTexture *tex);
@@ -26,6 +26,9 @@ protected:
     virtual void initializeGL();
     virtual void resizeGL(int w, int h);
     virtual void paintGL();
+
+    void setVertices(double ratio);
+    void setVertices(QRect rc);
 
     static void loadYUVShader();
     void initVAO();
@@ -41,6 +44,7 @@ protected:
     static GLuint texUniformV;
     GLuint  tex_yuv[3];
 
+    double  aspect_ratio;
     GLfloat vertices[8];
     GLfloat textures[8];
 

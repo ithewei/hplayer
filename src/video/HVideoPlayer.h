@@ -45,6 +45,8 @@ public:
         fps = g_confile->Get<int>("fps", "video", DEFAULT_FPS);
         decode_mode = g_confile->Get<int>("decode_mode", "video", DEFAULT_DECODE_MODE);
 
+        width = 0;
+        height = 0;
         duration = 0;
         start_time = 0;
         error = 0;
@@ -107,6 +109,8 @@ public:
     int         decode_mode;
     int         real_decode_mode;
 
+    int32_t     width;
+    int32_t     height;
     int64_t     duration;   // ms
     int64_t     start_time; // ms
     int         error;

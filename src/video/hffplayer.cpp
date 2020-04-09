@@ -283,6 +283,8 @@ try_software_decode:
     if (video_stream->avg_frame_rate.num && video_stream->avg_frame_rate.den) {
         fps = video_stream->avg_frame_rate.num / video_stream->avg_frame_rate.den;
     }
+    width = sw;
+    height = sh;
     duration = 0;
     start_time = 0;
     error = 0;
