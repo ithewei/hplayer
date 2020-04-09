@@ -196,6 +196,7 @@ void HVideoWidget::start() {
         else {
             onOpenSucceed();
         }
+        updateUI();
     }
     else {
         if (status == PAUSE) {

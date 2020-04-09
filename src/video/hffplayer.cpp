@@ -227,12 +227,22 @@ try_software_decode:
         return ret;
     }
 
-    int sw = codec_ctx->width;
-    int sh = codec_ctx->height;
+    int sw, sh, dw, dh;
+    sw = codec_ctx->width;
+    sh = codec_ctx->height;
     src_pix_fmt = codec_ctx->pix_fmt;
 
-    int dw = sw >> 2 << 2; // align = 4
-    int dh = sh;
+    dw = sw >> 2 << 2; // align = 4
+    dh = sh;
+
+    hlogi("sw=%d sh=%d dw=%d dh=%d", sw, sh, dw, dh);
+    hlogi("src_pix_fmt=%d:%s dst_pix_fmt=%d:%s", src_pix_fmt, av_get_pix_fmt_name(src_pix_fmt),
+        dst_pix_fmt, av_get_pix_fmt_name(dst_pix_fmt));
+    if (sw <= 0 || sh <= 0 || src_pix_fmt == AV_PIX_FMT_NONE) {
+        hloge("Codec parameters wrong!");
+        ret = -45;
+        return ret;
+    }
 
     sws_ctx = sws_getContext(sw, sh, src_pix_fmt, dw, dh, dst_pix_fmt, SWS_BICUBIC, NULL, NULL, NULL);
     if (sws_ctx == NULL) {
@@ -268,10 +278,6 @@ try_software_decode:
         data[0] = (uint8_t*)hframe.buf.base;
         linesize[0] = dw * 3;
     }
-
-    hlogi("sw=%d sh=%d dw=%d dh=%d", sw, sh, dw, dh);
-    hlogi("src_pix_fmt=%d:%s dst_pix_fmt=%d:%s", src_pix_fmt, av_get_pix_fmt_name(src_pix_fmt),
-        dst_pix_fmt, av_get_pix_fmt_name(dst_pix_fmt));
 
     // HVideoPlayer member vars
     if (video_stream->avg_frame_rate.num && video_stream->avg_frame_rate.den) {
