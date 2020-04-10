@@ -7,7 +7,7 @@
 #include "HVideoPlayerFactory.h"
 
 #define DEFAULT_RETRY_INTERVAL  10000  // ms
-#define DEFAULT_RETRY_MAXCNT    60
+#define DEFAULT_RETRY_MAXCNT    6
 
 #include "CustomEventType.h"
 static int hplayer_event_callback(hplayer_event_e e, void* userdata) {
@@ -329,13 +329,27 @@ void HVideoWidget::onOpenFailed() {
 }
 
 void HVideoWidget::onPlayerEOF() {
-    stop();
+    switch (media.type) {
+    case MEDIA_TYPE_NETWORK:
+        retry();
+        break;
+    case MEDIA_TYPE_FILE:
+        if (g_confile->Get<bool>("loop_playback", "video")) {
+            restart();
+        }
+        else {
+            stop();
+        }
+        break;
+    default:
+        stop();
+        break;
+    }
 }
 
 void HVideoWidget::onPlayerError() {
     switch (media.type) {
     case MEDIA_TYPE_NETWORK:
-        hlogi("retry?");
         retry();
         break;
     default:

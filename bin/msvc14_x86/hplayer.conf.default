@@ -53,8 +53,12 @@ dst_pix_fmt = YUV420P
 # rtsp_transport = [tcp, udp]
 rtsp_transport = udp
 
+# for network source retry
 retry_interval = 10000  # ms
-retry_maxcnt = 60       # -1 means INFINITE
+retry_maxcnt = -1       # -1 means INFINITE
+
+# for file source loop playback
+loop_playback = false
 
 [media]
 # 0:file 1:network 2:capture
