@@ -8,7 +8,7 @@
 ## 概要设计
 
 - 使用Qt实现界面；
-- 使用FFmpeg获取帧，编解码，转码；
+- 使用FFmpeg拉流，编解码，转码；
 - 使用OpenCV处理图片；
 - 使用OpenGL渲染视频帧；
 
@@ -51,10 +51,6 @@ https://gitee.com/ithewei/hplayer.git
 ## Build
 
 see BUILD.md
-
-## Contact
-
-如有编译问题，或者提出建议，请发邮件<ithewei@163.com>
 
 ## 项目博客
 
