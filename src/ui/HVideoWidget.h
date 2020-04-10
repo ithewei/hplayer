@@ -68,6 +68,7 @@ public:
     int playerid;
     int status;
     QString title;
+    int fps;
     AspectRatio eAspectRatio;
     double  aspect_ratio;
 private:

@@ -39,6 +39,7 @@ HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
     playerid = 0;
     status = STOP;
     pImpl_player = NULL;
+    fps = g_confile->Get<int>("fps", "video");
     // aspect_ratio
     string str = g_confile->GetValue("aspect_ratio", "video");
     if (str.empty()) {
@@ -256,7 +257,7 @@ void HVideoWidget::pause() {
 void HVideoWidget::resume() {
     if (status == PAUSE && pImpl_player) {
         pImpl_player->resume();
-        timer->start(1000 / pImpl_player->fps);
+        timer->start(1000 / (fps ? fps : pImpl_player->fps));
         status = PLAY;
 
         updateUI();
@@ -299,7 +300,7 @@ void HVideoWidget::retry() {
 }
 
 void HVideoWidget::onOpenSucceed() {
-    timer->start(1000 / pImpl_player->fps);
+    timer->start(1000 / (fps ? fps : pImpl_player->fps));
     status = PLAY;
     setAspectRatio(eAspectRatio, aspect_ratio);
     if (pImpl_player->duration > 0) {
