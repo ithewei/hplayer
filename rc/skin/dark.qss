@@ -216,7 +216,7 @@ padding:0px 5px 2px 0px;
 QTimeEdit::up-button:pressed,QDateEdit::up-button:pressed,QDateTimeEdit::up-button:pressed,QDoubleSpinBox::up-button:pressed,QSpinBox::up-button:pressed{
 top:-2px;
 }
-  
+
 QTimeEdit::down-button:pressed,QDateEdit::down-button:pressed,QDateTimeEdit::down-button:pressed,QDoubleSpinBox::down-button:pressed,QSpinBox::down-button:pressed,QSpinBox::down-button:pressed{
 bottom:-2px;
 }
@@ -637,21 +637,6 @@ border-color:#484848;
 QPushButton[flat="true"],QToolButton[flat="true"]{
 background:none;
 border-width:0px;
-}
-
-.HVideoWidget{
-background:#000000;
-border:1px solid #242424;
-}
-
-.HVideoWidget:hover{
-background:#000000;
-border:1px solid #FFFF00;
-}
-
-.HVideoTitlebar,.HVideoToolbar{
-background:#C0404040;
-color:#FF0000;
 }
 
 /*TextColor:#DCDCDC*/

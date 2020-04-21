@@ -76,6 +76,7 @@ HVideoWidget::~HVideoWidget() {
 }
 
 void HVideoWidget::initUI() {
+    setStyleSheet(VIDEO_WIDGET_QSS);
     setFocusPolicy(Qt::ClickFocus);
 
     videoWnd = new HVideoWnd(this);

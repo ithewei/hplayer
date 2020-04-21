@@ -1,0 +1,67 @@
+# [root]
+
+logfile = logs/hplayer.log
+# loglevel = [VERBOSE,DEBUG,INFO,WARN,ERROR,FATAL,SILENT]
+loglevel = INFO
+log_remain_days = 3
+log_filesize = 16M
+
+[ui]
+skin = dark
+# 0xAARRGGBB
+palette = 0xFF132D48
+# language = [en, zh_CN, ...]
+language = 
+fontsize = 12
+
+main_window_width = 800
+main_window_height = 600
+mv_fullscreen = false
+fullscreen = false
+maximized = true
+# rect(x,y,w,h)
+main_window_rect = rect(0,0,0,0)
+
+menubar_visible = true
+toolbar_visible = true
+statusbar_visible = true
+lside_visible = false
+rside_visible = false
+
+mv_row = 3
+mv_col = 3
+
+draw_fps = true
+
+[video]
+frame_cache = 5
+# fps = 25
+
+# aspect_ratio = [0:0, w:h, x:y]
+# aspect_ratio = 0:0 # SPREAD
+# aspect_ratio = w:h # ORIGINAL_RATIO
+# aspect_ratio = 4:3 # CUSTOM_RATIO
+
+# SOFTWARE_DECODE         = 1,
+# HARDWARE_DECODE_QSV     = 2,
+# HARDWARE_DECODE_CUVID   = 3,
+decode_mode = 3
+
+# pix_fmt = [YUV420P, BGR24]
+dst_pix_fmt = YUV420P
+
+# rtsp_transport = [tcp, udp]
+rtsp_transport = tcp
+
+# for network source retry
+retry_interval = 10000  # ms
+retry_maxcnt = -1       # -1 means INFINITE
+
+# for file source loop playback
+loop_playback = false
+
+[media]
+# 0:file 1:network 2:capture
+last_tab = 0
+last_file_source = 
+last_network_source = 

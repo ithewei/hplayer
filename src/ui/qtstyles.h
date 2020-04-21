@@ -27,8 +27,6 @@
 #define MAIN_WINDOW_WIDTH   800
 #define MAIN_WINDOW_HEIGHT  600
 
-#define MASK_BG QColor(0x40, 0x40, 0x40, 0xC0)
-
 #define VIDEO_TITLEBAR_HEIGHT           50
 #define VIDEO_TITLEBAR_ICON_WIDTH       48
 #define VIDEO_TITLEBAR_ICON_HEIGHT      48
@@ -42,5 +40,18 @@
 
 #define DRAG_QSS    "border:3px groove #FF8C00"
 #define RECT_QSS    "border:2px solid red; background:transparent;"
+
+#define VIDEO_TITLEBAR_QSS  "background:#C0404040"
+#define VIDEO_TOOLBAR_QSS   "background:#C0404040"
+#define VIDEO_WIDGET_QSS "\
+.HVideoWidget{\
+background:#000000;\
+border:1px solid #242424;\
+}\
+\
+.HVideoWidget:hover{\
+background:#000000;\
+border:1px solid #FFFF00;\
+}"
 
 #endif // QT_STYLES_H

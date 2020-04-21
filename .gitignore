@@ -18,6 +18,7 @@ cscope*
 *.o
 *.obj
 
+*.conf
 *.pid
 *.log
 *.db
@@ -26,6 +27,7 @@ cscope*
 tmp
 *debug
 *release
+Makefile*
 
 # msvc
 *.VC.db
@@ -35,10 +37,10 @@ Debug
 Release
 
 # toolchains
-# just push msvc14_x86 lib and dll
-msvc14_x64
+msvc2015_x86
 mingw32
 mingw64
 
 # mine
+3rd/include/opencv2
 3rd/include/qt5

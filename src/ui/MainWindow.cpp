@@ -232,11 +232,18 @@ void MainWindow::keyPressEvent(QKeyEvent* e) {
     }
 }
 
+#include "ffmpeg_util.h"
 void MainWindow::about() {
     QString strAbout = APP_NAME " " APP_VERSION "\n\n";
 
     strAbout += "Build on ";
     strAbout += QString::asprintf("%s %s\n\n", __DATE__, __TIME__);
+
+    strAbout += "Qt version: ";
+    strAbout += qVersion();
+    strAbout += "\nFFmpeg version: ";
+    strAbout += av_version_info();
+    strAbout += "\n\n";
 
     strAbout += "Copyright 2018-2028 " COMPANY_NAME " Company.\n";
     strAbout += "All rights reserved.\n";

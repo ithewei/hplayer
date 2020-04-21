@@ -8,7 +8,8 @@ HVideoToolbar::HVideoToolbar(QWidget *parent) : QFrame(parent)
 }
 
 void HVideoToolbar::initUI() {
-    setFixedHeight(VIDEO_TITLEBAR_HEIGHT);
+    setStyleSheet(VIDEO_TOOLBAR_QSS);
+    setFixedHeight(VIDEO_TOOLBAR_HEIGHT);
 
     QSize sz(VIDEO_TOOLBAR_ICON_WIDTH, VIDEO_TOOLBAR_ICON_HEIGHT);
     btnStart = genPushButton(QPixmap(":/image/start.png"), tr("start"));

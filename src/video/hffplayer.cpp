@@ -5,6 +5,7 @@
 #include "hstring.h"
 #include "hscope.h"
 #include "htime.h"
+#include "hgl.h"
 
 #define DEFAULT_BLOCK_TIMEOUT   10  // s
 

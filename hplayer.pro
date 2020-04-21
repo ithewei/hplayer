@@ -113,16 +113,13 @@ SOURCES += src/GL/glew.c
 # video
 INCLUDEPATH += src/video
 HEADERS +=  \
-    src/video/opencv_util.h \
     src/video/ffmpeg_util.h \
     src/video/hmedia.h \
     src/video/HVideoPlayer.h \
     src/video/HVideoPlayerFactory.h \
-    src/video/HVideoCapture.h \
     src/video/hffplayer.h \
 
 SOURCES += \
-    src/video/HVideoCapture.cpp \
     src/video/hffplayer.cpp \
 
 # win32
@@ -142,11 +139,11 @@ win32 {
     INCLUDEPATH += 3rd/include
 
     ## opencv
-    LIBS += -lopencv_core341        \
-            -lopencv_highgui341     \
-            -lopencv_imgcodecs341   \
-            -lopencv_imgproc341     \
-            -lopencv_videoio341     \
+    ##LIBS += -lopencv_core341        \
+    ##        -lopencv_highgui341     \
+    ##        -lopencv_imgcodecs341   \
+    ##        -lopencv_imgproc341     \
+    ##        -lopencv_videoio341     \
 
     ## FFmpeg
     LIBS += -lavformat      \
@@ -173,11 +170,11 @@ win32 {
 
     win32-msvc {
         if (contains(QMAKE_HOST.arch, x86_64)) {
-            LIBS += -L$$PWD/3rd/lib/msvc14_x64
-            DESTDIR = $$PWD/bin/msvc14_x64
+            LIBS += -L$$PWD/3rd/lib/msvc2015_x64
+            DESTDIR = $$PWD/bin/msvc2015_x64
         } else {
-            LIBS += -L$$PWD/3rd/lib/msvc14_x86
-            DESTDIR = $$PWD/bin/msvc14_x86
+            LIBS += -L$$PWD/3rd/lib/msvc2015_x86
+            DESTDIR = $$PWD/bin/msvc2015_x86
         }
     }
 
@@ -204,9 +201,9 @@ win32 {
 
 unix {
     ## opencv
-    LIBS += -lopencv_highgui    \
-            -lopencv_imgproc    \
-            -lopencv_core       \
+    ##LIBS += -lopencv_highgui    \
+    ##        -lopencv_imgproc    \
+    ##        -lopencv_core       \
 
     ## FFmpeg
     LIBS += -lavformat  \

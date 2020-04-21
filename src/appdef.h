@@ -2,7 +2,7 @@
 #define APPDEF_H
 
 #define APP_NAME        "hplayer"
-#define APP_VERSION     "1.0"
+#define APP_VERSION     "1.20.4"
 
 #define COMPANY_NAME    "ReadSense"
 #define COMPANY_WEBSITE "www.readsense.com"

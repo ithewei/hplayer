@@ -8,6 +8,7 @@ HVideoTitlebar::HVideoTitlebar(QWidget *parent) : QFrame(parent)
 }
 
 void HVideoTitlebar::initUI() {
+    setStyleSheet(VIDEO_TITLEBAR_QSS);
     setFixedHeight(VIDEO_TITLEBAR_HEIGHT);
 
     labTitle = new QLabel;

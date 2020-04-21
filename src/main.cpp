@@ -35,7 +35,7 @@ void qLogHandler(QtMsgType type, const QMessageLogContext & ctx, const QString &
 #endif
 
 
-    QString strLogfile = "qt.log";
+    QString strLogfile = "logs/qt.log";
 
     static FILE* s_fp = NULL;
     if (s_fp) {
@@ -56,13 +56,19 @@ void qLogHandler(QtMsgType type, const QMessageLogContext & ctx, const QString &
 }
 
 int main(int argc, char *argv[]) {
+    MKDIR("logs");
     qInstallMessageHandler(qLogHandler);
 
+    // load confile
     g_confile = new IniParser;
-    g_confile->LoadFromFile(APP_NAME".conf");
+    char confile[] = "conf/" APP_NAME ".conf";
+    if (access(confile, 0) != 0) {
+        QFile::copy("conf/" APP_NAME ".conf.default", confile);
+    }
+    g_confile->LoadFromFile(confile);
     // logfile
     string str = g_confile->GetValue("logfile");
-    hlog_set_file(str.empty() ? APP_NAME".log" : str.c_str());
+    hlog_set_file(str.empty() ? "logs/" APP_NAME ".log" : str.c_str());
     // loglevel
     const char* szLoglevel = g_confile->GetValue("loglevel").c_str();
     int loglevel = LOG_LEVEL_DEBUG;
