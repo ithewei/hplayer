@@ -12,7 +12,6 @@
 
 tags
 cscope*
-.ycm*
 
 # output
 *.o
@@ -27,6 +26,7 @@ cscope*
 tmp
 *debug
 *release
+*.pdb
 Makefile*
 
 # msvc

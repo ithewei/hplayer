@@ -10,7 +10,7 @@ void GLWnd::drawFPS() {
     sprintf(szFPS, "FPS:%d", fps);
 
     QPoint pt(width()-100,40);
-    drawText(pt, szFPS, 16, Qt::blue);
+    drawText(pt, szFPS, 12, Qt::blue);
 }
 
 void GLWnd::paintGL() {

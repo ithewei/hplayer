@@ -247,13 +247,11 @@ try_software_decode:
     }
     hlogi("dw=%d dh=%d dst_pix_fmt=%d:%s", dw, dh, dst_pix_fmt, av_get_pix_fmt_name(dst_pix_fmt));
 
-    if (src_pix_fmt != dst_pix_fmt) {
-        sws_ctx = sws_getContext(sw, sh, src_pix_fmt, dw, dh, dst_pix_fmt, SWS_BICUBIC, NULL, NULL, NULL);
-        if (sws_ctx == NULL) {
-            hloge("sws_getContext");
-            ret = -50;
-            return ret;
-        }
+    sws_ctx = sws_getContext(sw, sh, src_pix_fmt, dw, dh, dst_pix_fmt, SWS_BICUBIC, NULL, NULL, NULL);
+    if (sws_ctx == NULL) {
+        hloge("sws_getContext");
+        ret = -50;
+        return ret;
     }
 
     packet = av_packet_alloc();
