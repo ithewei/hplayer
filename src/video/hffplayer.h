@@ -40,7 +40,10 @@ public:
     int     quit;
 
 private:
-    static std::atomic_flag s_init_flag;
+    static std::atomic_flag s_ffmpeg_init;
+
+    AVDictionary*       fmt_opts;
+    AVDictionary*       codec_opts;
 
     AVFormatContext*    fmt_ctx;
     AVCodecContext*     codec_ctx;
@@ -56,12 +59,12 @@ private:
     int video_time_base_den;
 
     // for scale
-    AVPixelFormat src_pix_fmt;
-    AVPixelFormat dst_pix_fmt;
-    SwsContext* sws_ctx;
-    uint8_t* data[4];
-    int linesize[4];
-    HFrame hframe;
+    AVPixelFormat   src_pix_fmt;
+    AVPixelFormat   dst_pix_fmt;
+    SwsContext*     sws_ctx;
+    uint8_t*        data[4];
+    int             linesize[4];
+    HFrame          hframe;
 };
 
 #endif // H_FFPLAYER_H

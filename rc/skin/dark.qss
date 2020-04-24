@@ -639,6 +639,19 @@ background:none;
 border-width:0px;
 }
 
+.HVideoWidget{
+background:#000000;
+border:1px solid #242424;
+}
+.HVideoWidget:hover{
+background:#000000;
+border:1px solid #FFFF00;
+}
+
+.HVideoTitlebar,.HVideoToolbar{
+background:#C0404040;
+}
+
 /*TextColor:#DCDCDC*/
 /*PanelColor:#444444*/
 /*BorderColor:#242424*/

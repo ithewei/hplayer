@@ -72,6 +72,7 @@ public:
     QLabel *labDrag;
 
     QPoint ptMousePress;
+    uint64_t tsMousePress;
     Action action;
     bool bStretch;
 };

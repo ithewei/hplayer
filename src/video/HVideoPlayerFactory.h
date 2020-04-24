@@ -9,7 +9,7 @@
 class HVideoPlayerFactory
 {
 public:
-    static HVideoPlayer* create(MEDIA_TYPE type) {
+    static HVideoPlayer* create(media_type_e type) {
         switch (type) {
         case MEDIA_TYPE_FILE:
         case MEDIA_TYPE_NETWORK:

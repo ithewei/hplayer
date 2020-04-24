@@ -4,7 +4,6 @@
 #include "qtstyles.h"
 
 #include "HOpenMediaDlg.h"
-#include "HVideoPlayerFactory.h"
 
 #define DEFAULT_RETRY_INTERVAL  10000  // ms
 #define DEFAULT_RETRY_MAXCNT    6
@@ -34,6 +33,21 @@ static int hplayer_event_callback(hplayer_event_e e, void* userdata) {
     return 0;
 }
 
+static renderer_type_e renderer_type_enum(const char* str) {
+    if (stricmp(str, "opengl") == 0) {
+        return RENDERER_TYPE_OPENGL;
+    }
+    else if (stricmp(str, "sdl") == 0 || stricmp(str, "sdl2") == 0) {
+        return RENDERER_TYPE_SDL2;
+    }
+    /*
+    else if (stricmp(str, "d3d") == 0) {
+        return RENDERER_TYPE_D3D;
+    }
+    */
+    return DEFAULT_RENDERER_TYPE;
+}
+
 HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
 {
     playerid = 0;
@@ -42,23 +56,31 @@ HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
     fps = g_confile->Get<int>("fps", "video");
     // aspect_ratio
     string str = g_confile->GetValue("aspect_ratio", "video");
-    if (str.empty()) {
-        eAspectRatio = SPREAD;
+    if (str.empty() || strcmp(str.c_str(), "100%") == 0) {
+        aspect_type = ASPECT_SPREAD;
     }
     else if (stricmp(str.c_str(), "w:h") == 0) {
-        eAspectRatio = ORIGINAL_RATIO;
+        aspect_type = ASPECT_ORIGINAL_RATIO;
     }
     else {
         int x = 0;
         int y = 0;
         sscanf(str.c_str(), "%d:%d", &x, &y);
         if (x && y) {
-            eAspectRatio = CUSTOM_RATIO;
+            aspect_type = ASPECT_CUSTOM_RATIO;
             aspect_ratio = (double)x / (double)y;
         }
         else {
-            eAspectRatio = SPREAD;
+            aspect_type = ASPECT_SPREAD;
         }
+    }
+    // renderer
+    str = g_confile->GetValue("renderer", "video");
+    if (str.empty()) {
+        renderer_type = RENDERER_TYPE_OPENGL;
+    }
+    else {
+        renderer_type = renderer_type_enum(str.c_str());
     }
     // retry
     retry_interval = g_confile->Get<int>("retry_interval", "video", DEFAULT_RETRY_INTERVAL);
@@ -76,10 +98,9 @@ HVideoWidget::~HVideoWidget() {
 }
 
 void HVideoWidget::initUI() {
-    setStyleSheet(VIDEO_WIDGET_QSS);
     setFocusPolicy(Qt::ClickFocus);
 
-    videoWnd = new HVideoWnd(this);
+    videownd = HVideoWndFactory::create(renderer_type, this);
     titlebar = new HVideoTitlebar(this);
     toolbar  = new HVideoToolbar(this);
     btnMedia = genPushButton(QPixmap(":/image/media_bk.png"), tr("Open media"));
@@ -134,7 +155,7 @@ void HVideoWidget::updateUI() {
 }
 
 void HVideoWidget::resizeEvent(QResizeEvent *e) {
-    setVideoArea();
+    videownd->setGeometry(rect() - QMargins(1,1,1,1));
 }
 
 void HVideoWidget::enterEvent(QEvent *e) {
@@ -235,8 +256,8 @@ void HVideoWidget::stop() {
         SAFE_DELETE(pImpl_player);
     }
 
-    videoWnd->last_frame.buf.cleanup();
-    videoWnd->update();
+    videownd->last_frame.buf.cleanup();
+    videownd->update();
     status = STOP;
 
     last_retry_time = 0;
@@ -303,7 +324,7 @@ void HVideoWidget::retry() {
 void HVideoWidget::onOpenSucceed() {
     timer->start(1000 / (fps ? fps : pImpl_player->fps));
     status = PLAY;
-    setAspectRatio(eAspectRatio, aspect_ratio);
+    setAspectRatio(aspect_type, aspect_ratio);
     if (pImpl_player->duration > 0) {
         toolbar->lblDuration->setText(strtime(pImpl_player->duration).c_str());
         toolbar->sldProgress->setRange(0, pImpl_player->duration/1000);
@@ -362,36 +383,36 @@ void HVideoWidget::onPlayerError() {
 void HVideoWidget::onTimerUpdate() {
     if (pImpl_player == NULL)   return;
 
-    if (pImpl_player->pop_frame(&videoWnd->last_frame) == 0) {
+    if (pImpl_player->pop_frame(&videownd->last_frame) == 0) {
         // update progress bar
         if (toolbar->sldProgress->isVisible()) {
-            int progress = (videoWnd->last_frame.ts - pImpl_player->start_time) / 1000;
+            int progress = (videownd->last_frame.ts - pImpl_player->start_time) / 1000;
             if (toolbar->sldProgress->value() != progress &&
                 !toolbar->sldProgress->isSliderDown()) {
                 toolbar->sldProgress->setValue(progress);
             }
         }
         // update video frame
-        videoWnd->update();
+        videownd->update();
     }
 }
 
-void HVideoWidget::setAspectRatio(AspectRatio e, double ratio) {
-    eAspectRatio = e;
-    switch(e) {
-    case SPREAD:
+void HVideoWidget::setAspectRatio(aspect_ratio_e type, double ratio) {
+    aspect_type = type;
+    switch(type) {
+    case ASPECT_SPREAD:
         aspect_ratio = 0.0;
         break;
-    case ORIGINAL_RATIO:
+    case ASPECT_ORIGINAL_RATIO:
         if (pImpl_player && pImpl_player->height > 0) {
             aspect_ratio = (double)pImpl_player->width / (double)pImpl_player->height;
         }
         break;
-    case CUSTOM_RATIO:
+    case ASPECT_CUSTOM_RATIO:
         aspect_ratio = ratio;
         break;
     }
-    if (videoWnd) {
-        videoWnd->setAspectRatio(aspect_ratio);
+    if (videownd) {
+        videownd->setAspectRatio(aspect_ratio);
     }
 }

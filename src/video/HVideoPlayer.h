@@ -49,6 +49,7 @@ public:
         height = 0;
         duration = 0;
         start_time = 0;
+        eof = 0;
         error = 0;
         event_cb = NULL;
     }
@@ -113,6 +114,7 @@ public:
     int32_t     height;
     int64_t     duration;   // ms
     int64_t     start_time; // ms
+    int         eof;
     int         error;
 protected:
     HFrameBuf   frame_buf;

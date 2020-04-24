@@ -1,4 +1,15 @@
 #include "HGLWidget.h"
+#include "avdef.h"
+
+static int glPixFmt(int type) {
+    switch (type) {
+    case PIX_FMT_BGR:  return GL_BGR;
+    case PIX_FMT_RGB:  return GL_RGB;
+    case PIX_FMT_BGRA: return GL_BGRA;
+    case PIX_FMT_RGBA: return GL_RGBA;
+    }
+    return -1;
+}
 
 void bindTexture(GLTexture* tex, QImage* img) {
     if (img->format() != QImage::Format_ARGB32)
@@ -19,7 +30,7 @@ void bindTexture(GLTexture* tex, QImage* img) {
     //glTexImage2D(GL_TEXTURE_2D, 0, tex->bpp/8, tex->width, tex->height, 0, tex->type, GL_UNSIGNED_BYTE, img->bits());
 }
 
-std::atomic_flag HGLWidget::s_init_flag = ATOMIC_FLAG_INIT;
+std::atomic_flag HGLWidget::s_glew_init = ATOMIC_FLAG_INIT;
 GLuint HGLWidget::prog_yuv;
 GLuint HGLWidget::texUniformY;
 GLuint HGLWidget::texUniformU;
@@ -196,9 +207,9 @@ void HGLWidget::initYUV() {
 }
 
 void HGLWidget::initializeGL() {
-    if (!s_init_flag.test_and_set()) {
+    if (!s_glew_init.test_and_set()) {
         if (glewInit() != 0) {
-            s_init_flag.clear();
+            s_glew_init.clear();
             qFatal("glewInit failed");
             return;
         }
@@ -221,7 +232,7 @@ void HGLWidget::paintGL() {
 }
 
 void HGLWidget::drawYUV(HFrame* pFrame) {
-    assert(pFrame->type == GL_I420 || pFrame->type == GL_YV12);
+    assert(pFrame->type == PIX_FMT_IYUV || pFrame->type == PIX_FMT_YV12);
 
     int w = pFrame->w;
     int h = pFrame->h;
@@ -229,7 +240,7 @@ void HGLWidget::drawYUV(HFrame* pFrame) {
     GLubyte* y = (GLubyte*)pFrame->buf.base;
     GLubyte* u = y + y_size;
     GLubyte* v = u + (y_size>>2);
-    if (pFrame->type == GL_YV12) {
+    if (pFrame->type == PIX_FMT_YV12) {
         GLubyte* tmp = u;
         u = v;
         v = tmp;
@@ -258,7 +269,7 @@ void HGLWidget::drawYUV(HFrame* pFrame) {
 }
 
 void HGLWidget::drawFrame(HFrame *pFrame) {
-    if (pFrame->type == GL_I420 || pFrame->type == GL_YV12) {
+    if (pFrame->type == PIX_FMT_IYUV || pFrame->type == PIX_FMT_YV12) {
         drawYUV(pFrame);
     }
     else {
@@ -266,7 +277,7 @@ void HGLWidget::drawFrame(HFrame *pFrame) {
         glLoadIdentity();
         glRasterPos3f(-1.0f,1.0f,0);
         glPixelZoom(width()/(float)pFrame->w, -height()/(float)pFrame->h);
-        glDrawPixels(pFrame->w, pFrame->h, pFrame->type, GL_UNSIGNED_BYTE, pFrame->buf.base);
+        glDrawPixels(pFrame->w, pFrame->h, glPixFmt(pFrame->type), GL_UNSIGNED_BYTE, pFrame->buf.base);
     }
 }
 

@@ -2,22 +2,13 @@
 #define H_MEDIA_H
 
 #include <string>
-
-enum MEDIA_TYPE {
-    MEDIA_TYPE_FILE = 0,
-    MEDIA_TYPE_NETWORK,
-    MEDIA_TYPE_CAPTURE,
-
-    MEDIA_TYPE_NONE
-};
-
-#define DEFAULT_MEDIA_TYPE  MEDIA_TYPE_CAPTURE
+#include "avdef.h"
 
 typedef struct media_s {
-    MEDIA_TYPE  type;
-    int         index; // for camera index
-    std::string src;
-    std::string descr;
+    media_type_e    type;
+    std::string     src;
+    std::string     descr;
+    int             index; // for camera index
 
     media_s() {
         type = MEDIA_TYPE_NONE;

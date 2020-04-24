@@ -154,6 +154,7 @@ void HMultiView::resizeEvent(QResizeEvent* e) {
 
 void HMultiView::mousePressEvent(QMouseEvent *e) {
     ptMousePress = e->pos();
+    tsMousePress = gettick();
 }
 
 void HMultiView::mouseReleaseEvent(QMouseEvent *e) {
@@ -186,13 +187,15 @@ void HMultiView::mouseMoveEvent(QMouseEvent *e) {
 
     if (e->buttons() == Qt::LeftButton) {
         if (!labDrag->isVisible()) {
+            if (gettick() - tsMousePress < 300) return;
             action = EXCHANGE;
             setCursor(Qt::OpenHandCursor);
-            labDrag->setPixmap(QPixmap::fromImage(player->snap().scaled(labDrag->size())));
+            labDrag->setPixmap(player->grab().scaled(labDrag->size()));
             labDrag->setVisible(true);
         }
-
-        labDrag->move(e->pos()-QPoint(labDrag->width()/2, labDrag->height()));
+        if (labDrag->isVisible()) {
+            labDrag->move(e->pos()-QPoint(labDrag->width()/2, labDrag->height()));
+        }
     }
     else if (e->buttons() == Qt::RightButton) {
         if (!labRect->isVisible()) {
@@ -200,7 +203,6 @@ void HMultiView::mouseMoveEvent(QMouseEvent *e) {
             setCursor(Qt::CrossCursor);
             labRect->setVisible(true);
         }
-
         labRect->setGeometry(adjustRect(ptMousePress, e->pos()));
     }
 }

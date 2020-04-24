@@ -14,8 +14,8 @@ palette = 0xFF132D48
 language = 
 fontsize = 12
 
-main_window_width = 800
-main_window_height = 600
+main_window_width = 1280
+main_window_height = 800
 mv_fullscreen = false
 fullscreen = false
 maximized = true
@@ -37,25 +37,31 @@ draw_fps = true
 frame_cache = 5
 # fps = 25
 
-# aspect_ratio = [0:0, w:h, x:y]
-# aspect_ratio = 0:0 # SPREAD
+# aspect_ratio = [0:0, w:h, x:y, w]
+# aspect_ratio = 100% # SPREAD
+# aspect_ratio = 50% # PERCENT
 # aspect_ratio = w:h # ORIGINAL_RATIO
 # aspect_ratio = 4:3 # CUSTOM_RATIO
+# aspect_ratio = wxh # ORIGINAL_SIZE
+# aspect_ratio = 800x600 # CUSTOM_SIZE
+
+# renderer = [opengl, sdl, ...]
+renderer = opengl
 
 # SOFTWARE_DECODE         = 1,
 # HARDWARE_DECODE_QSV     = 2,
 # HARDWARE_DECODE_CUVID   = 3,
 decode_mode = 3
 
-# pix_fmt = [YUV420P, BGR24]
-dst_pix_fmt = YUV420P
+# pix_fmt = [YUV, RGB]
+dst_pix_fmt = YUV
 
 # rtsp_transport = [tcp, udp]
 rtsp_transport = tcp
 
 # for network source retry
 retry_interval = 10000  # ms
-retry_maxcnt = -1       # -1 means INFINITE
+retry_maxcnt = -1 # -1 means INFINITE
 
 # for file source loop playback
 loop_playback = false

@@ -1,34 +1,28 @@
 #ifndef H_VIDEO_WND_H
 #define H_VIDEO_WND_H
 
-#include "qtheaders.h"
-#include "hframe.h"
+#include <qtheaders.h>
 
-#include "HGLWidget.h"
-
-class HVideoWnd : public HGLWidget
-{
-    Q_OBJECT
+class HVideoWnd {
 public:
-    explicit HVideoWnd(QWidget *parent = nullptr);
+    HVideoWnd(QWidget* parent = nullptr);
+    virtual ~HVideoWnd() {}
 
-signals:
+    virtual void setGeometry(const QRect& rc) = 0;
+    virtual void update() = 0;
+    virtual void setAspectRatio(double ratio) = 0;
 
 protected:
-    void calFps();
-    virtual void paintGL();
-    virtual void drawFPS();
-
-public slots:
+    void calcFPS();
 
 public:
-    HFrame last_frame;
-
+    HFrame      last_frame;
+    int         fps;
+    bool        draw_fps;
+protected:
     // for calFPS
-    uint64_t tick;
-    int framecnt;
-    int fps;
-    bool draw_fps;
+    uint64_t    tick;
+    int         framecnt;
 };
 
 #endif // H_VIDEO_WND_H

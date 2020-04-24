@@ -5,9 +5,10 @@
 #-------------------------------------------------
 
 # default CONFIG contains debug,release,debug_and_release
-CONFIG -= debug
+#CONFIG -= debug
 #CONFIG -= release
-CONFIG -= debug_and_release
+#CONFIG -= debug_and_release
+DEFINES -= UNICODE _UNICODE
 
 QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -91,6 +92,8 @@ HEADERS +=  \
     src/ui/HVideoWnd.h \
     src/ui/HOpenMediaDlg.h \
     src/ui/HMediaInfoDlg.h \
+    src/ui/HVideoWndFactory.h \
+    src/ui/GLWnd.h \
 
 SOURCES +=  \
     src/ui/htable.cpp \
@@ -103,6 +106,7 @@ SOURCES +=  \
     src/ui/HVideoWnd.cpp \
     src/ui/HOpenMediaDlg.cpp \
     src/ui/HMediaInfoDlg.cpp \
+    src/ui/GLWnd.cpp \
 
 # GL
 DEFINES += GLEW_STATIC
@@ -113,7 +117,6 @@ SOURCES += src/GL/glew.c
 # video
 INCLUDEPATH += src/video
 HEADERS +=  \
-    src/video/ffmpeg_util.h \
     src/video/hmedia.h \
     src/video/HVideoPlayer.h \
     src/video/HVideoPlayerFactory.h \
@@ -127,12 +130,18 @@ INCLUDEPATH += src/win32
 HEADERS += src/win32/hdevice.h
 SOURCES += src/win32/hdevice.cpp
 
-# global
-HEADERS += \
-    src/appdef.h
+# util
+INCLUDEPATH += src/util
+HEADERS += src/util/ffmpeg_util.h src/util/sdl_util.h
 
-SOURCES += \
-    src/main.cpp
+# SDL
+HEADERS += src/ui/SDL2Wnd.h
+SOURCES += src/ui/SDL2Wnd.cpp
+LIBS += -lSDL2
+
+# global
+HEADERS += src/appdef.h src/confile.h src/avdef.h
+SOURCES += src/main.cpp
 
 win32 {
     DEFINES += WIN32_LEAN_AND_MEAN

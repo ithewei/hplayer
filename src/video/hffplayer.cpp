@@ -5,11 +5,10 @@
 #include "hstring.h"
 #include "hscope.h"
 #include "htime.h"
-#include "hgl.h"
 
 #define DEFAULT_BLOCK_TIMEOUT   10  // s
 
-std::atomic_flag HFFPlayer::s_init_flag = ATOMIC_FLAG_INIT;
+std::atomic_flag HFFPlayer::s_ffmpeg_init = ATOMIC_FLAG_INIT;
 
 static void list_devices() {
     AVFormatContext* fmt_ctx = avformat_alloc_context();
@@ -46,6 +45,8 @@ static int interrupt_callback(void* opaque) {
 HFFPlayer::HFFPlayer()
 : HVideoPlayer()
 , HThread() {
+    fmt_opts = NULL;
+    codec_opts = NULL;
     fmt_ctx = NULL;
     codec_ctx = NULL;
     packet = NULL;
@@ -56,20 +57,10 @@ HFFPlayer::HFFPlayer()
     block_timeout = DEFAULT_BLOCK_TIMEOUT;
     quit = 0;
 
-    dst_pix_fmt = AV_PIX_FMT_YUV420P;
-    std::string str = g_confile->GetValue("dst_pix_fmt", "video");
-    if (!str.empty()) {
-        if (strcmp(str.c_str(), "YUV420P") == 0) {
-            dst_pix_fmt = AV_PIX_FMT_YUV420P;
-        }
-        else if (strcmp(str.c_str(), "BGR24") == 0) {
-            dst_pix_fmt = AV_PIX_FMT_BGR24;
-        }
-    }
-
-    if (!s_init_flag.test_and_set()) {
-        av_register_all();
-        avcodec_register_all();
+    if (!s_ffmpeg_init.test_and_set()) {
+        // av_register_all();
+        // avcodec_register_all();
+        avformat_network_init();
         avdevice_register_all();
         list_devices();
     }
@@ -120,22 +111,21 @@ int HFFPlayer::open() {
     }
     defer (if (ret != 0 && fmt_ctx) {avformat_free_context(fmt_ctx); fmt_ctx = NULL;})
 
-    AVDictionary* opts = NULL;
     if (media.type == MEDIA_TYPE_NETWORK) {
         if (strncmp(media.src.c_str(), "rtsp:", 5) == 0) {
             std::string str = g_confile->GetValue("rtsp_transport", "video");
             if (strcmp(str.c_str(), "tcp") == 0 ||
                 strcmp(str.c_str(), "udp") == 0) {
-                av_dict_set(&opts, "rtsp_transport", str.c_str(), 0);
+                av_dict_set(&fmt_opts, "rtsp_transport", str.c_str(), 0);
             }
         }
-        av_dict_set(&opts, "stimeout", "5000000", 0);   // us
+        av_dict_set(&fmt_opts, "stimeout", "5000000", 0);   // us
     }
-    av_dict_set(&opts, "buffer_size", "2048000", 0);
+    av_dict_set(&fmt_opts, "buffer_size", "2048000", 0);
     fmt_ctx->interrupt_callback.callback = interrupt_callback;
     fmt_ctx->interrupt_callback.opaque = this;
     block_starttime = time(NULL);
-    ret = avformat_open_input(&fmt_ctx, ifile.c_str(), ifmt, &opts);
+    ret = avformat_open_input(&fmt_ctx, ifile.c_str(), ifmt, &fmt_opts);
     if (ret != 0) {
         hloge("Open input file[%s] failed: %d", ifile.c_str(), ret);
         return ret;
@@ -218,7 +208,10 @@ try_software_decode:
         return ret;
     }
 
-    ret = avcodec_open2(codec_ctx, codec, NULL);
+    if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO || codec_ctx->codec_type == AVMEDIA_TYPE_AUDIO) {
+        av_dict_set(&codec_opts, "refcounted_frames", "1", 0);
+    }
+    ret = avcodec_open2(codec_ctx, codec, &codec_opts);
     if (ret != 0) {
         if (real_decode_mode != SOFTWARE_DECODE) {
             hlogi("Can not open hardwrae codec error: %d, try software codec.", ret);
@@ -227,29 +220,40 @@ try_software_decode:
         hloge("Can not open software codec error: %d", ret);
         return ret;
     }
+    video_stream->discard = AVDISCARD_DEFAULT;
 
     int sw, sh, dw, dh;
     sw = codec_ctx->width;
     sh = codec_ctx->height;
     src_pix_fmt = codec_ctx->pix_fmt;
-
-    dw = sw >> 2 << 2; // align = 4
-    dh = sh;
-
-    hlogi("sw=%d sh=%d dw=%d dh=%d", sw, sh, dw, dh);
-    hlogi("src_pix_fmt=%d:%s dst_pix_fmt=%d:%s", src_pix_fmt, av_get_pix_fmt_name(src_pix_fmt),
-        dst_pix_fmt, av_get_pix_fmt_name(dst_pix_fmt));
+    hlogi("sw=%d sh=%d src_pix_fmt=%d:%s", sw, sh, src_pix_fmt, av_get_pix_fmt_name(src_pix_fmt));
     if (sw <= 0 || sh <= 0 || src_pix_fmt == AV_PIX_FMT_NONE) {
         hloge("Codec parameters wrong!");
         ret = -45;
         return ret;
     }
 
-    sws_ctx = sws_getContext(sw, sh, src_pix_fmt, dw, dh, dst_pix_fmt, SWS_BICUBIC, NULL, NULL, NULL);
-    if (sws_ctx == NULL) {
-        hloge("sws_getContext=NULL");
-        ret = -50;
-        return ret;
+    dw = sw >> 2 << 2; // align = 4
+    dh = sh;
+    dst_pix_fmt = AV_PIX_FMT_YUV420P;
+    std::string str = g_confile->GetValue("dst_pix_fmt", "video");
+    if (!str.empty()) {
+        if (strcmp(str.c_str(), "YUV") == 0) {
+            dst_pix_fmt = AV_PIX_FMT_YUV420P;
+        }
+        else if (strcmp(str.c_str(), "RGB") == 0) {
+            dst_pix_fmt = AV_PIX_FMT_BGR24;
+        }
+    }
+    hlogi("dw=%d dh=%d dst_pix_fmt=%d:%s", dw, dh, dst_pix_fmt, av_get_pix_fmt_name(dst_pix_fmt));
+
+    if (src_pix_fmt != dst_pix_fmt) {
+        sws_ctx = sws_getContext(sw, sh, src_pix_fmt, dw, dh, dst_pix_fmt, SWS_BICUBIC, NULL, NULL, NULL);
+        if (sws_ctx == NULL) {
+            hloge("sws_getContext");
+            ret = -50;
+            return ret;
+        }
     }
 
     packet = av_packet_alloc();
@@ -261,7 +265,7 @@ try_software_decode:
     hframe.buf.resize(dw * dh * 4);
 
     if (dst_pix_fmt == AV_PIX_FMT_YUV420P) {
-        hframe.type = GL_I420;
+        hframe.type = PIX_FMT_IYUV;
         hframe.bpp = 12;
         int y_size = dw * dh;
         hframe.buf.len = y_size * 3 / 2;
@@ -273,7 +277,7 @@ try_software_decode:
     }
     else {
         dst_pix_fmt = AV_PIX_FMT_BGR24;
-        hframe.type = GL_BGR;
+        hframe.type = PIX_FMT_BGR;
         hframe.bpp = 24;
         hframe.buf.len = dw * dh * 3;
         data[0] = (uint8_t*)hframe.buf.base;
@@ -288,6 +292,7 @@ try_software_decode:
     height = sh;
     duration = 0;
     start_time = 0;
+    eof = 0;
     error = 0;
     if (video_time_base_num && video_time_base_den) {
         if (video_stream->duration > 0) {
@@ -304,6 +309,16 @@ try_software_decode:
 }
 
 int HFFPlayer::close() {
+    if (fmt_opts) {
+        av_dict_free(&fmt_opts);
+        fmt_opts = NULL;
+    }
+
+    if (codec_opts) {
+        av_dict_free(&codec_opts);
+        codec_opts = NULL;
+    }
+
     if (codec_ctx) {
         avcodec_close(codec_ctx);
         avcodec_free_context(&codec_ctx);
@@ -383,7 +398,8 @@ void HFFPlayer::doTask() {
         if (ret != 0) {
             hlogi("No frame: %d", ret);
             if (!quit) {
-                if (ret == AVERROR_EOF) {
+                if (ret == AVERROR_EOF || avio_feof(fmt_ctx->pb)) {
+                    eof = 1;
                     event_callback(HPLAYER_EOF);
                 }
                 else {
@@ -434,11 +450,13 @@ void HFFPlayer::doTask() {
 #endif
     }
 
-    // hlogi("sws_scale w=%d h=%d data=%p", frame->width, frame->height, frame->data);
-    int h = sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, data, linesize);
-    // hlogi("sws_scale h=%d", h);
-    if (h <= 0 || h != frame->height) {
-        return;
+    if (sws_ctx) {
+        // hlogi("sws_scale w=%d h=%d data=%p", frame->width, frame->height, frame->data);
+        int h = sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, data, linesize);
+        // hlogi("sws_scale h=%d", h);
+        if (h <= 0 || h != frame->height) {
+            return;
+        }
     }
 
     if (video_time_base_num && video_time_base_den) {

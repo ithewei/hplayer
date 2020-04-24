@@ -2,11 +2,12 @@
 #define H_VIDEO_WIDGET_H
 
 #include "qtheaders.h"
+#include "avdef.h"
 
-#include "HVideoWnd.h"
+#include "HVideoWndFactory.h"
 #include "HVideoTitlebar.h"
 #include "HVideoToolbar.h"
-#include "HVideoPlayer.h"
+#include "HVideoPlayerFactory.h"
 
 class HVideoWidget : public QFrame
 {
@@ -18,17 +19,8 @@ public:
         PLAY,
     };
 
-    enum AspectRatio {
-        SPREAD,
-        ORIGINAL_RATIO,
-        CUSTOM_RATIO
-    };
-
     explicit HVideoWidget(QWidget *parent = nullptr);
     ~HVideoWidget();
-
-    void setVideoArea() {videoWnd->setGeometry(rect() - QMargins(1,1,1,1));}
-    QImage snap() {return videoWnd->grabFramebuffer();}
 
 signals:
 
@@ -49,7 +41,7 @@ public slots:
     void onPlayerEOF();
     void onPlayerError();
 
-    void setAspectRatio(AspectRatio e, double ratio = 0.0);
+    void setAspectRatio(aspect_ratio_e type, double ratio = 0.0);
 
 protected:
     void initUI();
@@ -65,29 +57,29 @@ protected:
     virtual void customEvent(QEvent* e);
 
 public:
-    int playerid;
-    int status;
+    int     playerid;
+    int     status;
     QString title;
-    int fps;
-    AspectRatio eAspectRatio;
-    double  aspect_ratio;
+    int     fps;
+    aspect_ratio_e  aspect_type;
+    double          aspect_ratio;
+    renderer_type_e renderer_type;
+
+    HVideoWnd       *videownd;
+    HVideoTitlebar  *titlebar;
+    HVideoToolbar   *toolbar;
+    QPushButton     *btnMedia;
 private:
-    QPoint ptMousePress;
+    QPoint          ptMousePress;
+    QTimer*         timer;
 
-    HVideoWnd *videoWnd;
-    HVideoTitlebar *titlebar;
-    HVideoToolbar *toolbar;
-    QPushButton *btnMedia;
-
-    QTimer *timer;
-
-    HMedia        media;
-    HVideoPlayer* pImpl_player;
+    HMedia          media;
+    HVideoPlayer*   pImpl_player;
     // for retry when SIGNAL_END_OF_FILE
-    int           retry_interval;
-    int           retry_maxcnt;
-    int64_t       last_retry_time;
-    int           retry_cnt;
+    int             retry_interval;
+    int             retry_maxcnt;
+    int64_t         last_retry_time;
+    int             retry_cnt;
 };
 
 #endif // H_VIDEO_WIDGET_H

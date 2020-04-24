@@ -8,7 +8,6 @@ HVideoToolbar::HVideoToolbar(QWidget *parent) : QFrame(parent)
 }
 
 void HVideoToolbar::initUI() {
-    setStyleSheet(VIDEO_TOOLBAR_QSS);
     setFixedHeight(VIDEO_TOOLBAR_HEIGHT);
 
     QSize sz(VIDEO_TOOLBAR_ICON_WIDTH, VIDEO_TOOLBAR_ICON_HEIGHT);
