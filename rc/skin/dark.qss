@@ -557,6 +557,11 @@ padding:3px;
 background:none;
 }
 
+QMessageBox{
+color:#DCDCDC;
+background-color:#484848;
+}
+
 QColorDialog QPushButton,QFileDialog QPushButton, QInputDialog QPushButton,
 QFontDialog QPushButton, QProgressDialog QPushButton, QMessageBox QPushButton,
 QDialogButtonBox QPushButton{
