@@ -16,9 +16,8 @@ fontsize = 12
 
 main_window_width = 1280
 main_window_height = 800
-mv_fullscreen = false
-fullscreen = false
-maximized = true
+# [NORMAL=0, MINIMIZED=1, MAXMIZED=2, FULLSCREEN=3]
+main_window_state = 2
 # rect(x,y,w,h)
 main_window_rect = rect(0,0,0,0)
 
@@ -30,6 +29,7 @@ rside_visible = false
 
 mv_row = 3
 mv_col = 3
+mv_fullscreen = false
 
 draw_fps = true
 
@@ -37,8 +37,8 @@ draw_fps = true
 frame_cache = 5
 # fps = 25
 
-# aspect_ratio = [0:0, w:h, x:y, w]
-# aspect_ratio = 100% # SPREAD
+# aspect_ratio = [x%, w:h, x:y, wxh]
+# aspect_ratio = 100% # FULL
 # aspect_ratio = 50% # PERCENT
 # aspect_ratio = w:h # ORIGINAL_RATIO
 # aspect_ratio = 4:3 # CUSTOM_RATIO

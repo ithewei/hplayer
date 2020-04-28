@@ -82,13 +82,18 @@ typedef enum {
 } avstream_type_e;
 
 typedef enum {
-    ASPECT_SPREAD,          // 100%
-    ASPECT_PECENT,          // 50%
+    ASPECT_FULL,            // 100%
+    ASPECT_PERCENT,         // 50%
     ASPECT_ORIGINAL_RATIO,  // w:h
     ASPECT_ORIGINAL_SIZE,   // wxh
     ASPECT_CUSTOM_RATIO,    // 4:3 16:9 ...
     ASPECT_CUSTOM_SIZE,     // 1280x720 640*480 ...
 } aspect_ratio_e;
-#define DEFAULT_ASPECT_RATIO    ASPECT_SPREAD
+#define DEFAULT_ASPECT_RATIO    ASPECT_FULL
+
+typedef struct aspect_ratio_s {
+    aspect_ratio_e type;
+    int w, h;
+} aspect_ratio_t;
 
 #endif // AV_DEF_H

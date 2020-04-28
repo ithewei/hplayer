@@ -10,7 +10,6 @@ public:
 
     virtual void setGeometry(const QRect& rc) = 0;
     virtual void update() = 0;
-    virtual void setAspectRatio(double ratio) = 0;
 
 protected:
     void calcFPS();

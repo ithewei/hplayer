@@ -56,24 +56,70 @@ HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
     fps = g_confile->Get<int>("fps", "video");
     // aspect_ratio
     string str = g_confile->GetValue("aspect_ratio", "video");
-    if (str.empty() || strcmp(str.c_str(), "100%") == 0) {
-        aspect_type = ASPECT_SPREAD;
+    const char* c_str = str.c_str();
+    aspect_ratio.type = ASPECT_FULL;
+    if (str.empty() || strcmp(c_str, "100%") == 0) {
+        aspect_ratio.type = ASPECT_FULL;
     }
-    else if (stricmp(str.c_str(), "w:h") == 0) {
-        aspect_type = ASPECT_ORIGINAL_RATIO;
+    else if (stricmp(c_str, "w:h") == 0) {
+        aspect_ratio.type = ASPECT_ORIGINAL_RATIO;
+    }
+    else if (stricmp(c_str, "wxh") == 0 || stricmp(c_str, "w*h") == 0) {
+        aspect_ratio.type = ASPECT_ORIGINAL_SIZE;
+    }
+    else if (strchr(c_str, '%')) {
+        int percent = 0;
+        sscanf(c_str, "%d%%", &percent);
+        if (percent) {
+            aspect_ratio.type = ASPECT_PERCENT;
+            aspect_ratio.w = percent;
+            aspect_ratio.h = percent;
+        }
+    }
+    else if (strchr(c_str, ':')) {
+        int w = 0;
+        int h = 0;
+        sscanf(c_str, "%d:%d", &w, &h);
+        if (w && h) {
+            aspect_ratio.type = ASPECT_CUSTOM_RATIO;
+            aspect_ratio.w = w;
+            aspect_ratio.h = h;
+        }
+    }
+    else if (strchr(c_str, 'x')) {
+        int w = 0;
+        int h = 0;
+        sscanf(c_str, "%dx%d", &w, &h);
+        if (w && h) {
+            aspect_ratio.type = ASPECT_CUSTOM_SIZE;
+            aspect_ratio.w = w;
+            aspect_ratio.h = h;
+        }
+    }
+    else if (strchr(c_str, 'X')) {
+        int w = 0;
+        int h = 0;
+        sscanf(c_str, "%dX%d", &w, &h);
+        if (w && h) {
+            aspect_ratio.type = ASPECT_CUSTOM_SIZE;
+            aspect_ratio.w = w;
+            aspect_ratio.h = h;
+        }
+    }
+    else if (strchr(c_str, '*')) {
+        int w = 0;
+        int h = 0;
+        sscanf(c_str, "%d*%d", &w, &h);
+        if (w && h) {
+            aspect_ratio.type = ASPECT_CUSTOM_SIZE;
+            aspect_ratio.w = w;
+            aspect_ratio.h = h;
+        }
     }
     else {
-        int x = 0;
-        int y = 0;
-        sscanf(str.c_str(), "%d:%d", &x, &y);
-        if (x && y) {
-            aspect_type = ASPECT_CUSTOM_RATIO;
-            aspect_ratio = (double)x / (double)y;
-        }
-        else {
-            aspect_type = ASPECT_SPREAD;
-        }
+        aspect_ratio.type = ASPECT_FULL;
     }
+    hlogi("aspect_ratio type=%d w=%d h=%d", aspect_ratio.type, aspect_ratio.w, aspect_ratio.h);
     // renderer
     str = g_confile->GetValue("renderer", "video");
     if (str.empty()) {
@@ -155,7 +201,7 @@ void HVideoWidget::updateUI() {
 }
 
 void HVideoWidget::resizeEvent(QResizeEvent *e) {
-    videownd->setGeometry(rect() - QMargins(1,1,1,1));
+    setAspectRatio(aspect_ratio);
 }
 
 void HVideoWidget::enterEvent(QEvent *e) {
@@ -324,7 +370,7 @@ void HVideoWidget::retry() {
 void HVideoWidget::onOpenSucceed() {
     timer->start(1000 / (fps ? fps : pImpl_player->fps));
     status = PLAY;
-    setAspectRatio(aspect_type, aspect_ratio);
+    setAspectRatio(aspect_ratio);
     if (pImpl_player->duration > 0) {
         toolbar->lblDuration->setText(strtime(pImpl_player->duration).c_str());
         toolbar->sldProgress->setRange(0, pImpl_player->duration/1000);
@@ -397,22 +443,68 @@ void HVideoWidget::onTimerUpdate() {
     }
 }
 
-void HVideoWidget::setAspectRatio(aspect_ratio_e type, double ratio) {
-    aspect_type = type;
-    switch(type) {
-    case ASPECT_SPREAD:
-        aspect_ratio = 0.0;
+void HVideoWidget::setAspectRatio(aspect_ratio_t ar) {
+    aspect_ratio = ar;
+    int border = 1;
+    int scr_w = width() - border * 2;
+    int scr_h = height() - border * 2;
+    if (scr_w <= 0 || scr_h <= 0) return;
+    int pic_w = 0;
+    int pic_h = 0;
+    if (pImpl_player && status != STOP) {
+        pic_w = pImpl_player->width;
+        pic_h = pImpl_player->height;
+    }
+    if (pic_w == 0) pic_w = scr_w;
+    if (pic_h == 0) pic_h = scr_h;
+    // calc videownd rect
+    int dst_w, dst_h;
+    switch (ar.type) {
+    case ASPECT_FULL:
+        dst_w = scr_w;
+        dst_h = scr_h;
+        break;
+    case ASPECT_PERCENT:
+        dst_w = pic_w * ar.w / 100;
+        dst_h = pic_h * ar.h / 100;
+        break;
+    case ASPECT_ORIGINAL_SIZE:
+        dst_w = pic_w;
+        dst_h = pic_h;
+        break;
+    case ASPECT_CUSTOM_SIZE:
+        dst_w = ar.w;
+        dst_h = ar.h;
         break;
     case ASPECT_ORIGINAL_RATIO:
-        if (pImpl_player && pImpl_player->height > 0) {
-            aspect_ratio = (double)pImpl_player->width / (double)pImpl_player->height;
-        }
-        break;
     case ASPECT_CUSTOM_RATIO:
-        aspect_ratio = ratio;
+    {
+        double scr_ratio = (double)scr_w / (double)scr_h;
+        double dst_ratio = 1.0;
+        if (ar.type == ASPECT_CUSTOM_RATIO) {
+            dst_ratio = (double)ar.w / (double)ar.h;
+        }
+        else {
+            dst_ratio = (double)pic_w / (double)pic_h;
+        }
+        if (dst_ratio > scr_ratio) {
+            dst_w = scr_w;
+            dst_h = scr_w / dst_ratio;
+        }
+        else {
+            dst_h = scr_h;
+            dst_w = scr_h * dst_ratio;
+        }
+    }
         break;
     }
-    if (videownd) {
-        videownd->setAspectRatio(aspect_ratio);
-    }
+    dst_w = MIN(dst_w, scr_w);
+    dst_h = MIN(dst_h, scr_h);
+    // align 4
+    dst_w = dst_w >> 2 << 2;
+    dst_h = dst_h >> 2 << 2;
+
+    int x = border + (scr_w - dst_w) / 2;
+    int y = border + (scr_h - dst_h) / 2;
+    videownd->setGeometry(QRect(x, y, dst_w, dst_h));
 }

@@ -2,7 +2,6 @@
 
 #include "confile.h"
 #include "qtstyles.h"
-#include "MainWindow.h"
 
 HMultiView::HMultiView(QWidget *parent) : QWidget(parent)
 {
@@ -110,7 +109,7 @@ HVideoWidget* HMultiView::getIdlePlayer() {
     return NULL;
 }
 
-#define CELL_BORDER     1
+#define SEPARATOR_LINE_WIDTH 1
 void HMultiView::updateUI() {
     int row = table.row;
     int col = table.col;
@@ -134,7 +133,7 @@ void HMultiView::updateUI() {
             if (table.getTableCell(id, cell)) {
                 QWidget *wdg = getPlayerByID(id);
                 if (wdg) {
-                    wdg->setGeometry(x, y, cell_w*cell.colspan() - CELL_BORDER, cell_h*cell.rowspan()- CELL_BORDER);
+                    wdg->setGeometry(x, y, cell_w*cell.colspan() - SEPARATOR_LINE_WIDTH, cell_h*cell.rowspan() - SEPARATOR_LINE_WIDTH);
                     wdg->show();
                     ++cnt;
                 }
@@ -203,7 +202,9 @@ void HMultiView::mouseMoveEvent(QMouseEvent *e) {
             setCursor(Qt::CrossCursor);
             labRect->setVisible(true);
         }
-        labRect->setGeometry(adjustRect(ptMousePress, e->pos()));
+        if (labRect->isVisible()) {
+            labRect->setGeometry(adjustRect(ptMousePress, e->pos()));
+        }
     }
 }
 

@@ -41,7 +41,7 @@ public slots:
     void onPlayerEOF();
     void onPlayerError();
 
-    void setAspectRatio(aspect_ratio_e type, double ratio = 0.0);
+    void setAspectRatio(aspect_ratio_t aspect_ratio);
 
 protected:
     void initUI();
@@ -61,8 +61,7 @@ public:
     int     status;
     QString title;
     int     fps;
-    aspect_ratio_e  aspect_type;
-    double          aspect_ratio;
+    aspect_ratio_t  aspect_ratio;
     renderer_type_e renderer_type;
 
     HVideoWnd       *videownd;

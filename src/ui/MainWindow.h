@@ -16,12 +16,12 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    enum STATUS {
-        NORMAL,
+    enum window_state_e {
+        NORMAL = 0,
+        MINIMIZED,
         MAXIMIZED,
         FULLSCREEN,
-        MV_FULLSCREEN,
-    } status;
+    } window_state;
 
 protected:
     void initUI();
@@ -30,6 +30,7 @@ protected:
     void initMenu();
 
     virtual void keyPressEvent(QKeyEvent* e);
+    virtual void changeEvent(QEvent* e);
 
 signals:
 

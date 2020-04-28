@@ -144,26 +144,16 @@ int main(int argc, char *argv[]) {
     // rcloader->loadIcon();
 
     MainWindow::instance();
-
-    if (g_confile->Get<bool>("mv_fullscreen", "ui")) {
-        g_mainwnd->status = MainWindow::MV_FULLSCREEN;
-    }
-    else if (g_confile->Get<bool>("fullscreen", "ui")) {
-        g_mainwnd->status = MainWindow::FULLSCREEN;
-    }
-    else if (g_confile->Get<bool>("maximized", "ui")) {
-        g_mainwnd->status = MainWindow::MAXIMIZED;
-    }
-
-    switch (g_mainwnd->status) {
-    case MainWindow::MV_FULLSCREEN:
-        g_mainwnd->mv_fullscreen();
-        break;
+    g_mainwnd->window_state = (MainWindow::window_state_e)(g_confile->Get<int>("main_window_state", "ui"));
+    switch (g_mainwnd->window_state) {
     case MainWindow::FULLSCREEN:
         g_mainwnd->showFullScreen();
         break;
     case MainWindow::MAXIMIZED:
         g_mainwnd->showMaximized();
+        break;
+    case MainWindow::MINIMIZED:
+        g_mainwnd->showMinimized();
         break;
     default:
         str = g_confile->GetValue("main_window_rect", "ui");
@@ -178,11 +168,13 @@ int main(int argc, char *argv[]) {
         g_mainwnd->show();
         break;
     }
+    if (g_confile->Get<bool>("mv_fullscreen", "ui")) {
+        g_mainwnd->mv_fullscreen();
+    }
 
     int exitcode = app.exec();
 
-    g_confile->Set<bool>("fullscreen", g_mainwnd->isFullScreen(), "ui");
-    g_confile->Set<bool>("maximized", g_mainwnd->isMaximized(), "ui");
+    g_confile->Set<int>("main_window_state", (int)g_mainwnd->window_state, "ui");
     str = asprintf("rect(%d,%d,%d,%d)",
                     g_mainwnd->x(),
                     g_mainwnd->y(),

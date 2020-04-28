@@ -178,24 +178,24 @@ win32 {
             -lsecur32     \
 
     win32-msvc {
-        if (contains(QMAKE_HOST.arch, x86_64)) {
-            LIBS += -L$$PWD/3rd/lib/msvc2015_x64
-            DESTDIR = $$PWD/bin/msvc2015_x64
+        if (contains(DEFINES, WIN64)) {
+            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/msvc2015_x64
+            DESTDIR = $$_PRO_FILE_PWD_/bin/msvc2015_x64
         } else {
-            LIBS += -L$$PWD/3rd/lib/msvc2015_x86
-            DESTDIR = $$PWD/bin/msvc2015_x86
+            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/msvc2015_x86
+            DESTDIR = $$_PRO_FILE_PWD_/bin/msvc2015_x86
         }
     }
 
     win32-g++ {
         QMAKE_CFLAGS += -std=c99
         QMAKE_CXXFLAGS += -std=c++11
-        if (contains(QMAKE_HOST.arch, x86_64)) {
-            LIBS += -L$$PWD/3rd/lib/mingw64
-            DESTDIR = $$PWD/bin/mingw64
+        if (contains(DEFINES, WIN64)) {
+            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/mingw64
+            DESTDIR = $$_PRO_FILE_PWD_/bin/mingw64
         } else {
-            LIBS += -L$$PWD/3rd/lib/mingw32
-            DESTDIR = $$PWD/bin/mingw32
+            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/mingw32
+            DESTDIR = $$_PRO_FILE_PWD_/bin/mingw32
         }
 
         # for ffmpeg staticlib
@@ -229,8 +229,8 @@ unix {
     linux-g++ {
         QMAKE_CFLAGS += -std=c99
         QMAKE_CXXFLAGS += -std=c++11
-        LIBS += -L$$PWD/3rd/lib/linux
-        DESTDIR = $$PWD/bin/linux
+        LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/linux
+        DESTDIR = $$_PRO_FILE_PWD_/bin/linux
     }
 }
 

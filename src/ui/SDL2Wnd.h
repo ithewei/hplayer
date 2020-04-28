@@ -15,12 +15,9 @@ public:
 
     virtual void update();
 
-    virtual void setAspectRatio(double ratio) {
-    }
-
 protected:
-    // virtual void paintEvent(QPaintEvent* e);
-
+    virtual void paintEvent(QPaintEvent* e);
+    virtual void resizeEvent(QResizeEvent* e);
 
     static std::atomic_flag s_sdl_init;
     SDL_Window*             sdlWindow;

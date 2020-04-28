@@ -9,7 +9,6 @@ SINGLETON_IMPL(MainWindow)
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    status = NORMAL;
     initUI();
     initConnect();
 }
@@ -177,13 +176,11 @@ void MainWindow::fullscreen() {
         menuBar()->setVisible(true);
         showNormal();
         setGeometry(rcOld);
-        status = NORMAL;
     }
     else {
         rcOld = geometry();
         menuBar()->setVisible(false);
         showFullScreen();
-        status = FULLSCREEN;
     }
     actFullscreen->setChecked(isFullScreen());
     actMenubar->setChecked(menuBar()->isVisible());
@@ -191,27 +188,27 @@ void MainWindow::fullscreen() {
 
 void MainWindow::mv_fullscreen() {
     HMultiView* mv = center->mv;
+    bool is_mv_fullscreen = false;
     if (mv->windowType() & Qt::Window) {
         mv->setWindowFlags(Qt::SubWindow);
         this->show();
-        status = NORMAL;
     }
     else {
         mv->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
         this->hide();
         mv->showFullScreen();
         mv->raise();
-        status = MV_FULLSCREEN;
+        is_mv_fullscreen = true;
     }
     this->grabKeyboard();
-
-    actMvFullscreen->setChecked(status == MV_FULLSCREEN);
+    actMvFullscreen->setChecked(is_mv_fullscreen);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* e) {
-    if (status == MV_FULLSCREEN) {
-        if (e->key() == Qt::Key_F12 || e->key() == Qt::Key_Escape)
+    if (center->mv->windowType() & Qt::Window) {
+        if (e->key() == Qt::Key_F12 || e->key() == Qt::Key_Escape) {
             mv_fullscreen();
+        }
     }
     else {
         switch(e->key()) {
@@ -229,6 +226,28 @@ void MainWindow::keyPressEvent(QKeyEvent* e) {
         default:
             return QMainWindow::keyPressEvent(e);
         }
+    }
+}
+
+void MainWindow::changeEvent(QEvent* e) {
+    QMainWindow::changeEvent(e);
+    if (e->type() == QEvent::ActivationChange) {
+        update();
+    }
+    else if (e->type() == QEvent::WindowStateChange) {
+        if (isFullScreen()) {
+            window_state = FULLSCREEN;
+        }
+        else if (isMaximized()) {
+            window_state = MAXIMIZED;
+        }
+        else if (isMinimized()) {
+            window_state = MINIMIZED;
+        }
+        else {
+            window_state = NORMAL;
+        }
+        qInfo("window_state=%d", (int)window_state);
     }
 }
 

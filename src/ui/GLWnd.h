@@ -16,10 +16,6 @@ public:
         HGLWidget::update();
     }
 
-    virtual void setAspectRatio(double ratio) {
-        HGLWidget::setAspectRatio(ratio);
-    }
-
 protected:
     virtual void drawFPS();
     virtual void paintGL();
