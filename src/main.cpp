@@ -1,6 +1,6 @@
 #include "qtheaders.h"
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "qtstyles.h"
 #include "appdef.h"
 #include "confile.h"
