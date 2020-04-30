@@ -51,8 +51,6 @@ HEADERS += \
     src/hv/base/hmutex.h \
     src/hv/base/hthread.h \
     src/hv/utils/singleton.h \
-    src/hv/utils/hgl.h \
-    src/hv/utils/hframe.h \
     src/hv/utils/iniparser.h \
 
 SOURCES += \
@@ -62,7 +60,6 @@ SOURCES += \
     src/hv/base/htime.c \
     src/hv/base/hlog.c \
     src/hv/base/hstring.cpp \
-    src/hv/utils/hframe.cpp \
     src/hv/utils/iniparser.cpp \
 
 # qt
@@ -132,7 +129,13 @@ SOURCES += src/win32/hdevice.cpp
 
 # util
 INCLUDEPATH += src/util
-HEADERS += src/util/ffmpeg_util.h src/util/sdl_util.h
+HEADERS += \
+    src/util/ffmpeg_util.h \
+    src/util/sdl_util.h \
+    src/util/hgl.h \
+    src/util/hframe.h \
+
+SOURCES += src/util/hframe.cpp
 
 # SDL
 HEADERS += src/ui/SDL2Wnd.h

@@ -34,13 +34,7 @@
     <IntermediateDirectory>tmp\obj\</IntermediateDirectory>
     <PrimaryOutput>hplayer</PrimaryOutput>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <PropertyGroup Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">
-    <QtMsBuild>$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
-  </PropertyGroup>
-  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
-    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
-  </Target>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" /><PropertyGroup Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')"><QtMsBuild>$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild></PropertyGroup><Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')"><Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." /></Target>
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
@@ -48,29 +42,15 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
-  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
-    <Import Project="$(QtMsBuild)\qt_defaults.props" />
-  </ImportGroup>
-  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <QtInstall>qt5.12.0_msvc2015_x64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
-  </PropertyGroup>
-  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <QtInstall>qt5.12.0_msvc2015_x64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
-  </PropertyGroup>
-  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
-    <Import Project="$(QtMsBuild)\qt.props" />
-  </ImportGroup>
+  <PropertyGroup Label="UserMacros" /><ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')"><Import Project="$(QtMsBuild)\qt_defaults.props" /></ImportGroup><PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"><QtInstall>qt5.12.0_msvc2015_x64</QtInstall><QtModules>core;gui;widgets</QtModules></PropertyGroup><PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'"><QtInstall>qt5.12.0_msvc2015_x64</QtInstall><QtModules>core;gui;widgets</QtModules></PropertyGroup><ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')"><Import Project="$(QtMsBuild)\qt.props" /></ImportGroup>
   <PropertyGroup>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">bin\msvc2015_x64\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">tmp\obj\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">hplayer</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">bin\msvc2015_x64\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">tmp\obj\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">hplayer</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
   </PropertyGroup>
@@ -83,17 +63,16 @@
       <DebugInformationFormat>None</DebugInformationFormat>
       <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ObjectFileName>tmp\obj\</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DEPRECATED_WARNINGS;GLEW_STATIC;WIN32_LEAN_AND_MEAN;QT_NO_DEBUG;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName></ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-    </ClCompile>
+    <MultiProcessorCompilation>true</MultiProcessorCompilation></ClCompile>
     <Link>
       <AdditionalDependencies>SDL2.lib;avformat.lib;avdevice.lib;avcodec.lib;swresample.lib;swscale.lib;avutil.lib;kernel32.lib;user32.lib;gdi32.lib;opengl32.lib;glu32.lib;ole32.lib;oleaut32.lib;strmiids.lib;ws2_32.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\3rd\lib\msvc2015_x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -115,21 +94,7 @@
     <ResourceCompile>
       <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DEPRECATED_WARNINGS;GLEW_STATIC;WIN32_LEAN_AND_MEAN;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
-    <QtMoc>
-      <CompilerFlavor>msvc</CompilerFlavor>
-      <Include>./tmp/moc/moc_predefs.h</Include>
-      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <DynamicSource>output</DynamicSource>
-      <QtMocDir>tmp\moc</QtMocDir>
-      <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
-    </QtMoc>
-    <QtRcc>
-      <Compression>default</Compression>
-      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
-      <QtRccDir>tmp\rcc</QtRccDir>
-      <QtRccFileName>qrc_%(Filename).cpp</QtRccFileName>
-    </QtRcc>
-  </ItemDefinitionGroup>
+  <QtMoc><CompilerFlavor>msvc</CompilerFlavor><Include>./tmp/moc/moc_predefs.h</Include><ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription><DynamicSource>output</DynamicSource><QtMocDir>tmp\moc</QtMocDir><QtMocFileName>moc_%(Filename).cpp</QtMocFileName></QtMoc><QtRcc><Compression>default</Compression><ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription><QtRccDir>tmp\rcc</QtRccDir><QtRccFileName>qrc_%(Filename).cpp</QtRccFileName></QtRcc></ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;src;src\hv;src\hv\base;src\hv\utils;src\qt;src\ui;src\GL;src\video;src\win32;src\util;3rd\include;$(QTDIR)\include;tmp\moc;\include;$(QTDIR)\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -139,7 +104,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ObjectFileName>tmp\obj\</ObjectFileName>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DEPRECATED_WARNINGS;GLEW_STATIC;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
@@ -147,9 +112,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-    </ClCompile>
+    <MultiProcessorCompilation>true</MultiProcessorCompilation></ClCompile>
     <Link>
       <AdditionalDependencies>SDL2.lib;avformat.lib;avdevice.lib;avcodec.lib;swresample.lib;swscale.lib;avutil.lib;kernel32.lib;user32.lib;gdi32.lib;opengl32.lib;glu32.lib;ole32.lib;oleaut32.lib;strmiids.lib;ws2_32.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\3rd\lib\msvc2015_x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -170,21 +133,7 @@
     <ResourceCompile>
       <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DEPRECATED_WARNINGS;GLEW_STATIC;WIN32_LEAN_AND_MEAN;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
-    <QtMoc>
-      <CompilerFlavor>msvc</CompilerFlavor>
-      <Include>./tmp/moc/moc_predefs.h</Include>
-      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <DynamicSource>output</DynamicSource>
-      <QtMocDir>tmp\moc</QtMocDir>
-      <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
-    </QtMoc>
-    <QtRcc>
-      <Compression>default</Compression>
-      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
-      <QtRccDir>tmp\rcc</QtRccDir>
-      <QtRccFileName>qrc_%(Filename).cpp</QtRccFileName>
-    </QtRcc>
-  </ItemDefinitionGroup>
+  <QtMoc><CompilerFlavor>msvc</CompilerFlavor><Include>./tmp/moc/moc_predefs.h</Include><ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription><DynamicSource>output</DynamicSource><QtMocDir>tmp\moc</QtMocDir><QtMocFileName>moc_%(Filename).cpp</QtMocFileName></QtMoc><QtRcc><Compression>default</Compression><ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription><QtRccDir>tmp\rcc</QtRccDir><QtRccFileName>qrc_%(Filename).cpp</QtRccFileName></QtRcc></ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\ui\CentralWidget.cpp" />
     <ClCompile Include="src\ui\GLWnd.cpp" />
@@ -203,7 +152,7 @@
     <ClCompile Include="src\win32\hdevice.cpp" />
     <ClCompile Include="src\hv\base\herr.c" />
     <ClCompile Include="src\video\hffplayer.cpp" />
-    <ClCompile Include="src\hv\utils\hframe.cpp" />
+    <ClCompile Include="src\util\hframe.cpp" />
     <ClCompile Include="src\hv\base\hlog.c" />
     <ClCompile Include="src\hv\base\hstring.cpp" />
     <ClCompile Include="src\ui\htable.cpp" />
@@ -215,27 +164,91 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\ui\CentralWidget.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <ClInclude Include="src\ui\CustomEventType.h" />
     <ClInclude Include="src\ui\GLWnd.h" />
     <ClInclude Include="src\qt\HGLWidget.h" />
     <QtMoc Include="src\ui\HMediaInfoDlg.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <QtMoc Include="src\ui\HMultiView.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <QtMoc Include="src\ui\HOpenMediaDlg.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <ClInclude Include="src\video\HVideoPlayer.h" />
     <ClInclude Include="src\video\HVideoPlayerFactory.h" />
     <QtMoc Include="src\ui\HVideoTitlebar.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <QtMoc Include="src\ui\HVideoToolbar.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <QtMoc Include="src\ui\HVideoWidget.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <ClInclude Include="src\ui\HVideoWnd.h" />
     <ClInclude Include="src\ui\HVideoWndFactory.h" />
     <QtMoc Include="src\ui\MainWindow.h">
+      
+      
+      
+      
+      
+      
+      
+      
     </QtMoc>
     <ClInclude Include="src\ui\SDL2Wnd.h" />
     <ClInclude Include="src\appdef.h" />
@@ -249,8 +262,8 @@
     <ClInclude Include="src\win32\hdevice.h" />
     <ClInclude Include="src\hv\base\herr.h" />
     <ClInclude Include="src\video\hffplayer.h" />
-    <ClInclude Include="src\hv\utils\hframe.h" />
-    <ClInclude Include="src\hv\utils\hgl.h" />
+    <ClInclude Include="src\util\hframe.h" />
+    <ClInclude Include="src\util\hgl.h" />
     <ClInclude Include="src\hv\base\hgui.h" />
     <ClInclude Include="src\hv\base\hlog.h" />
     <ClInclude Include="src\video\hmedia.h" />
@@ -274,6 +287,14 @@
     <ClInclude Include="src\hv\utils\singleton.h" />
   </ItemGroup>
   <ItemGroup>
+    
+    
+    
+    
+    
+    
+    
+    
     <CustomBuild Include="tmp\moc\moc_predefs.h.cbt">
       <FileType>Document</FileType>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
@@ -285,6 +306,8 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generate moc_predefs.h</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">tmp\moc\moc_predefs.h;%(Outputs)</Outputs>
     </CustomBuild>
+    
+    
   </ItemGroup>
   <ItemGroup>
     <None Include="rc\lang\app_zh_CN.qm" />
@@ -316,9 +339,16 @@
     <None Include="rc\image\fullscreen.png" />
     <None Include="rc\image\icon.png" />
     <QtRcc Include="rc\image.qrc">
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">image</InitFuncName>
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">image</InitFuncName>
-    </QtRcc>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">image</InitFuncName><InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">image</InitFuncName></QtRcc>
     <None Include="rc\image\media.png" />
     <None Include="rc\image\media_bk.png" />
     <None Include="rc\image\mute.png" />
@@ -332,9 +362,16 @@
     <None Include="rc\skin\dark\radiobutton_unchecked.png" />
     <None Include="rc\skin\dark\radiobutton_unchecked_disable.png" />
     <QtRcc Include="rc\skin.qrc">
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">skin</InitFuncName>
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">skin</InitFuncName>
-    </QtRcc>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">skin</InitFuncName><InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">skin</InitFuncName></QtRcc>
     <None Include="rc\image\start.png" />
     <None Include="rc\image\stop.png" />
     <None Include="rc\image\style1.png" />
@@ -353,9 +390,6 @@
   <ItemGroup>
     <ResourceCompile Include="hplayer.rc" />
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
-    <Import Project="$(QtMsBuild)\qt.targets" />
-  </ImportGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" /><ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')"><Import Project="$(QtMsBuild)\qt.targets" /></ImportGroup>
   <ImportGroup Label="ExtensionTargets" />
 </Project>
