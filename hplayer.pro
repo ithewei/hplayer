@@ -218,10 +218,12 @@ unix {
     ##        -lopencv_core       \
 
     ## FFmpeg
-    LIBS += -lavformat  \
-            -lavcodec   \
-            -lswscale   \
-            -lavutil    \
+    LIBS += -lavformat      \
+            -lavdevice      \
+            -lavcodec       \
+            -lswresample    \
+            -lswscale       \
+            -lavutil        \
 
     ## sys
     LIBS += -lGLU   \

@@ -1,7 +1,7 @@
 #ifndef H_FFPLAYER_H
 #define H_FFPLAYER_H
 
-#include "hvideoplayer.h"
+#include "HVideoPlayer.h"
 #include "ffmpeg_util.h"
 
 #include "hthread.h"
