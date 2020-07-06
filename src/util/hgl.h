@@ -1,8 +1,6 @@
 #ifndef HV_GL_H_
 #define HV_GL_H_
 
-#include <GL/glew.h>
-
 #include "hframe.h"
 
 // GL PixelFormat extend
@@ -20,7 +18,7 @@
 */
 
 typedef struct GLTexture_s {
-    GLuint id;  // for glGenTextures
+    unsigned int id;  // for glGenTextures
     HFrame frame;
 } GLTexture;
 

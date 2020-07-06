@@ -5,12 +5,8 @@
 
 #include "HMultiView.h"
 
-// define LSideWidget and RSideWidget for future expansion
-//#include "lsideWidget.h"
-//#include "rsideWidget.h"
-
-typedef QWidget     LsideWidget;
-typedef QWidget     RsideWidget;
+#include "LsideWidget.h"
+#include "RsideWidget.h"
 
 class CentralWidget : public QWidget {
     Q_OBJECT

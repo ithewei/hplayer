@@ -72,3 +72,9 @@ int HFrameBuf::pop(HFrame* pFrame) {
 
     return 0;
 }
+
+void HFrameBuf::clear() {
+    std::lock_guard<std::mutex> locker(mutex);
+    frames.clear();
+    HRingBuf::clear();
+}

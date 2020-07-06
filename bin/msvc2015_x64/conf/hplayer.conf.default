@@ -31,7 +31,9 @@ mv_row = 3
 mv_col = 3
 mv_fullscreen = false
 
-draw_fps = true
+draw_time = false
+draw_fps = false
+draw_resolution = false
 
 [video]
 frame_cache = 5

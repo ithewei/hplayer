@@ -17,7 +17,9 @@ protected:
 public:
     HFrame      last_frame;
     int         fps;
+    bool        draw_time;
     bool        draw_fps;
+    bool        draw_resolution;
 protected:
     // for calFPS
     uint64_t    tick;

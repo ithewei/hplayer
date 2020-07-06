@@ -352,6 +352,7 @@ int HFFPlayer::close() {
 
 int HFFPlayer::seek(int64_t ms) {
     if (fmt_ctx) {
+        clear_frame_cache();
         hlogi("seek=>%lldms", ms);
         return av_seek_frame(fmt_ctx, video_stream_index,
                 (start_time+ms)/1000/(double)video_time_base_num*video_time_base_den,

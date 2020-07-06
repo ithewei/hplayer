@@ -119,7 +119,7 @@ HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
     else {
         aspect_ratio.type = ASPECT_FULL;
     }
-    hlogi("aspect_ratio type=%d w=%d h=%d", aspect_ratio.type, aspect_ratio.w, aspect_ratio.h);
+    hlogd("aspect_ratio type=%d w=%d h=%d", aspect_ratio.type, aspect_ratio.w, aspect_ratio.h);
     // renderer
     str = g_confile->GetValue("renderer", "video");
     if (str.empty()) {
@@ -346,7 +346,7 @@ void HVideoWidget::restart() {
 void HVideoWidget::retry() {
     if (retry_maxcnt < 0 || retry_cnt < retry_maxcnt) {
         ++retry_cnt;
-        int64_t cur_time = timestamp_ms();
+        int64_t cur_time = gettimeofday_ms();
         int64_t timespan = cur_time - last_retry_time;
         if (timespan >= retry_interval) {
             last_retry_time = cur_time;
@@ -372,8 +372,11 @@ void HVideoWidget::onOpenSucceed() {
     status = PLAY;
     setAspectRatio(aspect_ratio);
     if (pImpl_player->duration > 0) {
-        toolbar->lblDuration->setText(strtime(pImpl_player->duration).c_str());
-        toolbar->sldProgress->setRange(0, pImpl_player->duration/1000);
+        int duration_sec = pImpl_player->duration / 1000;
+        char szTime[16];
+        duration_fmt(duration_sec, szTime);
+        toolbar->lblDuration->setText(szTime);
+        toolbar->sldProgress->setRange(0, duration_sec);
         toolbar->lblDuration->show();
         toolbar->sldProgress->show();
     }

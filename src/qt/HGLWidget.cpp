@@ -26,11 +26,10 @@ void bindTexture(GLTexture* tex, QImage* img) {
     tex->frame.h = img->height();
     tex->frame.type = GL_BGRA;
     tex->frame.bpp = img->bitPlaneCount();
-    gluBuild2DMipmaps(GL_TEXTURE_2D, tex->frame.bpp/8, tex->frame.w, tex->frame.h, tex->frame.type, GL_UNSIGNED_BYTE, img->bits());
-    //glTexImage2D(GL_TEXTURE_2D, 0, tex->bpp/8, tex->width, tex->height, 0, tex->type, GL_UNSIGNED_BYTE, img->bits());
+    // gluBuild2DMipmaps(GL_TEXTURE_2D, tex->frame.bpp/8, tex->frame.w, tex->frame.h, tex->frame.type, GL_UNSIGNED_BYTE, img->bits());
+    glTexImage2D(GL_TEXTURE_2D, 0, tex->frame.bpp/8, tex->frame.w, tex->frame.h, 0, tex->frame.type, GL_UNSIGNED_BYTE, img->bits());
 }
 
-std::atomic_flag HGLWidget::s_glew_init = ATOMIC_FLAG_INIT;
 GLuint HGLWidget::prog_yuv;
 GLuint HGLWidget::texUniformY;
 GLuint HGLWidget::texUniformU;
@@ -72,7 +71,7 @@ void HGLWidget::setAspectRatio(double ratio) {
 }
 
 void HGLWidget::setVertices(double ratio) {
-    double w = 1.0, h = 1.0;
+    GLfloat w = 1.0, h = 1.0;
     if (ratio < 1.0) {
         w = ratio;
     }
@@ -207,14 +206,6 @@ void HGLWidget::initYUV() {
 }
 
 void HGLWidget::initializeGL() {
-    if (!s_glew_init.test_and_set()) {
-        if (glewInit() != 0) {
-            s_glew_init.clear();
-            qFatal("glewInit failed");
-            return;
-        }
-    }
-
     initVAO();
 
     loadYUVShader();

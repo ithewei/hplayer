@@ -25,18 +25,6 @@ enum hplayer_event_e {
 };
 typedef int (*hplayer_event_cb)(hplayer_event_e e, void* userdata);
 
-inline string strtime(int64_t ms) {
-    int sec = ms / 1000;
-
-    int min = sec / 60;
-    sec = sec % 60;
-
-    int hour = min / 60;
-    min = min % 60;
-
-    return asprintf("%02d:%02d:%02d", hour, min, sec);
-}
-
 class HVideoPlayer
 {
 public:
@@ -83,6 +71,10 @@ public:
 
     void set_frame_cache(int cache) {
         frame_buf.setCache(cache);
+    }
+
+    void clear_frame_cache() {
+        frame_buf.clear();
     }
 
     int push_frame(HFrame* pFrame) {

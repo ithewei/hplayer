@@ -62,6 +62,32 @@ SOURCES += \
     src/hv/base/hstring.cpp \
     src/hv/utils/iniparser.cpp \
 
+# http_client
+# INCLUDEPATH += src/hv/http src/hv/http/client
+# HEADERS += \
+#     src/hv/http/client/http_client.h \
+#     src/hv/http/httpdef.h \
+#     src/hv/http/http_parser.h \
+#     src/hv/http/multipart_parser.h \
+#     src/hv/http/http_content.h \
+#     src/hv/http/HttpMessage.h \
+#     src/hv/http/HttpParser.h \
+#     src/hv/http/Http1Parser.h \
+#     src/hv/base/hsocket.h \
+#     src/hv/base/hurl.h \
+
+# SOURCES += \
+#     src/hv/http/client/http_client.cpp \
+#     src/hv/http/httpdef.c \
+#     src/hv/http/http_parser.c \
+#     src/hv/http/multipart_parser.c \
+#     src/hv/http/http_content.cpp \
+#     src/hv/http/HttpMessage.cpp \
+#     src/hv/http/HttpSession.cpp \
+#     src/hv/http/Http1Session.cpp \
+#     src/hv/base/hsocket.c \
+#     src/hv/base/hurl.cpp \
+
 # qt
 INCLUDEPATH += src/qt
 HEADERS += \
@@ -91,6 +117,8 @@ HEADERS +=  \
     src/ui/HMediaInfoDlg.h \
     src/ui/HVideoWndFactory.h \
     src/ui/GLWnd.h \
+    src/ui/LsideWidget.h \
+    src/ui/RsideWidget.h \
 
 SOURCES +=  \
     src/ui/htable.cpp \
@@ -104,12 +132,14 @@ SOURCES +=  \
     src/ui/HOpenMediaDlg.cpp \
     src/ui/HMediaInfoDlg.cpp \
     src/ui/GLWnd.cpp \
+    src/ui/LsideWidget.cpp \
+    src/ui/RsideWidget.cpp \
 
 # GL
-DEFINES += GLEW_STATIC
-INCLUDEPATH += src/GL
-HEADERS += src/GL/glew.h
-SOURCES += src/GL/glew.c
+# DEFINES += GLEW_STATIC
+# INCLUDEPATH += src/GL
+# HEADERS += src/GL/glew.h
+# SOURCES += src/GL/glew.c
 
 # video
 INCLUDEPATH += src/video
@@ -146,9 +176,10 @@ LIBS += -lSDL2
 HEADERS += src/appdef.h src/confile.h src/avdef.h
 SOURCES += src/main.cpp
 
+INCLUDEPATH += 3rd/include
+
 win32 {
     DEFINES += WIN32_LEAN_AND_MEAN
-    INCLUDEPATH += 3rd/include
 
     ## opencv
     ##LIBS += -lopencv_core341        \
@@ -182,11 +213,11 @@ win32 {
 
     win32-msvc {
         if (contains(DEFINES, WIN64)) {
-            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/msvc2015_x64
             DESTDIR = $$_PRO_FILE_PWD_/bin/msvc2015_x64
+            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/msvc2015_x64
         } else {
-            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/msvc2015_x86
             DESTDIR = $$_PRO_FILE_PWD_/bin/msvc2015_x86
+            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/msvc2015_x86
         }
     }
 
@@ -194,11 +225,11 @@ win32 {
         QMAKE_CFLAGS += -std=c99
         QMAKE_CXXFLAGS += -std=c++11
         if (contains(DEFINES, WIN64)) {
-            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/mingw64
             DESTDIR = $$_PRO_FILE_PWD_/bin/mingw64
+            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/mingw64
         } else {
-            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/mingw32
             DESTDIR = $$_PRO_FILE_PWD_/bin/mingw32
+            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/mingw32
         }
 
         # for ffmpeg staticlib
@@ -225,17 +256,27 @@ unix {
             -lswscale       \
             -lavutil        \
 
-    ## sys
-    LIBS += -lGLU   \
-            -lGL    \
-            -lpthread   \
-            -lm         \
+
+    QMAKE_CFLAGS += -std=c99
+    QMAKE_CXXFLAGS += -std=c++11
 
     linux-g++ {
-        QMAKE_CFLAGS += -std=c99
-        QMAKE_CXXFLAGS += -std=c++11
-        LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/linux
         DESTDIR = $$_PRO_FILE_PWD_/bin/linux
+        LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/linux
+        LIBS += -L$$DESTDIR
+
+        ## sys
+        LIBS += -lGLU   \
+                -lGL    \
+                -lpthread   \
+                -lm         \
+    }
+
+    macx-clang {
+        DESTDIR = $$_PRO_FILE_PWD_/bin/mac
+        LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/mac
+        LIBS += -L$$DESTDIR/$${TARGET}.app/Contents/Frameworks
+        QMAKE_RPATHDIR += @executable_path/../Frameworks
     }
 }
 

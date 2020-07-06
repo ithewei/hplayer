@@ -37,7 +37,6 @@ protected:
     void drawYUV(HFrame* pFrame);
 
 protected:
-    static std::atomic_flag s_glew_init;
     static GLuint prog_yuv;
     static GLuint texUniformY;
     static GLuint texUniformU;

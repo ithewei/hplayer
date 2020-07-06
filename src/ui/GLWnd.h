@@ -17,8 +17,10 @@ public:
     }
 
 protected:
-    virtual void drawFPS();
     virtual void paintGL();
+    void drawTime();
+    void drawFPS();
+    void drawResolution();
 };
 
 #endif // GL_WND_H

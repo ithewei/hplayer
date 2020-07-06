@@ -78,6 +78,7 @@ class HFrameBuf : public HRingBuf {
 
     int push(HFrame* pFrame);
     int pop(HFrame* pFrame);
+    void clear();
 
     int         cache_num;
     FrameStats  frame_stats;
