@@ -32,6 +32,7 @@ TRANSLATIONS = rc/lang/app_zh_CN.ts rc/lang/app_zh_CN.qm
 INCLUDEPATH += src
 
 # hv
+DEFINES += HV_SOURCE
 INCLUDEPATH += src/hv src/hv/base src/hv/utils
 HEADERS += \
     src/hv/hv.h \
