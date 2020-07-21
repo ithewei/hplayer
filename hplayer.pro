@@ -84,8 +84,8 @@ SOURCES += \
 #     src/hv/http/multipart_parser.c \
 #     src/hv/http/http_content.cpp \
 #     src/hv/http/HttpMessage.cpp \
-#     src/hv/http/HttpSession.cpp \
-#     src/hv/http/Http1Session.cpp \
+#     src/hv/http/HttpParser.cpp \
+#     src/hv/http/Http1Parser.cpp \
 #     src/hv/base/hsocket.c \
 #     src/hv/base/hurl.cpp \
 
