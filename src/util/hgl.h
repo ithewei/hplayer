@@ -1,6 +1,7 @@
 #ifndef HV_GL_H_
 #define HV_GL_H_
 
+#include "glew.h"
 #include "hframe.h"
 
 // GL PixelFormat extend

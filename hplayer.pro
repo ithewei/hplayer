@@ -43,7 +43,6 @@ HEADERS += \
     src/hv/base/htime.h \
     src/hv/base/herr.h \
     src/hv/base/hbuf.h \
-    src/hv/base/hgui.h \
     src/hv/base/hlog.h \
     src/hv/base/hobj.h \
     src/hv/base/hvar.h \
@@ -137,10 +136,10 @@ SOURCES +=  \
     src/ui/RsideWidget.cpp \
 
 # GL
-# DEFINES += GLEW_STATIC
-# INCLUDEPATH += src/GL
-# HEADERS += src/GL/glew.h
-# SOURCES += src/GL/glew.c
+DEFINES += GLEW_STATIC
+INCLUDEPATH += src/GL
+HEADERS += src/GL/glew.h
+SOURCES += src/GL/glew.c
 
 # video
 INCLUDEPATH += src/video
@@ -165,6 +164,7 @@ HEADERS += \
     src/util/sdl_util.h \
     src/util/hgl.h \
     src/util/hframe.h \
+    src/util/hgui.h \
 
 SOURCES += src/util/hframe.cpp
 
