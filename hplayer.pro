@@ -8,6 +8,8 @@
 #CONFIG -= debug
 #CONFIG -= release
 #CONFIG -= debug_and_release
+CONFIG += sdk_no_version_check
+
 DEFINES -= UNICODE _UNICODE
 
 QT       += core gui
@@ -44,8 +46,6 @@ HEADERS += \
     src/hv/base/herr.h \
     src/hv/base/hbuf.h \
     src/hv/base/hlog.h \
-    src/hv/base/hobj.h \
-    src/hv/base/hvar.h \
     src/hv/base/hscope.h \
     src/hv/base/hstring.h \
     src/hv/base/hmutex.h \
