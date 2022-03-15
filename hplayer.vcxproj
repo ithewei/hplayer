@@ -317,7 +317,6 @@
     <None Include="rc\skin\dark\add_left.png" />
     <None Include="rc\skin\dark\add_right.png" />
     <None Include="rc\skin\dark\add_top.png" />
-    <None Include="rc\lang\app_zh_CN.qm" />
     <None Include="rc\skin\dark\branch_close.png" />
     <None Include="rc\skin\dark\branch_open.png" />
     <None Include="rc\skin\dark\calendar_nextmonth.png" />
