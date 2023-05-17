@@ -104,6 +104,8 @@ static int load_confile() {
     // first log here
     hlogi("%s version: %s", g_exec_path, hv_compile_version());
     hlog_fsync();
+
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
