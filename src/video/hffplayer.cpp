@@ -233,7 +233,8 @@ try_software_decode:
         return ret;
     }
 
-    dw = sw >> 2 << 2; // align = 4
+    // dw = sw >> 2 << 2; // align = 4
+    dw = FFALIGN(sw, 32);
     dh = sh;
     dst_pix_fmt = AV_PIX_FMT_YUV420P;
     std::string str = g_confile->GetValue("dst_pix_fmt", "video");
